@@ -389,10 +389,141 @@ function goPage(p){if(!pages.includes(p))return;pages.forEach(x=>document.getEle
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.page)));
 function val(id){return document.getElementById(id).value.trim()}
 function setOut(id,txt){document.getElementById(id).textContent=txt;if(id==='factoryResult'){const wrap=document.getElementById('factoryEditorWrap');if(wrap)wrap.classList.add('hide')}}
-function saveResult(id,title){let content=document.getElementById(id).textContent.trim();if(!content||content.startsWith('Brief ')||content.startsWith('Paket ')){alert('Buat hasil terlebih dahulu.');return}let projects=loadProjects();projects.unshift({id:Date.now(),title:title||content.slice(0,50),content,created:new Date().toLocaleString('id-ID')});localStorage.setItem('kreova_projects',JSON.stringify(projects));renderProjects();alert('Proyek tersimpan di perangkat.')}
-function loadProjects(){try{return JSON.parse(localStorage.getItem('kreova_projects')||'[]')}catch(e){return[]}}
-function renderProjects(){let list=document.getElementById('projectList'),arr=loadProjects();list.innerHTML='';if(!arr.length){list.innerHTML='<p class="small">Belum ada proyek tersimpan.</p>';return}arr.forEach(p=>{let row=document.createElement('div');row.className='project-row';let name=document.createElement('div');name.className='name';name.innerHTML='<strong>'+escapeHtml(p.title)+'</strong><div class="small">'+escapeHtml(p.created||'')+'</div>';let open=document.createElement('button');open.className='btn';open.textContent='Buka';open.onclick=()=>{let win=window.open('','_blank');if(win){win.document.write('<pre style="white-space:pre-wrap;font-family:system-ui;padding:16px">'+escapeHtml(p.content)+'</pre>')}else alert(p.content)};let del=document.createElement('button');del.className='btn';del.textContent='Hapus';del.onclick=()=>{if(confirm('Hapus proyek ini?')){localStorage.setItem('kreova_projects',JSON.stringify(loadProjects().filter(x=>x.id!==p.id)));renderProjects()}};row.append(name,open,del);list.appendChild(row)})}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+async function saveResult(id,title){
+  const content=document.getElementById(id).textContent.trim();
+
+  if(!content||content.startsWith('Brief ')||content.startsWith('Paket ')){
+    alert('Buat hasil terlebih dahulu.');
+    return;
+  }
+
+  if(!kreovaSb){
+    alert('Supabase belum terhubung.');
+    return;
+  }
+
+  const {data:{session},error:sessionError}=await kreovaSb.auth.getSession();
+
+  if(sessionError||!session){
+    alert('Silakan login terlebih dahulu untuk menyimpan proyek.');
+    return;
+  }
+
+  const {error}=await kreovaSb
+    .from('kreova_projects')
+    .insert({
+      user_id:session.user.id,
+      project_name:title||content.slice(0,50),
+      project_type:id,
+      project_data:{
+        content:content
+      }
+    });
+
+  if(error){
+    alert('Gagal menyimpan proyek: '+error.message);
+    return;
+  }
+
+  await renderProjects();
+  alert('Proyek berhasil disimpan ke akun KREOVA AI.');
+}
+
+async function loadProjects(){
+  if(!kreovaSb)return [];
+
+  const {data:{session}}=await kreovaSb.auth.getSession();
+
+  if(!session)return [];
+
+  const {data,error}=await kreovaSb
+    .from('kreova_projects')
+    .select('*')
+    .order('created_at',{ascending:false});
+
+  if(error){
+    console.error('Gagal memuat proyek:',error.message);
+    return [];
+  }
+
+  return data||[];
+}
+
+async function renderProjects(){
+  const list=document.getElementById('projectList');
+  if(!list)return;
+
+  list.innerHTML='<p class="small">Memuat proyek...</p>';
+
+  const arr=await loadProjects();
+
+  list.innerHTML='';
+
+  if(!arr.length){
+    list.innerHTML='<p class="small">Belum ada proyek tersimpan di akun ini.</p>';
+    return;
+  }
+
+  arr.forEach(p=>{
+    const row=document.createElement('div');
+    row.className='project-row';
+
+    const name=document.createElement('div');
+    name.className='name';
+
+    const content=p.project_data?.content||'';
+    const created=p.created_at
+      ?new Date(p.created_at).toLocaleString('id-ID')
+      :'';
+
+    name.innerHTML=
+      '<strong>'+escapeHtml(p.project_name||'Proyek')+'</strong>'+
+      '<div class="small">'+escapeHtml(created)+'</div>';
+
+    const open=document.createElement('button');
+    open.className='btn';
+    open.textContent='Buka';
+
+    open.onclick=()=>{
+      const win=window.open('','_blank');
+
+      if(win){
+        win.document.write(
+          '<pre style="white-space:pre-wrap;font-family:system-ui;padding:16px">'+
+          escapeHtml(content)+
+          '</pre>'
+        );
+      }else{
+        alert(content);
+      }
+    };
+
+    const del=document.createElement('button');
+    del.className='btn';
+    del.textContent='Hapus';
+
+    del.onclick=async()=>{
+      if(!confirm('Hapus proyek ini secara permanen?'))return;
+
+      const {error}=await kreovaSb
+        .from('kreova_projects')
+        .delete()
+        .eq('id',p.id);
+
+      if(error){
+        alert('Gagal menghapus proyek: '+error.message);
+        return;
+      }
+
+      await renderProjects();
+    };
+
+    row.append(name,open,del);
+    list.appendChild(row);
+  });
+     }
+ 
 document.getElementById('startProject').onclick=()=>{let t=val('dashTopic');if(!t){alert('Masukkan topik terlebih dahulu');return}document.getElementById('ideaTopic').value=t;document.getElementById('ideaPlatform').value=document.getElementById('dashPlatform').value;goPage('ideas')};
 document.getElementById('editFactory').onclick=()=>{const result=document.getElementById('factoryResult').textContent.trim();if(!result||result.includes('Masukkan topik')){alert('Buat paket konten terlebih dahulu.');return}document.getElementById('factoryEditor').value=result;document.getElementById('factoryEditorWrap').classList.remove('hide');document.getElementById('factoryEditor').focus();};
 document.getElementById('applyFactoryEdit').onclick=()=>{const edited=document.getElementById('factoryEditor').value.trim();if(!edited){alert('Isi paket tidak boleh kosong.');return}setOut('factoryResult',edited);alert('Perubahan paket berhasil diterapkan. Kamu bisa menyalin atau menyimpannya.');};
