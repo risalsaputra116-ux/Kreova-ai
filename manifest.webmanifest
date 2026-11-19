@@ -1,0 +1,17 @@
+{
+  "name": "KREOVA AI Creative Studio",
+  "short_name": "KREOVA AI",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#101018",
+  "theme_color": "#111018",
+  "description": "Studio konten gratis",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
