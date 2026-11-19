@@ -58,6 +58,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <button data-page="scenes"><span class="ico">▧</span>Scene Maker</button>
 <button data-page="social"><span class="ico">↗</span>Social Pack</button>
 <button data-page="projects"><span class="ico">▣</span>My Projects</button>
+<button data-page="account"><span class="ico">👤</span>Akun / Login</button>
 </nav>
 <div class="sidebar-bottom"><div class="free">● FREE EDITION</div><div class="side-note">MVP berjalan di perangkat. AI gambar terhubung melalui persetujuan akun Pollinations.</div></div>
 </aside>
@@ -197,6 +198,24 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="hero"><h1>My <span>Projects</span></h1><p>Proyek disimpan lokal di browser/perangkat ini. Tidak diunggah ke server.</p></div>
 <div class="panel"><div class="panel-title">Proyek tersimpan</div><div id="projectList" class="project-list"><p class="small">Belum ada proyek tersimpan.</p></div></div>
 </section>
+
+<section id="account" class="section">
+<div class="hero"><h1>Account <span>Center</span></h1><p>Login dan pendaftaran akun melalui Supabase Auth. Konfigurasi hanya tersimpan sementara di sesi browser ini.</p></div>
+<div class="panel"><div class="panel-title">⚙️ Konfigurasi Supabase</div>
+<div class="field"><label>Project URL</label><input id="sbProjectUrl" placeholder="https://PROJECT.supabase.co" inputmode="url"></div>
+<div class="field"><label>Publishable / anon key</label><input id="sbPublicKey" type="password" autocomplete="off" placeholder="Tempel publishable key (bukan secret/service_role)"></div>
+<div class="btnrow"><button class="btn primary" id="sbInit">Hubungkan Supabase</button><button class="btn" id="sbClearConfig">Hapus konfigurasi sesi</button></div>
+<div id="sbAuthStatus" class="ai-status warn">Supabase belum dikonfigurasi.</div>
+</div>
+<div class="panel"><div class="panel-title">🔐 Login / Daftar</div>
+<div class="field"><label>Nama tampilan (untuk daftar)</label><input id="sbDisplayName" placeholder="Nama kamu"></div>
+<div class="field"><label>Email</label><input id="sbEmail" type="email" autocomplete="email" placeholder="email@contoh.com"></div>
+<div class="field"><label>Password (minimal 8 karakter)</label><input id="sbPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
+<div class="btnrow"><button class="btn primary" id="sbSignup">Daftar</button><button class="btn" id="sbLogin">Login</button><button class="btn ghost" id="sbLogout">Logout</button></div>
+<div id="sbUserStatus" class="ai-status warn">Belum login.</div>
+</div>
+<div class="panel"><div class="panel-title">Status fitur & paket</div><p class="small">Image Studio lokal tetap dapat digunakan. Pembatasan 10 gambar AI per hari belum aktif. Generator Pollinations masih menggunakan izin akun Pollinations dan bukan kuota KREOVA AI. Paket Premium Rp15.000/bulan masih berupa rencana; pembayaran belum diaktifkan.</p></div>
+</section>
 <footer>KREOVA AI • Free MVP • Penyimpanan lokal</footer>
 </main>
 </div>
@@ -209,10 +228,12 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <button data-page="scenes"><span class="ico">🎬</span>Scenes</button>
 <button data-page="social"><span class="ico">↗</span>Social</button>
 <button data-page="projects"><span class="ico">▣</span>Saved</button>
+<button data-page="account"><span class="ico">👤</span>Akun</button>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const pages=['dashboard','factory','poster','ideas','script','scenes','social','projects'];
-const pageNames={dashboard:'Dashboard',factory:'Content Factory',poster:'Image Studio',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',social:'Social Pack',projects:'My Projects'};
+const pages=['dashboard','factory','poster','ideas','script','scenes','social','projects','account'];
+const pageNames={dashboard:'Dashboard',factory:'Content Factory',poster:'Image Studio',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',social:'Social Pack',projects:'My Projects',account:'Akun / Login'};
 function goPage(p){if(!pages.includes(p))return;pages.forEach(x=>document.getElementById(x).classList.toggle('active',x===p));document.getElementById('crumb').textContent=pageNames[p];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===p));window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.page)));
 function val(id){return document.getElementById(id).value.trim()}
@@ -567,6 +588,20 @@ setOut('socialResult',`KREOVA AI — SOCIAL PACK BRIEF\n\nKONTEN:\n${t}\nPLATFOR
 document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{let txt=document.getElementById(b.dataset.copy).textContent.trim();if(!txt||txt.includes('akan muncul di sini')){alert('Belum ada hasil untuk disalin');return}try{await navigator.clipboard.writeText(txt);alert('Berhasil disalin')}catch(e){alert('Clipboard tidak tersedia. Pilih dan salin teks hasil secara manual.')}});
 document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>saveResult(b.dataset.save,b.dataset.saveTitle==='factory'?'Content Factory — '+(val('factoryTopic')||'Konten'):undefined));
 renderProjects();
+// KREOVA AI v9 — Supabase Auth UI. Publishable key only; never use service_role here.
+let kreovaSb=null;
+const SB_URL_SESSION='kreova_sb_url_session', SB_KEY_SESSION='kreova_sb_key_session';
+function sbStatus(msg,good=false){const el=document.getElementById('sbAuthStatus');if(el){el.textContent=msg;el.className='ai-status '+(good?'good':'warn')}}
+function sbUserStatus(msg,good=false){const el=document.getElementById('sbUserStatus');if(el){el.textContent=msg;el.className='ai-status '+(good?'good':'warn')}}
+function sbClient(){return kreovaSb}
+function sbRefreshUser(){if(!kreovaSb){sbUserStatus('Supabase belum dikonfigurasi.');return}kreovaSb.auth.getSession().then(({data,error})=>{if(error){sbUserStatus('Gagal membaca sesi: '+error.message);return}const u=data.session?.user;if(u)sbUserStatus('Login sebagai '+u.email+' • ID akun tersedia. Jangan bagikan token.',true);else sbUserStatus('Belum login.')})}
+function sbConnect(){const url=(document.getElementById('sbProjectUrl').value||sessionStorage.getItem(SB_URL_SESSION)||'').trim().replace(/\/$/,'');const key=(document.getElementById('sbPublicKey').value||sessionStorage.getItem(SB_KEY_SESSION)||'').trim();if(!/^https:\/\/[^\s]+\.supabase\.co$/.test(url)){sbStatus('URL tidak valid. Gunakan https:// nama-proyek.supabase.co (tanpa /rest/v1).');return}if(!key){sbStatus('Publishable/anon key diperlukan. Jangan gunakan secret atau service_role key.');return}if(!window.supabase||!window.supabase.createClient){sbStatus('Library Supabase belum termuat. Periksa koneksi internet lalu muat ulang.');return}try{sessionStorage.setItem(SB_URL_SESSION,url);sessionStorage.setItem(SB_KEY_SESSION,key);kreovaSb=window.supabase.createClient(url,key);sbStatus('Supabase berhasil dikonfigurasi di tab ini.',true);sbRefreshUser();kreovaSb.auth.onAuthStateChange((event,session)=>{if(session?.user)sbUserStatus('Login sebagai '+session.user.email+' • '+event,true);else sbUserStatus('Belum login.')})}catch(e){sbStatus('Gagal menghubungkan: '+e.message)}}
+document.getElementById('sbInit').onclick=sbConnect;
+document.getElementById('sbClearConfig').onclick=()=>{sessionStorage.removeItem(SB_URL_SESSION);sessionStorage.removeItem(SB_KEY_SESSION);kreovaSb=null;document.getElementById('sbProjectUrl').value='';document.getElementById('sbPublicKey').value='';sbStatus('Konfigurasi sesi dihapus.');sbUserStatus('Belum login.')};
+document.getElementById('sbSignup').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value,display=document.getElementById('sbDisplayName').value.trim();if(!email||password.length<8){alert('Masukkan email dan password minimal 8 karakter.');return}const {data,error}=await kreovaSb.auth.signUp({email,password,options:{data:{display_name:display}}});if(error){sbUserStatus('Daftar gagal: '+error.message);return}sbUserStatus(data.session?'Pendaftaran berhasil, akun login.':'Pendaftaran berhasil. Periksa email untuk konfirmasi sebelum login.',!!data.session)};
+document.getElementById('sbLogin').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value;if(!email||!password){alert('Masukkan email dan password.');return}const {data,error}=await kreovaSb.auth.signInWithPassword({email,password});if(error){sbUserStatus('Login gagal: '+error.message);return}sbUserStatus('Login berhasil sebagai '+data.user.email,true)};
+document.getElementById('sbLogout').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const {error}=await kreovaSb.auth.signOut();if(error)sbUserStatus('Logout gagal: '+error.message);else sbUserStatus('Logout berhasil.',true)};
+(function restoreSbConfig(){const u=sessionStorage.getItem(SB_URL_SESSION),k=sessionStorage.getItem(SB_KEY_SESSION);if(u)document.getElementById('sbProjectUrl').value=u;if(k)document.getElementById('sbPublicKey').value=k;if(u&&k)sbConnect()})();
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 </script>
 </body>
