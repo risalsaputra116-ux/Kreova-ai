@@ -132,7 +132,104 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 </div>
 <div class="small">Catatan: fitur ini menghasilkan draft berbasis template lokal, bukan AI online. Periksa fakta sebelum publikasi.</div>
 </section>
+<section id="studio" class="section">
+  <div class="hero">
+    <h1>Video <span>Studio</span></h1>
+    <p>Ubah ide menjadi video lengkap dalam satu alur produksi.</p>
+  </div>
 
+  <div class="panel">
+    <div class="panel-title">🎬 Proyek video baru</div>
+
+    <div class="field">
+      <label>Judul proyek</label>
+      <input id="studioTitle" placeholder="Masukkan judul video">
+    </div>
+
+    <div class="field">
+      <label>Ide atau deskripsi cerita</label>
+      <textarea id="studioIdea" placeholder="Ceritakan ide video yang ingin kamu buat..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Jenis video</label>
+      <select id="studioType">
+        <option>Film pendek</option>
+        <option>Drama</option>
+        <option>Konten TikTok</option>
+        <option>YouTube Shorts</option>
+        <option>Video promosi</option>
+        <option>Video edukasi</option>
+        <option>Storytelling</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Format video</label>
+      <select id="studioFormat">
+        <option value="9:16">Vertikal 9:16 (TikTok / Reels / Shorts)</option>
+        <option value="16:9">Landscape 16:9 (YouTube)</option>
+        <option value="1:1">Kotak 1:1</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Target durasi</label>
+      <select id="studioDuration">
+        <option value="30">30 detik</option>
+        <option value="60" selected>1 menit</option>
+        <option value="120">2 menit</option>
+        <option value="180">3 menit</option>
+        <option value="300">5 menit</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">⚙️ Alur produksi otomatis</div>
+
+    <div class="project-list">
+      <div class="project-item">
+        <strong>01 · Naskah AI</strong>
+        <p class="small">Ide menjadi cerita, dialog, dan naskah lengkap.</p>
+      </div>
+
+      <div class="project-item">
+        <strong>02 · Storyboard</strong>
+        <p class="small">Naskah dipecah menjadi adegan berurutan.</p>
+      </div>
+
+      <div class="project-item">
+        <strong>03 · Character & Image Studio</strong>
+        <p class="small">Membuat karakter dan gambar latar setiap adegan.</p>
+      </div>
+
+      <div class="project-item">
+        <strong>04 · AI Video Generator</strong>
+        <p class="small">Mengubah gambar dan prompt menjadi klip video.</p>
+      </div>
+
+      <div class="project-item">
+        <strong>05 · Auto Video Merger</strong>
+        <p class="small">Menggabungkan semua klip, audio, transisi, dan subtitle secara otomatis.</p>
+      </div>
+
+      <div class="project-item">
+        <strong>06 · Export & Publish</strong>
+        <p class="small">Menyimpan video final atau meneruskan ke publikasi media sosial.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">📽️ Hasil produksi</div>
+    <div class="result">
+      <div class="empty">
+        Proyek video belum dibuat. Studio produksi akan diaktifkan secara bertahap.
+      </div>
+    </div>
+  </div>
+     </section>
 
 <section id="poster" class="section">
 <div class="hero"><h1>Image <span>Studio</span></h1><p>Buat poster konten dari tema atau foto galeri. Editor berjalan di perangkat dan dapat mengekspor PNG.</p></div>
@@ -265,8 +362,8 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
  
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const pages=['dashboard','factory','poster','ideas','script','scenes','social','projects','account'];
-const pageNames={dashboard:'Dashboard',factory:'Content Factory',poster:'Image Studio',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',social:'Social Pack',projects:'My Projects',account:'Akun / Login'};
+const pages=['dashboard','factory','studio','poster','ideas','script','scenes','social','projects','account'];
+const pageNames={dashboard:'Dashboard',factory:'Content Factory',studio:'Video Studio',poster:'Image Studio',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',social:'Social Pack',projects:'My Projects',account:'Akun / Login'};
 function goPage(p){if(!pages.includes(p))return;pages.forEach(x=>document.getElementById(x).classList.toggle('active',x===p));document.getElementById('crumb').textContent=pageNames[p];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===p));window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.page)));
 function val(id){return document.getElementById(id).value.trim()}
