@@ -29,6 +29,32 @@ main{flex:1;min-width:0;padding:23px clamp(15px,4vw,42px) 50px;max-width:1320px;
 .small{color:var(--muted);font-size:11px;line-height:1.5}.pill{font-size:10px;color:#8fe1b8;background:#1b2b25;border:1px solid #2e4b3d;padding:5px 8px;border-radius:20px}
 footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 .mobilebar{display:none}
+ 
+.mobile-hint{
+  display:none;
+}
+
+@media(max-width:620px){
+  .mobile-hint{
+    display:block;
+    position:fixed;
+    bottom:58px;
+    left:0;
+    right:0;
+    z-index:6;
+    padding:7px 10px;
+    text-align:center;
+    background:#292333;
+    color:#f2caff;
+    font-size:11px;
+    border-top:1px solid #40354e;
+  }
+
+  .mobilebar{
+    bottom:0;
+  }
+}
+ 
 @media(max-width:800px){.sidebar{width:210px}.cards{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 86px}.hero{margin:22px 0}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{padding-top:3px}.mobilebar{position:fixed;display:flex;bottom:0;left:0;right:0;background:#17161e;border-top:1px solid #343340;padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5;justify-content:flex-start;gap:4px;overflow-x:auto}.mobilebar button{flex:0 0 auto;min-width:55px;background:none;border:0;color:#aaa6b7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:#d9a4ff}.mobilebar .ico{font-size:18px}.badge{font-size:10px}.panel{padding:14px}}
 
@@ -219,17 +245,23 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <footer>KREOVA AI • Free MVP • Penyimpanan lokal</footer>
 </main>
 </div>
-<div class="mobilebar" id="mobileNav">
-<button class="active" data-page="dashboard"><span class="ico">⌂</span>Home</button>
-<button data-page="factory"><span class="ico">⚡</span>Factory</button>
-<button data-page="poster"><span class="ico">🖼️</span>Image</button>
-<button data-page="ideas"><span class="ico">✦</span>Ideas</button>
-<button data-page="script"><span class="ico">▤</span>Script</button>
-<button data-page="scenes"><span class="ico">🎬</span>Scenes</button>
-<button data-page="social"><span class="ico">↗</span>Social</button>
-<button data-page="projects"><span class="ico">▣</span>Saved</button>
-<button data-page="account"><span class="ico">👤</span>Akun</button>
+
+<div class="mobile-hint" id="mobileNavHint">
+  👈 Geser menu ke kiri untuk melihat menu lainnya, termasuk Akun 👤
 </div>
+
+<div class="mobilebar" id="mobileNav">
+  <button class="active" data-page="dashboard"><span class="ico">⌂</span>Home</button>
+  <button data-page="factory"><span class="ico">⚡</span>Factory</button>
+  <button data-page="poster"><span class="ico">🖼️</span>Image</button>
+  <button data-page="ideas"><span class="ico">✦</span>Ideas</button>
+  <button data-page="script"><span class="ico">▤</span>Script</button>
+  <button data-page="scenes"><span class="ico">🎬</span>Scenes</button>
+  <button data-page="social"><span class="ico">↗</span>Social</button>
+  <button data-page="projects"><span class="ico">▣</span>Saved</button>
+  <button data-page="account"><span class="ico">👤</span>Akun</button>
+</div>
+ 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const pages=['dashboard','factory','poster','ideas','script','scenes','social','projects','account'];
