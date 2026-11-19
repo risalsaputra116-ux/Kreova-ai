@@ -31,6 +31,10 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 .mobilebar{display:none}
 @media(max-width:800px){.sidebar{width:210px}.cards{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 86px}.hero{margin:22px 0}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{padding-top:3px}.mobilebar{position:fixed;display:flex;bottom:0;left:0;right:0;background:#17161e;border-top:1px solid #343340;padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5;justify-content:flex-start;gap:4px;overflow-x:auto}.mobilebar button{flex:0 0 auto;min-width:55px;background:none;border:0;color:#aaa6b7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:#d9a4ff}.mobilebar .ico{font-size:18px}.badge{font-size:10px}.panel{padding:14px}}
+
+.poster-preview{width:100%;max-width:420px;margin:12px auto;background:#111119;border:1px solid #393548;border-radius:14px;padding:10px}
+#posterCanvas{display:block;width:100%;height:auto;border-radius:8px;background:#201d2b}
+.file-input{padding:9px}
 </style>
 </head>
 <body>
@@ -41,6 +45,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <nav class="nav" id="sideNav">
 <button class="active" data-page="dashboard"><span class="ico">⌂</span>Dashboard</button>
 <button data-page="factory"><span class="ico">⚡</span>Content Factory</button>
+<button data-page="poster"><span class="ico">🖼️</span>Image Studio</button>
 <button data-page="ideas"><span class="ico">✦</span>AI Idea Studio</button>
 <button data-page="script"><span class="ico">▤</span>Script Studio</button>
 <button data-page="scenes"><span class="ico">▧</span>Scene Maker</button>
@@ -62,6 +67,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="panel"><div class="panel-title"><span class="ico">▦</span>Creative tools</div>
 <div class="cards">
 <div class="tool-card" data-page="factory"><div class="tool-icon">⚡</div><h3>Content Factory</h3><p>Satu topik menjadi paket konten lengkap, langsung di perangkat.</p></div>
+<div class="tool-card" data-page="poster"><div class="tool-icon">🖼️</div><h3>Image Studio</h3><p>Buat poster dari tema atau foto sendiri, lalu ekspor PNG.</p></div>
 <div class="tool-card" data-page="ideas"><div class="tool-icon">💡</div><h3>AI Idea Studio</h3><p>Bangun ide, angle, dan hook untuk konten.</p></div>
 <div class="tool-card" data-page="script"><div class="tool-icon">📝</div><h3>Script Studio</h3><p>Susun naskah video sesuai durasi dan gaya.</p></div>
 <div class="tool-card" data-page="scenes"><div class="tool-icon">🎬</div><h3>Scene Maker</h3><p>Ubah naskah menjadi urutan adegan produksi.</p></div>
@@ -93,6 +99,31 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="small">Catatan: fitur ini menghasilkan draft berbasis template lokal, bukan AI online. Periksa fakta sebelum publikasi.</div>
 </section>
 
+
+<section id="poster" class="section">
+<div class="hero"><h1>Image <span>Studio</span></h1><p>Buat poster konten dari tema atau foto galeri. Editor berjalan di perangkat dan dapat mengekspor PNG.</p></div>
+<div class="panel">
+<div class="panel-title">🖼️ Sumber gambar</div>
+<div class="field"><label>Judul / tema poster</label><input id="posterTitle" placeholder="Contoh: 5 kebiasaan agar hidup lebih tenang"></div>
+<div class="field"><label>Subjudul (opsional)</label><input id="posterSubtitle" placeholder="Mulai dari langkah kecil setiap hari"></div>
+<div class="field"><label>Unggah foto sendiri (opsional)</label><input id="posterPhoto" class="file-input" type="file" accept="image/*"><p class="small">Jika foto dipilih, foto akan menjadi latar poster. Jika tidak, poster dibuat dari desain grafis lokal.</p></div>
+<div class="grid">
+<div class="field"><label>Format</label><select id="posterFormat"><option value="portrait">Vertikal 9:16 (Story/Reels)</option><option value="square">Kotak 1:1</option><option value="landscape">Horizontal 16:9</option></select></div>
+<div class="field"><label>Gaya warna</label><select id="posterTheme"><option value="purple">Ungu & pink</option><option value="sunrise">Hangat matahari</option><option value="ocean">Biru laut</option><option value="mono">Hitam & putih</option></select></div>
+</div>
+<div class="btnrow"><button class="btn primary" id="makePoster">Buat / perbarui poster</button><button class="btn" id="clearPosterPhoto">Hapus foto</button></div>
+</div>
+<div class="panel">
+<div class="panel-title">Pratinjau poster</div>
+<div class="poster-preview"><canvas id="posterCanvas" width="1080" height="1920"></canvas></div>
+<div class="btnrow"><button class="btn primary" id="downloadPoster">Unduh PNG</button><button class="btn" id="copyPosterPrompt">Salin prompt AI</button></div>
+<p class="small">Catatan: poster tanpa foto menggunakan desain grafis lokal, bukan gambar AI generatif. Tombol prompt AI menyiapkan instruksi yang bisa digunakan di layanan pembuat gambar AI eksternal. Ketersediaan gratis dan batas kredit mengikuti layanan tersebut.</p>
+</div>
+<div class="panel">
+<div class="panel-title">Prompt gambar AI dari tema</div>
+<div id="posterPrompt" class="result"><div class="empty">Isi tema poster, lalu tekan Buat / perbarui poster.</div></div>
+</div>
+</section>
 <section id="ideas" class="section">
 <div class="hero"><h1>AI Idea <span>Studio</span></h1><p>Rancang ide konten dan prompt pengembangan yang dapat kamu bawa ke AI chat.</p></div>
 <div class="panel"><div class="grid">
@@ -143,6 +174,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="mobilebar" id="mobileNav">
 <button class="active" data-page="dashboard"><span class="ico">⌂</span>Home</button>
 <button data-page="factory"><span class="ico">⚡</span>Factory</button>
+<button data-page="poster"><span class="ico">🖼️</span>Image</button>
 <button data-page="ideas"><span class="ico">✦</span>Ideas</button>
 <button data-page="script"><span class="ico">▤</span>Script</button>
 <button data-page="scenes"><span class="ico">🎬</span>Scenes</button>
@@ -150,8 +182,8 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <button data-page="projects"><span class="ico">▣</span>Saved</button>
 </div>
 <script>
-const pages=['dashboard','factory','ideas','script','scenes','social','projects'];
-const pageNames={dashboard:'Dashboard',factory:'Content Factory',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',social:'Social Pack',projects:'My Projects'};
+const pages=['dashboard','factory','poster','ideas','script','scenes','social','projects'];
+const pageNames={dashboard:'Dashboard',factory:'Content Factory',poster:'Image Studio',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',social:'Social Pack',projects:'My Projects'};
 function goPage(p){if(!pages.includes(p))return;pages.forEach(x=>document.getElementById(x).classList.toggle('active',x===p));document.getElementById('crumb').textContent=pageNames[p];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===p));window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.page)));
 function val(id){return document.getElementById(id).value.trim()}
@@ -259,6 +291,61 @@ function qualityCheck(){
  document.getElementById('qualityResult').textContent=result;
 }
 document.getElementById('checkQuality').onclick=qualityCheck;
+
+let posterImage=null;
+const posterCanvas=document.getElementById('posterCanvas');
+const posterCtx=posterCanvas.getContext('2d');
+function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight,maxLines){
+ const words=(text||'').split(/\s+/);let line='',lines=[];
+ for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test}
+ if(line)lines.push(line);
+ lines.slice(0,maxLines).forEach((ln,i)=>ctx.fillText(ln,x,y+i*lineHeight));
+ return Math.min(lines.length,maxLines);
+}
+function drawPoster(){
+ const title=val('posterTitle')||'Judul Konten';const subtitle=val('posterSubtitle');
+ const format=document.getElementById('posterFormat').value;
+ const theme=document.getElementById('posterTheme').value;
+ const dims=format==='square'?[1080,1080]:format==='landscape'?[1920,1080]:[1080,1920];
+ posterCanvas.width=dims[0];posterCanvas.height=dims[1];
+ const w=dims[0],h=dims[1],ctx=posterCtx;
+ const palettes={purple:['#21152f','#7d2b72','#ff477e'],sunrise:['#321b28','#c45a42','#ffc56d'],ocean:['#102b43','#176b87','#70d6e8'],mono:['#111111','#555555','#eeeeee']};
+ const p=palettes[theme];
+ const grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,p[0]);grad.addColorStop(.58,p[1]);grad.addColorStop(1,p[2]);
+ ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+ if(posterImage){
+   const scale=Math.max(w/posterImage.width,h/posterImage.height),iw=posterImage.width*scale,ih=posterImage.height*scale;
+   ctx.save();ctx.globalAlpha=.55;ctx.drawImage(posterImage,(w-iw)/2,(h-ih)/2,iw,ih);ctx.restore();
+   const overlay=ctx.createLinearGradient(0,h*.25,0,h);overlay.addColorStop(0,'rgba(0,0,0,.05)');overlay.addColorStop(1,'rgba(0,0,0,.82)');ctx.fillStyle=overlay;ctx.fillRect(0,0,w,h);
+ }
+ ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(w*.07,h*.08,w*.86,h*.84);
+ ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=Math.max(3,w*.004);ctx.strokeRect(w*.07,h*.08,w*.86,h*.84);
+ ctx.textAlign='left';ctx.fillStyle='#ffffff';
+ const margin=w*.13,baseY=h*(format==='landscape'?.48:.58);
+ ctx.font=`800 ${Math.round(w*.035)}px system-ui`;ctx.fillStyle='#ffe1f0';ctx.fillText('KREOVA CREATIVE',margin,h*.17);
+ ctx.font=`900 ${Math.round(w*(format==='landscape'?.075:.09))}px system-ui`;
+ const titleLines=wrapCanvasText(ctx,title,margin,baseY,w*.72,Math.round(w*.105),4);
+ if(subtitle){ctx.font=`500 ${Math.round(w*.032)}px system-ui`;ctx.fillStyle='#f5eefa';wrapCanvasText(ctx,subtitle,margin,baseY+titleLines*w*.105+Math.round(w*.055),w*.72,Math.round(w*.045),3)}
+ ctx.font=`700 ${Math.round(w*.025)}px system-ui`;ctx.fillStyle='#ffffff';ctx.fillText('SIMPAN • BAGIKAN • COBA HARI INI',margin,h*.87);
+ const prompt=`Buat poster media sosial ${format==='portrait'?'vertikal 9:16':format==='square'?'kotak 1:1':'horizontal 16:9'}, tema "${title}". Gaya desain ${theme}, komposisi profesional, visual orisinal yang menggambarkan tema, ruang teks jelas, kontras tinggi, tanpa watermark, tanpa logo merek pihak lain. Teks judul persis: "${title}". ${subtitle?'Subjudul persis: "'+subtitle+'".':''} Bahasa Indonesia, tipografi terbaca.`;
+ document.getElementById('posterPrompt').textContent=prompt;
+}
+document.getElementById('posterPhoto').addEventListener('change',e=>{
+ const file=e.target.files&&e.target.files[0];if(!file)return;
+ if(!file.type.startsWith('image/')){alert('Pilih file gambar.');return}
+ const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{posterImage=img;drawPoster()};img.src=reader.result};reader.readAsDataURL(file);
+});
+document.getElementById('makePoster').onclick=drawPoster;
+document.getElementById('clearPosterPhoto').onclick=()=>{posterImage=null;document.getElementById('posterPhoto').value='';drawPoster()};
+document.getElementById('downloadPoster').onclick=()=>{
+ if(!val('posterTitle')){alert('Isi judul atau tema poster terlebih dahulu.');return}
+ drawPoster();const a=document.createElement('a');a.download='kreova-poster.png';a.href=posterCanvas.toDataURL('image/png');a.click();
+};
+document.getElementById('copyPosterPrompt').onclick=async()=>{
+ const prompt=document.getElementById('posterPrompt').textContent.trim();if(!prompt||prompt.startsWith('Isi tema')){alert('Buat prompt terlebih dahulu.');return}
+ try{await navigator.clipboard.writeText(prompt);alert('Prompt AI berhasil disalin.')}catch(e){alert('Clipboard tidak tersedia; pilih teks prompt lalu salin manual.')}
+};
+drawPoster();
 document.getElementById('makeIdea').onclick=()=>{let t=val('ideaTopic');if(!t){alert('Masukkan topik');return}let plat=document.getElementById('ideaPlatform').value,sty=document.getElementById('ideaStyle').value;
 setOut('ideaResult',`KREOVA AI — IDEA & CONTENT BRIEF\n\nTOPIK: ${t}\nPLATFORM: ${plat}\nGAYA: ${sty}\n\nTUGAS AI:\nBertindak sebagai content strategist. Buat 5 ide konten berbeda dari topik ini. Untuk tiap ide sertakan:\n• Judul/angle yang spesifik\n• Hook 1–3 detik\n• Ringkasan isi\n• Format konten yang disarankan\n• CTA yang natural\n\nPilih ide paling kuat, lalu jelaskan mengapa cocok untuk platform ${plat}. Jangan gunakan clickbait menyesatkan, jangan mengarang data, dan hindari meniru karya kreator lain secara persis.\n\nIDE UTAMA UNTUK DIKEMBANGKAN: ${t}`)};
 document.getElementById('makeScript').onclick=()=>{let t=val('scriptTopic');if(!t){alert('Masukkan topik atau premis');return}let dur=document.getElementById('scriptDuration').value,typ=document.getElementById('scriptType').value,tone=document.getElementById('scriptTone').value,aud=val('scriptAudience')||'penonton umum';
