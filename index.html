@@ -180,8 +180,27 @@ document.getElementById('makeFactory').onclick=()=>{
    let visual=i===0?'Medium close-up: kreator menghadap kamera, ekspresi relatable, latar sederhana.':i===seg-1?'Shot penutup: gestur tenang, teks CTA muncul jelas.':'B-roll aktivitas sehari-hari yang menggambarkan poin, potongan pendek, pencahayaan natural.';
    scenes.push(`SCENE ${i+1} (${i*per}-${Math.min(duration,(i+1)*per)} detik)\nTujuan: ${sectionNames[i%sectionNames.length]}\nVisual: ${visual}\nVoice-over: ${voice}\nTeks layar: ${i===0?'Mulai dari yang kecil':i===seg-1?'Satu langkah hari ini':'Langkah '+i}\nEditing: potong cepat namun nyaman, subtitle kontras, transisi sederhana.`);
  }
- const hash=topic.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean).slice(0,3).map(w=>'#'+w).join(' ');
- const output=`KREOVA AI — CONTENT FACTORY (DRAFT OFFLINE)\n\nTOPIK: ${topic}\nPLATFORM: ${platform}\nJENIS: ${type}\nDURASI: ${duration} detik\nGAYA: ${tone}\nTARGET: ${audience}\n\n1. IDE KONTEN\n1) ${angles[0]}\n2) ${angles[1]}\n3) ${angles[2]}\n\n2. HOOK (PILIH SATU)\nA. ${hooks[0]}\nB. ${hooks[1]}\nC. ${hooks[2]}\n\n3. NASKAH VOICE-OVER (${duration} DETIK)\n${scriptLines.join('\n')}\n\n4. STORYBOARD / SCENE\n${scenes.join('\n\n')}\n\n5. CAPTION\n${topic}: tidak perlu menuntut perubahan besar sekaligus. Pilih satu langkah sederhana yang sesuai dengan keadaanmu, coba, lalu evaluasi.\n\n6. CTA\n${cta}\n\n7. HASHTAG AWAL\n${hash||'#tips #kebiasaan #konten'} #kreator #shortvideo\n\n8. IDE COVER\nClose-up ekspresi/objek yang berkaitan dengan topik, latar bersih, teks pendek: “Mulai dari yang kecil”.\n\n9. CHECKLIST PUBLIKASI\n- Periksa fakta atau klaim jika ada.\n- Sesuaikan bahasa dengan gaya bicaramu.\n- Pastikan aset audio/visual punya izin.\n- Tambahkan subtitle dan cek durasi.\n\nCatatan: ini generator template offline dengan susunan naskah yang lebih terarah, bukan AI generatif. Periksa dan sesuaikan isi sebelum publikasi.`;
+ // Hashtag dibuat dari tema, bukan nama aplikasi atau tag kreator generik.
+ const topicText=topic.toLowerCase();
+ const hashtagList=[];
+ const addTags=arr=>arr.forEach(tag=>{if(!hashtagList.includes(tag))hashtagList.push(tag)});
+ if(/stres|stress|cemas|tenang|pikiran|mental|overthinking|relaks/.test(topicText)) addTags(['#kelolastres','#ketenanganpikiran','#kesehatanmental','#selfcare']);
+ if(/tidur|istirahat|begadang|lelah|capek/.test(topicText)) addTags(['#tipsTidur','#kualitasTidur','#istirahatCukup']);
+ if(/kebiasaan|rutinitas|disiplin/.test(topicText)) addTags(['#kebiasaanpositif','#rutinitassehat']);
+ if(/produktif|fokus|konsentrasi|waktu/.test(topicText)) addTags(['#tipsProduktif','#manajemenwaktu','#fokusharian']);
+ if(/makan|nutrisi|makanan|diet|sehat|olahraga|gerak|tubuh/.test(topicText)) addTags(['#polahidupsehat','#tipsKesehatan']);
+ if(/uang|menabung|keuangan|bisnis|usaha|jualan/.test(topicText)) addTags(['#tipsKeuangan','#edukasikeuangan']);
+ if(/belajar|sekolah|pelajar|pendidikan|pengetahuan/.test(topicText)) addTags(['#tipsBelajar','#edukasi']);
+ if(/cinta|hubungan|pasangan|keluarga/.test(topicText)) addTags(['#tipsHubungan','#keluarga']);
+ if(/resep|masak|memasak|kuliner/.test(topicText)) addTags(['#reseppraktis','#ideMasakan']);
+ if(/edukasi|fakta|tips|cara|langkah/.test(type.toLowerCase()+' '+topicText)) addTags(['#tipsBermanfaat']);
+ const cleanWords=topicText.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w=>w.length>=4&&!['yang','agar','atau','dengan','untuk','dari','dalam','tidak','lebih','mudah','tentang','sederhana','adalah','bisa','video','konten'].includes(w));
+ cleanWords.slice(0,3).forEach(w=>addTags(['#'+w]));
+ if(/tiktok/i.test(platform)) addTags(['#TikTokEdukasi']);
+ else if(/instagram/i.test(platform)) addTags(['#ReelsEdukasi']);
+ else if(/youtube/i.test(platform)) addTags(['#YouTubeShorts']);
+ const hash=hashtagList.slice(0,8).join(' ');
+ const output=`KREOVA AI — CONTENT FACTORY (DRAFT OFFLINE)\n\nTOPIK: ${topic}\nPLATFORM: ${platform}\nJENIS: ${type}\nDURASI: ${duration} detik\nGAYA: ${tone}\nTARGET: ${audience}\n\n1. IDE KONTEN\n1) ${angles[0]}\n2) ${angles[1]}\n3) ${angles[2]}\n\n2. HOOK (PILIH SATU)\nA. ${hooks[0]}\nB. ${hooks[1]}\nC. ${hooks[2]}\n\n3. NASKAH VOICE-OVER (${duration} DETIK)\n${scriptLines.join('\n')}\n\n4. STORYBOARD / SCENE\n${scenes.join('\n\n')}\n\n5. CAPTION\n${topic}: tidak perlu menuntut perubahan besar sekaligus. Pilih satu langkah sederhana yang sesuai dengan keadaanmu, coba, lalu evaluasi.\n\n6. CTA\n${cta}\n\n7. HASHTAG RELEVAN\n${hash||'#tipsBermanfaat'}\nHashtag dipilih dari kata kunci topik dan kategori konten; bukan hashtag nama aplikasi KREOVA AI.\n\n8. IDE COVER\nClose-up ekspresi/objek yang berkaitan dengan topik, latar bersih, teks pendek: “Mulai dari yang kecil”.\n\n9. CHECKLIST PUBLIKASI\n- Periksa fakta atau klaim jika ada.\n- Sesuaikan bahasa dengan gaya bicaramu.\n- Pastikan aset audio/visual punya izin.\n- Tambahkan subtitle dan cek durasi.\n\nCatatan: ini generator template offline dengan susunan naskah yang lebih terarah, bukan AI generatif. Periksa dan sesuaikan isi sebelum publikasi.`;
  setOut('factoryResult',output);
 };
 document.getElementById('makeIdea').onclick=()=>{let t=val('ideaTopic');if(!t){alert('Masukkan topik');return}let plat=document.getElementById('ideaPlatform').value,sty=document.getElementById('ideaStyle').value;
