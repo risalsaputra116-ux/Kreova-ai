@@ -84,6 +84,12 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="field full"><label>Ajakan / CTA (opsional)</label><input id="factoryCTA" placeholder="Contoh: Simpan video ini untuk dicoba nanti"></div>
 </div><button class="btn primary full" id="makeFactory">⚡ Buat paket konten</button></div>
 <div class="panel"><div class="panel-title">Paket konten kamu</div><div class="result" id="factoryResult"><div class="empty">Masukkan topik, lalu tekan Buat paket konten.</div></div><div class="btnrow"><button class="btn" id="editFactory">✏️ Edit paket</button><button class="btn" data-copy="factoryResult">Salin paket</button><button class="btn" data-save="factoryResult" data-save-title="factory">Simpan proyek</button></div><div class="editor-area hide" id="factoryEditorWrap"><div class="edit-help">Edit bebas seluruh isi paket di bawah ini. Perubahan baru diterapkan setelah menekan “Terapkan perubahan”.</div><textarea id="factoryEditor" spellcheck="true"></textarea><div class="btnrow"><button class="btn primary" id="applyFactoryEdit">Terapkan perubahan</button><button class="btn ghost" id="cancelFactoryEdit">Batal</button></div></div></div>
+<div class="panel" id="qualityPanel">
+<div class="panel-title">🧪 Content Quality Checker</div>
+<p class="small">Periksa kelengkapan dan konsistensi paket sebelum dipublikasikan. Pemeriksaan berjalan lokal berdasarkan teks, bukan penilaian AI atau jaminan performa.</p>
+<button class="btn primary full" id="checkQuality">Periksa kualitas paket</button>
+<div id="qualityResult" class="result" style="margin-top:12px"><div class="empty">Buat paket konten terlebih dahulu, lalu jalankan pemeriksaan.</div></div>
+</div>
 <div class="small">Catatan: fitur ini menghasilkan draft berbasis template lokal, bukan AI online. Periksa fakta sebelum publikasi.</div>
 </section>
 
@@ -206,6 +212,53 @@ document.getElementById('makeFactory').onclick=()=>{
  const output=`KREOVA AI — CONTENT FACTORY (DRAFT OFFLINE)\n\nTOPIK: ${topic}\nPLATFORM: ${platform}\nJENIS: ${type}\nDURASI: ${duration} detik\nGAYA: ${tone}\nTARGET: ${audience}\n\n1. IDE KONTEN\n1) ${angles[0]}\n2) ${angles[1]}\n3) ${angles[2]}\n\n2. HOOK (PILIH SATU)\nA. ${hooks[0]}\nB. ${hooks[1]}\nC. ${hooks[2]}\n\n3. NASKAH VOICE-OVER (${duration} DETIK)\n${scriptLines.join('\n')}\n\n4. STORYBOARD / SCENE\n${scenes.join('\n\n')}\n\n5. CAPTION\n${topic}: tidak perlu menuntut perubahan besar sekaligus. Pilih satu langkah sederhana yang sesuai dengan keadaanmu, coba, lalu evaluasi.\n\n6. CTA\n${cta}\n\n7. HASHTAG RELEVAN\n${hash||'#tipsBermanfaat'}\nHashtag dipilih dari kata kunci topik dan kategori konten; bukan hashtag nama aplikasi KREOVA AI.\n\n8. IDE COVER\nClose-up ekspresi/objek yang berkaitan dengan topik, latar bersih, teks pendek: “Mulai dari yang kecil”.\n\n9. CHECKLIST PUBLIKASI\n- Periksa fakta atau klaim jika ada.\n- Sesuaikan bahasa dengan gaya bicaramu.\n- Pastikan aset audio/visual punya izin.\n- Tambahkan subtitle dan cek durasi.\n\nCatatan: ini generator template offline dengan susunan naskah yang lebih terarah, bukan AI generatif. Periksa dan sesuaikan isi sebelum publikasi.`;
  setOut('factoryResult',output);
 };
+
+function qualityCheck(){
+ const text=document.getElementById('factoryResult').textContent.trim();
+ if(!text || text.includes('Masukkan topik')){alert('Buat paket konten terlebih dahulu.');return;}
+ const topic=val('factoryTopic').toLowerCase();
+ const duration=Number(document.getElementById('factoryDuration').value)||30;
+ const platform=document.getElementById('factoryPlatform').value;
+ const sections=[
+  ['Ide konten',/1\. IDE KONTEN/i],
+  ['Hook pembuka',/2\. HOOK/i],
+  ['Naskah voice-over',/3\. NASKAH VOICE-OVER/i],
+  ['Storyboard / scene',/4\. STORYBOARD \/ SCENE/i],
+  ['Caption',/5\. CAPTION/i],
+  ['CTA',/6\. CTA/i],
+  ['Hashtag',/7\. HASHTAG/i],
+  ['Ide cover',/8\. IDE COVER/i]
+ ];
+ let score=0, lines=[];
+ const add=(name,ok,good,bad)=>{if(ok){score+=1;lines.push('✓ '+name+': '+good)}else lines.push('! '+name+': '+bad)};
+ sections.forEach(([name,rx])=>add(name,rx.test(text),'tersedia','belum ditemukan'));
+ const hooks=(text.match(/^[ABC]\.\s.+/gm)||[]).length;
+ add('Pilihan hook',hooks>=2, hooks+' pilihan tersedia','tambahkan minimal 2 pilihan hook');
+ const sceneCount=(text.match(/SCENE\s+\d+/gi)||[]).length;
+ add('Jumlah scene',sceneCount>=2,sceneCount+' scene terdeteksi','buat setidaknya 2 scene');
+ const hashMatch=text.match(/7\. HASHTAG RELEVAN\s*([\s\S]*?)(?:\n\n|$)/i);
+ const tags=hashMatch?(hashMatch[1].match(/#[\p{L}\p{N}_]+/gu)||[]):[];
+ const generic=tags.filter(t=>/kreova|fyp|viral|foryou|trending/i.test(t));
+ add('Hashtag',tags.length>=3,tags.length+' hashtag terdeteksi','tambahkan 3–8 hashtag spesifik yang relevan');
+ add('Relevansi hashtag',tags.length>0&&generic.length===0,'tidak terdeteksi tag nama aplikasi atau tag generik berlebihan','hapus hashtag yang tidak terkait isi video');
+ const words=(text.match(/\b[\p{L}\p{N}'’-]+\b/gu)||[]).length;
+ const spoken=(text.match(/\[\d+-\d+ detik\]\s*([^\n]+)/g)||[]).join(' ');
+ const spokenWords=(spoken.match(/\b[\p{L}\p{N}'’-]+\b/gu)||[]).length;
+ const estimated=Math.round(spokenWords/2.5);
+ const timingOk=spokenWords>0 && estimated<=duration+Math.max(4,Math.round(duration*.25));
+ add('Kesesuaian durasi',timingOk,`perkiraan narasi ${estimated} detik untuk target ${duration} detik`,'narasi mungkin terlalu panjang atau belum memiliki timing yang terbaca');
+ const topicWords=topic.split(/\s+/).filter(w=>w.length>=4&&!['yang','agar','atau','dengan','untuk','lebih','tidak','sederhana'].includes(w));
+ const matched=topicWords.filter(w=>text.toLowerCase().includes(w)).length;
+ const relevant=topicWords.length===0||matched>=Math.min(2,topicWords.length);
+ add('Kesesuaian topik',relevant,'kata kunci topik muncul dalam paket','periksa apakah semua bagian tetap membahas topik utama');
+ const pct=Math.round(score/sections.length/1*100); // score includes all checks; normalized below
+ const total=sections.length+5;
+ const finalScore=Math.round(score/total*100);
+ const verdict=finalScore>=85?'Paket cukup lengkap':finalScore>=65?'Paket perlu sedikit penyempurnaan':'Paket perlu diperbaiki sebelum publikasi';
+ const result=`HASIL PEMERIKSAAN KUALITAS\n\nSKOR KELENGKAPAN: ${finalScore}/100\n${verdict}\nPlatform: ${platform}\nTarget durasi: ${duration} detik\n\nRINCIAN:\n${lines.join('\n')}\n\nCATATAN:\nSkor ini mengukur kelengkapan struktur dan beberapa sinyal konsistensi secara otomatis. Ia tidak menilai kebenaran fakta, kualitas visual sebenarnya, hak cipta, atau peluang viral. Baca ulang dan sesuaikan dengan kebutuhan penonton sebelum publikasi.`;
+ document.getElementById('qualityResult').textContent=result;
+}
+document.getElementById('checkQuality').onclick=qualityCheck;
 document.getElementById('makeIdea').onclick=()=>{let t=val('ideaTopic');if(!t){alert('Masukkan topik');return}let plat=document.getElementById('ideaPlatform').value,sty=document.getElementById('ideaStyle').value;
 setOut('ideaResult',`KREOVA AI — IDEA & CONTENT BRIEF\n\nTOPIK: ${t}\nPLATFORM: ${plat}\nGAYA: ${sty}\n\nTUGAS AI:\nBertindak sebagai content strategist. Buat 5 ide konten berbeda dari topik ini. Untuk tiap ide sertakan:\n• Judul/angle yang spesifik\n• Hook 1–3 detik\n• Ringkasan isi\n• Format konten yang disarankan\n• CTA yang natural\n\nPilih ide paling kuat, lalu jelaskan mengapa cocok untuk platform ${plat}. Jangan gunakan clickbait menyesatkan, jangan mengarang data, dan hindari meniru karya kreator lain secara persis.\n\nIDE UTAMA UNTUK DIKEMBANGKAN: ${t}`)};
 document.getElementById('makeScript').onclick=()=>{let t=val('scriptTopic');if(!t){alert('Masukkan topik atau premis');return}let dur=document.getElementById('scriptDuration').value,typ=document.getElementById('scriptType').value,tone=document.getElementById('scriptTone').value,aud=val('scriptAudience')||'penonton umum';
