@@ -341,11 +341,15 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 
 <section id="account" class="section">
 <div class="hero"><h1>Account <span>Center</span></h1><p>Login dan pendaftaran akun melalui Supabase Auth. Konfigurasi hanya tersimpan sementara di sesi browser ini.</p></div>
-<div class="panel"><div class="panel-title">⚙️ Konfigurasi Supabase</div>
-<div class="field"><label>Project URL</label><input id="sbProjectUrl" placeholder="https://PROJECT.supabase.co" inputmode="url"></div>
-<div class="field"><label>Publishable / anon key</label><input id="sbPublicKey" type="password" autocomplete="off" placeholder="Tempel publishable key (bukan secret/service_role)"></div>
-<div class="btnrow"><button class="btn primary" id="sbInit">Hubungkan Supabase</button><button class="btn" id="sbClearConfig">Hapus konfigurasi sesi</button></div>
-<div id="sbAuthStatus" class="ai-status warn">Supabase belum dikonfigurasi.</div>
+<div class="panel" style="display:none">
+<div class="panel-title">Konfigurasi Supabase otomatis</div>
+<input id="sbProjectUrl">
+<input id="sbPublicKey">
+<button id="sbInit">Hubungkan Supabase</button>
+<button id="sbClearConfig">Reset</button>
+<div id="sbAuthStatus" class="ai-status warn">
+Supabase menghubungkan otomatis.
+</div>
 </div>
 <div class="panel"><div class="panel-title">🔐 Login / Daftar</div>
 <div class="field"><label>Nama tampilan (untuk daftar)</label><input id="sbDisplayName" placeholder="Nama kamu"></div>
@@ -742,13 +746,54 @@ function sbStatus(msg,good=false){const el=document.getElementById('sbAuthStatus
 function sbUserStatus(msg,good=false){const el=document.getElementById('sbUserStatus');if(el){el.textContent=msg;el.className='ai-status '+(good?'good':'warn')}}
 function sbClient(){return kreovaSb}
 function sbRefreshUser(){if(!kreovaSb){sbUserStatus('Supabase belum dikonfigurasi.');return}kreovaSb.auth.getSession().then(({data,error})=>{if(error){sbUserStatus('Gagal membaca sesi: '+error.message);return}const u=data.session?.user;if(u)sbUserStatus('Login sebagai '+u.email+' • ID akun tersedia. Jangan bagikan token.',true);else sbUserStatus('Belum login.')})}
-function sbConnect(){const url=(document.getElementById('sbProjectUrl').value||sessionStorage.getItem(SB_URL_SESSION)||'').trim().replace(/\/$/,'');const key=(document.getElementById('sbPublicKey').value||sessionStorage.getItem(SB_KEY_SESSION)||'').trim();if(!/^https:\/\/[^\s]+\.supabase\.co$/.test(url)){sbStatus('URL tidak valid. Gunakan https:// nama-proyek.supabase.co (tanpa /rest/v1).');return}if(!key){sbStatus('Publishable/anon key diperlukan. Jangan gunakan secret atau service_role key.');return}if(!window.supabase||!window.supabase.createClient){sbStatus('Library Supabase belum termuat. Periksa koneksi internet lalu muat ulang.');return}try{sessionStorage.setItem(SB_URL_SESSION,url);sessionStorage.setItem(SB_KEY_SESSION,key);kreovaSb=window.supabase.createClient(url,key);sbStatus('Supabase berhasil dikonfigurasi di tab ini.',true);sbRefreshUser();kreovaSb.auth.onAuthStateChange((event,session)=>{if(session?.user)sbUserStatus('Login sebagai '+session.user.email+' • '+event,true);else sbUserStatus('Belum login.')})}catch(e){sbStatus('Gagal menghubungkan: '+e.message)}}
-document.getElementById('sbInit').onclick=sbConnect;
-document.getElementById('sbClearConfig').onclick=()=>{sessionStorage.removeItem(SB_URL_SESSION);sessionStorage.removeItem(SB_KEY_SESSION);kreovaSb=null;document.getElementById('sbProjectUrl').value='';document.getElementById('sbPublicKey').value='';sbStatus('Konfigurasi sesi dihapus.');sbUserStatus('Belum login.')};
+// KREOVA AI — Supabase otomatis
+const KREOVA_SUPABASE_URL = 'https://uokgtueihzcopqqdraxa.supabase.co';
+const KREOVA_SUPABASE_KEY = 'sb_publishable_k-wgjzsFoVFTlRkADPOsXA_eEg3I-Ei';
+
+function sbConnect(){
+  if(!window.supabase || !window.supabase.createClient){
+    sbStatus('Library Supabase belum termuat. Muat ulang halaman.');
+    return;
+  }
+
+  try{
+    kreovaSb = window.supabase.createClient(
+      KREOVA_SUPABASE_URL,
+      KREOVA_SUPABASE_KEY
+    );
+
+    sbStatus('KREOVA AI berhasil terhubung ke Supabase.', true);
+    sbRefreshUser();
+
+    kreovaSb.auth.onAuthStateChange((event, session)=>{
+      if(session?.user){
+        sbUserStatus(
+          'Login sebagai '+session.user.email+' • '+event,
+          true
+        );
+      }else{
+        sbUserStatus('Belum login.');
+      }
+    });
+
+  }catch(e){
+    sbStatus('Gagal menghubungkan Supabase: '+e.message);
+  }
+}
+
+document.getElementById('sbInit').onclick = sbConnect;
+
+document.getElementById('sbClearConfig').onclick = ()=>{
+  kreovaSb = null;
+  sbStatus('Koneksi direset. Muat ulang halaman untuk menghubungkan kembali.');
+  sbUserStatus('Belum login.');
+};
+
+sbConnect();
 document.getElementById('sbSignup').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value,display=document.getElementById('sbDisplayName').value.trim();if(!email||password.length<8){alert('Masukkan email dan password minimal 8 karakter.');return}const {data,error}=await kreovaSb.auth.signUp({email,password,options:{data:{display_name:display}}});if(error){sbUserStatus('Daftar gagal: '+error.message);return}sbUserStatus(data.session?'Pendaftaran berhasil, akun login.':'Pendaftaran berhasil. Periksa email untuk konfirmasi sebelum login.',!!data.session)};
 document.getElementById('sbLogin').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value;if(!email||!password){alert('Masukkan email dan password.');return}const {data,error}=await kreovaSb.auth.signInWithPassword({email,password});if(error){sbUserStatus('Login gagal: '+error.message);return}sbUserStatus('Login berhasil sebagai '+data.user.email,true)};
 document.getElementById('sbLogout').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const {error}=await kreovaSb.auth.signOut();if(error)sbUserStatus('Logout gagal: '+error.message);else sbUserStatus('Logout berhasil.',true)};
-(function restoreSbConfig(){const u=sessionStorage.getItem(SB_URL_SESSION),k=sessionStorage.getItem(SB_KEY_SESSION);if(u)document.getElementById('sbProjectUrl').value=u;if(k)document.getElementById('sbPublicKey').value=k;if(u&&k)sbConnect()})();
+
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 </script>
 </body>
