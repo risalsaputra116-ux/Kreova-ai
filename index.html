@@ -30,7 +30,7 @@ main{flex:1;min-width:0;padding:23px clamp(15px,4vw,42px) 50px;max-width:1320px;
 footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 .mobilebar{display:none}
 @media(max-width:800px){.sidebar{width:210px}.cards{grid-template-columns:1fr 1fr}}
-@media(max-width:620px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 86px}.hero{margin:22px 0}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{padding-top:3px}.mobilebar{position:fixed;display:flex;bottom:0;left:0;right:0;background:#17161e;border-top:1px solid #343340;padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5;justify-content:space-around}.mobilebar button{background:none;border:0;color:#aaa6b7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:#d9a4ff}.mobilebar .ico{font-size:18px}.badge{font-size:10px}.panel{padding:14px}}
+@media(max-width:620px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 86px}.hero{margin:22px 0}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{padding-top:3px}.mobilebar{position:fixed;display:flex;bottom:0;left:0;right:0;background:#17161e;border-top:1px solid #343340;padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5;justify-content:flex-start;gap:4px;overflow-x:auto}.mobilebar button{flex:0 0 auto;min-width:55px;background:none;border:0;color:#aaa6b7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:#d9a4ff}.mobilebar .ico{font-size:18px}.badge{font-size:10px}.panel{padding:14px}}
 </style>
 </head>
 <body>
@@ -40,6 +40,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="nav-title">WORKSPACE</div>
 <nav class="nav" id="sideNav">
 <button class="active" data-page="dashboard"><span class="ico">⌂</span>Dashboard</button>
+<button data-page="factory"><span class="ico">⚡</span>Content Factory</button>
 <button data-page="ideas"><span class="ico">✦</span>AI Idea Studio</button>
 <button data-page="script"><span class="ico">▤</span>Script Studio</button>
 <button data-page="scenes"><span class="ico">▧</span>Scene Maker</button>
@@ -60,6 +61,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 </div>
 <div class="panel"><div class="panel-title"><span class="ico">▦</span>Creative tools</div>
 <div class="cards">
+<div class="tool-card" data-page="factory"><div class="tool-icon">⚡</div><h3>Content Factory</h3><p>Satu topik menjadi paket konten lengkap, langsung di perangkat.</p></div>
 <div class="tool-card" data-page="ideas"><div class="tool-icon">💡</div><h3>AI Idea Studio</h3><p>Bangun ide, angle, dan hook untuk konten.</p></div>
 <div class="tool-card" data-page="script"><div class="tool-icon">📝</div><h3>Script Studio</h3><p>Susun naskah video sesuai durasi dan gaya.</p></div>
 <div class="tool-card" data-page="scenes"><div class="tool-icon">🎬</div><h3>Scene Maker</h3><p>Ubah naskah menjadi urutan adegan produksi.</p></div>
@@ -67,6 +69,22 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="tool-card" data-page="projects"><div class="tool-icon">🗂️</div><h3>My Projects</h3><p>Lanjutkan proyek yang tersimpan di perangkat.</p></div>
 <div class="tool-card" data-page="script"><div class="tool-icon">✨</div><h3>Content Assistant</h3><p>Susun brief kreatif untuk AI chat pilihanmu.</p></div>
 </div></div>
+</section>
+
+<section id="factory" class="section">
+<div class="hero"><h1>Content <span>Factory</span></h1><p>Ubah satu topik menjadi paket konten lengkap. Generator template offline — tanpa login, tanpa biaya API.</p></div>
+<div class="panel"><div class="panel-title"><span class="ico">⚡</span>Rancang paket konten</div>
+<div class="grid">
+<div class="field full"><label>Topik utama</label><textarea id="factoryTopic" placeholder="Contoh: 5 kebiasaan sederhana agar tidur lebih nyenyak"></textarea></div>
+<div class="field"><label>Platform</label><select id="factoryPlatform"><option>TikTok</option><option>YouTube Shorts</option><option>Instagram Reels</option><option>Facebook Reels</option><option>YouTube</option></select></div>
+<div class="field"><label>Jenis konten</label><select id="factoryType"><option>Edukasi</option><option>Storytelling</option><option>Promosi</option><option>Komedi</option><option>Motivasi</option><option>Tips praktis</option></select></div>
+<div class="field"><label>Durasi</label><select id="factoryDuration"><option value="15">15 detik</option><option value="30" selected>30 detik</option><option value="45">45 detik</option><option value="60">60 detik</option><option value="90">90 detik</option></select></div>
+<div class="field"><label>Gaya</label><select id="factoryTone"><option>Natural dan akrab</option><option>Sinematik dan emosional</option><option>Lucu dan santai</option><option>Jelas dan informatif</option><option>Semangat dan inspiratif</option></select></div>
+<div class="field full"><label>Target penonton (opsional)</label><input id="factoryAudience" placeholder="Contoh: pekerja sibuk, pelajar, orang tua"></div>
+<div class="field full"><label>Ajakan / CTA (opsional)</label><input id="factoryCTA" placeholder="Contoh: Simpan video ini untuk dicoba nanti"></div>
+</div><button class="btn primary full" id="makeFactory">⚡ Buat paket konten</button></div>
+<div class="panel"><div class="panel-title">Paket konten kamu</div><div class="result" id="factoryResult"><div class="empty">Masukkan topik, lalu tekan Buat paket konten.</div></div><div class="btnrow"><button class="btn" data-copy="factoryResult">Salin paket</button><button class="btn" data-save="factoryResult" data-save-title="factory">Simpan proyek</button></div></div>
+<div class="small">Catatan: fitur ini menghasilkan draft berbasis template lokal, bukan AI online. Periksa fakta sebelum publikasi.</div>
 </section>
 
 <section id="ideas" class="section">
@@ -118,6 +136,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 </div>
 <div class="mobilebar" id="mobileNav">
 <button class="active" data-page="dashboard"><span class="ico">⌂</span>Home</button>
+<button data-page="factory"><span class="ico">⚡</span>Factory</button>
 <button data-page="ideas"><span class="ico">✦</span>Ideas</button>
 <button data-page="script"><span class="ico">▤</span>Script</button>
 <button data-page="scenes"><span class="ico">🎬</span>Scenes</button>
@@ -125,8 +144,8 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <button data-page="projects"><span class="ico">▣</span>Saved</button>
 </div>
 <script>
-const pages=['dashboard','ideas','script','scenes','social','projects'];
-const pageNames={dashboard:'Dashboard',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',social:'Social Pack',projects:'My Projects'};
+const pages=['dashboard','factory','ideas','script','scenes','social','projects'];
+const pageNames={dashboard:'Dashboard',factory:'Content Factory',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',social:'Social Pack',projects:'My Projects'};
 function goPage(p){if(!pages.includes(p))return;pages.forEach(x=>document.getElementById(x).classList.toggle('active',x===p));document.getElementById('crumb').textContent=pageNames[p];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===p));window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.page)));
 function val(id){return document.getElementById(id).value.trim()}
@@ -136,6 +155,20 @@ function loadProjects(){try{return JSON.parse(localStorage.getItem('kreova_proje
 function renderProjects(){let list=document.getElementById('projectList'),arr=loadProjects();list.innerHTML='';if(!arr.length){list.innerHTML='<p class="small">Belum ada proyek tersimpan.</p>';return}arr.forEach(p=>{let row=document.createElement('div');row.className='project-row';let name=document.createElement('div');name.className='name';name.innerHTML='<strong>'+escapeHtml(p.title)+'</strong><div class="small">'+escapeHtml(p.created||'')+'</div>';let open=document.createElement('button');open.className='btn';open.textContent='Buka';open.onclick=()=>{let win=window.open('','_blank');if(win){win.document.write('<pre style="white-space:pre-wrap;font-family:system-ui;padding:16px">'+escapeHtml(p.content)+'</pre>')}else alert(p.content)};let del=document.createElement('button');del.className='btn';del.textContent='Hapus';del.onclick=()=>{if(confirm('Hapus proyek ini?')){localStorage.setItem('kreova_projects',JSON.stringify(loadProjects().filter(x=>x.id!==p.id)));renderProjects()}};row.append(name,open,del);list.appendChild(row)})}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 document.getElementById('startProject').onclick=()=>{let t=val('dashTopic');if(!t){alert('Masukkan topik terlebih dahulu');return}document.getElementById('ideaTopic').value=t;document.getElementById('ideaPlatform').value=document.getElementById('dashPlatform').value;goPage('ideas')};
+document.getElementById('makeFactory').onclick=()=>{
+ const topic=val('factoryTopic'); if(!topic){alert('Masukkan topik terlebih dahulu');return;}
+ const platform=document.getElementById('factoryPlatform').value,type=document.getElementById('factoryType').value,duration=Number(document.getElementById('factoryDuration').value),tone=document.getElementById('factoryTone').value,audience=val('factoryAudience')||'penonton umum',cta=val('factoryCTA')||'Bagikan pendapatmu di komentar.';
+ const hooks=[`“Pernah kepikiran soal ${topic}? Ini yang sering terlewat.”`,`“Kalau kamu ingin memahami ${topic}, mulai dari hal sederhana ini.”`,`“Jangan buru-buru melewatkan ${topic}—ada hal penting yang perlu kamu tahu.”`];
+ const angles=[`Hal yang paling sering disalahpahami tentang ${topic}`,`Cara sederhana melihat ${topic} dari sudut berbeda`,`Satu langkah praktis yang bisa dicoba terkait ${topic}`];
+ const seg=Math.max(3,Math.min(5,Math.round(duration/15))),per=Math.round(duration/seg);
+ let scriptParts=[]; const narr=[`Hari ini kita bahas ${topic}.`,`Ada satu hal yang sering tidak disadari.`,`Coba perhatikan bagian ini: ${topic}.`,`Mulai dari langkah kecil dan lakukan dengan konsisten.`,`Intinya, pahami dulu lalu sesuaikan dengan keadaanmu.`];
+ for(let i=0;i<seg;i++){let line=narr[i%narr.length];scriptParts.push(`[${i*per}-${Math.min(duration,(i+1)*per)} detik] ${line}`)}
+ let sceneParts=[];for(let i=0;i<seg;i++){sceneParts.push(`SCENE ${i+1} (${i*per}-${Math.min(duration,(i+1)*per)} detik)\nVisual: ${i===0?'Pembuka yang langsung memperlihatkan konteks topik.':i===seg-1?'Penutup dengan visual ringkas dan ajakan.':'Ilustrasi/aktivitas pendukung yang memperjelas poin.'}\nVoice-over: ${scriptParts[i].split('] ')[1]}\nTeks layar: ${i===0?topic:i===seg-1?'Simpan & bagikan':'Poin penting'}`)}
+ const hashtags=topic.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean).slice(0,3).map(w=>'#'+w).join(' ');
+ const output=`KREOVA AI — CONTENT FACTORY (DRAFT TEMPLATE)\n\nTOPIK: ${topic}\nPLATFORM: ${platform}\nJENIS: ${type}\nDURASI: ${duration} detik\nGAYA: ${tone}\nTARGET: ${audience}\n\n1. IDE / ANGLE KONTEN\n1) ${angles[0]}\n2) ${angles[1]}\n3) ${angles[2]}\n\n2. PILIHAN HOOK\nA. ${hooks[0]}\nB. ${hooks[1]}\nC. ${hooks[2]}\n\n3. NASKAH DRAFT (${duration} DETIK)\n${scriptParts.join('\n')}\n\n4. STORYBOARD\n${sceneParts.join('\n\n')}\n\n5. CAPTION\n${topic} — bahas dengan gaya ${tone.toLowerCase()}. Konten ini dibuat untuk ${audience}. Tonton sampai akhir dan ambil satu hal yang bisa kamu praktikkan.\n\n6. CTA\n${cta}\n\n7. HASHTAG AWAL\n${hashtags||'#konten #tips #inspirasi'} #kreator #shortvideo\n\n8. IDE COVER / THUMBNAIL\nClose-up/visual utama yang mewakili ${topic}, latar sederhana, kontras jelas, dan teks cover maksimal 3–5 kata.\n\n9. CHECKLIST SEBELUM PUBLIKASI\n- Cek fakta dan klaim.\n- Sesuaikan naskah dengan suara dan gaya sendiri.\n- Pastikan musik, gambar, dan video memiliki izin penggunaan.\n- Periksa subtitle dan format platform.\n\nCatatan: hasil ini draft template offline, bukan keluaran AI generatif.`;
+ setOut('factoryResult',output);
+};
+
 document.getElementById('makeIdea').onclick=()=>{let t=val('ideaTopic');if(!t){alert('Masukkan topik');return}let plat=document.getElementById('ideaPlatform').value,sty=document.getElementById('ideaStyle').value;
 setOut('ideaResult',`KREOVA AI — IDEA & CONTENT BRIEF\n\nTOPIK: ${t}\nPLATFORM: ${plat}\nGAYA: ${sty}\n\nTUGAS AI:\nBertindak sebagai content strategist. Buat 5 ide konten berbeda dari topik ini. Untuk tiap ide sertakan:\n• Judul/angle yang spesifik\n• Hook 1–3 detik\n• Ringkasan isi\n• Format konten yang disarankan\n• CTA yang natural\n\nPilih ide paling kuat, lalu jelaskan mengapa cocok untuk platform ${plat}. Jangan gunakan clickbait menyesatkan, jangan mengarang data, dan hindari meniru karya kreator lain secara persis.\n\nIDE UTAMA UNTUK DIKEMBANGKAN: ${t}`)};
 document.getElementById('makeScript').onclick=()=>{let t=val('scriptTopic');if(!t){alert('Masukkan topik atau premis');return}let dur=document.getElementById('scriptDuration').value,typ=document.getElementById('scriptType').value,tone=document.getElementById('scriptTone').value,aud=val('scriptAudience')||'penonton umum';
@@ -145,7 +178,7 @@ setOut('sceneResult',`KREOVA AI — SCENE MAKER BRIEF\n\nNASKAH:\n${t}\n\nFORMAT
 document.getElementById('makeSocial').onclick=()=>{let t=val('socialTopic');if(!t){alert('Masukkan topik atau isi video');return}let p=document.getElementById('socialPlatform').value,g=document.getElementById('socialGoal').value;
 setOut('socialResult',`KREOVA AI — SOCIAL PACK BRIEF\n\nKONTEN:\n${t}\nPLATFORM: ${p}\nTUJUAN: ${g}\n\nBUAT PAKET:\n1. 5 judul alternatif yang menarik dan jujur.\n2. Caption utama sesuai platform ${p}.\n3. Deskripsi yang mudah dibaca dan relevan.\n4. 8–15 hashtag relevan (hindari hashtag spam).\n5. CTA sesuai tujuan: ${g}.\n6. Konsep thumbnail/cover: visual, komposisi, teks singkat, prompt gambar.\n7. Saran waktu posting sebagai eksperimen, bukan jaminan.\n8. Versi caption pendek dan versi lebih lengkap.\n\nHindari klaim viral atau clickbait yang menyesatkan.`)};
 document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{let txt=document.getElementById(b.dataset.copy).textContent.trim();if(!txt||txt.includes('akan muncul di sini')){alert('Belum ada hasil untuk disalin');return}try{await navigator.clipboard.writeText(txt);alert('Berhasil disalin')}catch(e){alert('Clipboard tidak tersedia. Pilih dan salin teks hasil secara manual.')}});
-document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>saveResult(b.dataset.save));
+document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>saveResult(b.dataset.save,b.dataset.saveTitle==='factory'?'Content Factory — '+(val('factoryTopic')||'Konten'):undefined));
 renderProjects();
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 </script>
