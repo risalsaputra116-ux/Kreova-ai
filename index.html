@@ -578,7 +578,13 @@ function sbRefreshUser(){
   });
 }
 if(window.supabase && window.supabase.createClient){
-  kreovaSb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
+  kreovaSb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY,{
+  auth:{
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true
+  }
+});
   kreovaSb.auth.onAuthStateChange((event,session)=>{
     sbUserStatus(session?.user?'Login sebagai '+session.user.email:'Belum login.',!!session?.user);
   });
