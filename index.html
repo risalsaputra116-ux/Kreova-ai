@@ -30,7 +30,7 @@ main{flex:1;min-width:0;padding:23px clamp(15px,4vw,42px) 50px;max-width:1320px;
 footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 .mobilebar{display:none}
 @media(max-width:800px){.sidebar{width:210px}.cards{grid-template-columns:1fr 1fr}}
-@media(max-width:620px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 86px}.hero{margin:22px 0}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{padding-top:3px}.mobilebar{position:fixed;display:flex;bottom:0;left:0;right:0;background:#17161e;border-top:1px solid #343340;padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5;justify-content:flex-start;gap:4px;overflow-x:auto}.mobilebar button{flex:0 0 auto;min-width:55px;background:none;border:0;color:#aaa6b7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:#d9a4ff}.mobilebar .ico{font-size:18px}.badge{font-size:10px}.panel{padding:14px}}
+@media(max-width:620px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 86px}.hero{margin:22px 0}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{padding-top:3px}.mobilebar{position:fixed;display:flex;bottom:0;left:0;right:0;background:#17161e;border-top:1px solid #343340;padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5;justify-content:flex-start;gap:4px;overflow-x:auto}.mobilebar button{flex:1 1 20%;min-width:0;background:none;border:0;color:#aaa6b7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:#d9a4ff}.mobilebar .ico{font-size:18px}.badge{font-size:10px}.panel{padding:14px}}
 
 .poster-preview{width:100%;max-width:420px;margin:12px auto;background:#111119;border:1px solid #393548;border-radius:14px;padding:10px}
 #posterCanvas{display:block;width:100%;height:auto;border-radius:8px;background:#201d2b}
@@ -51,15 +51,15 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="nav-title">WORKSPACE</div>
 <nav class="nav" id="sideNav">
 <button class="active" data-page="dashboard"><span class="ico">⌂</span>Dashboard</button>
-<button data-page="factory"><span class="ico">⚡</span>Content Factory</button>
+<button data-page="factory"><span class="ico">⚙</span>Content Factory</button>
 <button data-page="poster"><span class="ico">▧</span>Image Studio</button>
 <button data-page="ideas"><span class="ico">✦</span>AI Idea Studio</button>
 <button data-page="script"><span class="ico">✎</span>Script Studio</button>
 <button data-page="scenes"><span class="ico">▣</span>Scene Maker</button>
 <button data-page="video"><span class="ico">▶</span>Video Studio</button>
-<button data-page="social"><span class="ico">[LINK]</span>Social Pack</button>
-<button data-page="projects"><span class="ico">[PROJECT]</span>My Projects</button>
-<button data-page="account"><span class="ico">♙</span>Akun / Login</button>
+<button data-page="social"><span class="ico">↗</span>Social Pack</button>
+<button data-page="projects"><span class="ico">▤</span>My Projects</button>
+<button data-page="account"><span class="ico">●</span>Akun / Login</button>
 </nav>
 <div class="sidebar-bottom"><div class="free">[FREE] FREE EDITION</div><div class="side-note">MVP berjalan di perangkat. AI gambar terhubung melalui persetujuan akun Pollinations.</div></div>
 </aside>
@@ -73,24 +73,24 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="field"><label>Platform</label><select id="dashPlatform"><option>YouTube Shorts</option><option>TikTok</option><option>Instagram Reels</option><option>Facebook Reels</option><option>YouTube Video Panjang</option></select></div>
 </div><div class="btnrow"><button class="btn primary full" id="startProject">✦ Mulai membuat konten</button></div>
 </div>
-<div class="panel"><div class="panel-title"><span class="ico">▦</span>Creative tools</div>
+<div class="panel"><div class="panel-title"><span class="ico">✦</span>Creative tools</div>
 <div class="cards">
-<div class="tool-card" data-page="factory"><div class="tool-icon">⚡</div><h3>Content Factory</h3><p>Satu topik menjadi paket konten lengkap, langsung di perangkat.</p></div>
+<div class="tool-card" data-page="factory"><div class="tool-icon">⚙</div><h3>Content Factory</h3><p>Satu topik menjadi paket konten lengkap, langsung di perangkat.</p></div>
 <div class="tool-card" data-page="poster"><div class="tool-icon">▧</div><h3>Image Studio</h3><p>Buat poster dari tema atau foto sendiri, lalu ekspor PNG.</p></div>
 <div class="tool-card" data-page="ideas"><div class="tool-icon">✦</div><h3>AI Idea Studio</h3><p>Bangun ide, angle, dan hook untuk konten.</p></div>
 <div class="tool-card" data-page="script"><div class="tool-icon">✎</div><h3>Script Studio</h3><p>Susun naskah video sesuai durasi dan gaya.</p></div>
 <div class="tool-card" data-page="scenes"><div class="tool-icon">▣</div><h3>Scene Maker</h3><p>Ubah naskah menjadi urutan adegan produksi.</p></div>
 <div class="tool-card" data-page="video"><div class="tool-icon">▶</div><h3>Video Studio</h3><p>Susun gambar, subtitle, dan audio menjadi video.</p></div>
-<div class="tool-card" data-page="social"><div class="tool-icon">↗</div><h3>Social Pack</h3><p>Judul, caption, deskripsi, dan hashtag.</p></div>
-<div class="tool-card" data-page="projects"><div class="tool-icon">▤</div><h3>My Projects</h3><p>Lanjutkan proyek yang tersimpan di perangkat.</p></div>
-<div class="tool-card" data-page="script"><div class="tool-icon">[CONTENT]</div><h3>Content Assistant</h3><p>Susun brief kreatif untuk AI chat pilihanmu.</p></div>
+<div class="tool-card" data-page="social"><div class="tool-icon">[SOCIAL]</div><h3>Social Pack</h3><p>Judul, caption, deskripsi, dan hashtag.</p></div>
+<div class="tool-card" data-page="projects"><div class="tool-icon">[PROJECTS]</div><h3>My Projects</h3><p>Lanjutkan proyek yang tersimpan di perangkat.</p></div>
+<div class="tool-card" data-page="script"><div class="tool-icon">✧</div><h3>Content Assistant</h3><p>Susun brief kreatif untuk AI chat pilihanmu.</p></div>
 </div></div>
 </section>
 
-<div class="panel"><div class="panel-title">[PROJECT] Ringkasan proyek</div><div class="grid"><div class="field"><label>Proyek tersimpan</label><div id="dashProjectCount" style="font-size:28px;font-weight:800;color:var(--pink)">0</div></div><div class="field"><label>Status</label><div class="small">FREE EDITION  |  Berjalan di perangkat</div></div></div><div class="panel-title">Proyek terbaru</div><div id="dashRecentProjects" class="small">Belum ada proyek tersimpan.</div><button class="btn full" data-page="projects" type="button">Lihat semua proyek</button></div>
+<div class="panel"><div class="panel-title">▤ Ringkasan proyek</div><div class="grid"><div class="field"><label>Proyek tersimpan</label><div id="dashProjectCount" style="font-size:28px;font-weight:800;color:var(--pink)">0</div></div><div class="field"><label>Status</label><div class="small">FREE EDITION  |  Berjalan di perangkat</div></div></div><div class="panel-title">Proyek terbaru</div><div id="dashRecentProjects" class="small">Belum ada proyek tersimpan.</div><button class="btn full" data-page="projects" type="button">Lihat semua proyek</button></div>
 <section id="factory" class="section">
 <div class="hero"><h1>Content <span>Factory</span></h1><p>Ubah satu topik menjadi paket konten lengkap. Generator template offline  -  tanpa login, tanpa biaya API.</p></div>
-<div class="panel"><div class="panel-title"><span class="ico">⚡</span>Rancang paket konten</div>
+<div class="panel"><div class="panel-title"><span class="ico">⚙</span>Rancang paket konten</div>
 <div class="grid">
 <div class="field full"><label>Topik utama</label><textarea id="factoryTopic" placeholder="Contoh: 5 kebiasaan sederhana agar tidur lebih nyenyak"></textarea></div>
 <div class="field"><label>Platform</label><select id="factoryPlatform"><option>TikTok</option><option>YouTube Shorts</option><option>Instagram Reels</option><option>Facebook Reels</option><option>YouTube</option></select></div>
@@ -99,8 +99,8 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="field"><label>Gaya</label><select id="factoryTone"><option>Natural dan akrab</option><option>Sinematik dan emosional</option><option>Lucu dan santai</option><option>Jelas dan informatif</option><option>Semangat dan inspiratif</option></select></div>
 <div class="field full"><label>Target penonton (opsional)</label><input id="factoryAudience" placeholder="Contoh: pekerja sibuk, pelajar, orang tua"></div>
 <div class="field full"><label>Ajakan / CTA (opsional)</label><input id="factoryCTA" placeholder="Contoh: Simpan video ini untuk dicoba nanti"></div>
-</div><button class="btn primary full" id="makeFactory">⚡ Buat paket konten</button></div>
-<div class="panel"><div class="panel-title">Paket konten kamu</div><div class="result" id="factoryResult"><div class="empty">Masukkan topik, lalu tekan Buat paket konten.</div></div><div class="btnrow"><button class="btn" id="editFactory">✎ Edit paket</button><button class="btn" data-copy="factoryResult">Salin paket</button><button class="btn" data-save="factoryResult" data-save-title="factory">Simpan proyek</button></div><div class="editor-area hide" id="factoryEditorWrap"><div class="edit-help">Edit bebas seluruh isi paket di bawah ini. Perubahan baru diterapkan setelah menekan "Terapkan perubahan".</div><textarea id="factoryEditor" spellcheck="true"></textarea><div class="btnrow"><button class="btn primary" id="applyFactoryEdit">Terapkan perubahan</button><button class="btn ghost" id="cancelFactoryEdit">Batal</button></div></div></div>
+</div><button class="btn primary full" id="makeFactory">⚙ Buat paket konten</button></div>
+<div class="panel"><div class="panel-title">Paket konten kamu</div><div class="result" id="factoryResult"><div class="empty">Masukkan topik, lalu tekan Buat paket konten.</div></div><div class="btnrow"><button class="btn" id="editFactory">[EDIT] Edit paket</button><button class="btn" data-copy="factoryResult">Salin paket</button><button class="btn" data-save="factoryResult" data-save-title="factory">Simpan proyek</button></div><div class="editor-area hide" id="factoryEditorWrap"><div class="edit-help">Edit bebas seluruh isi paket di bawah ini. Perubahan baru diterapkan setelah menekan "Terapkan perubahan".</div><textarea id="factoryEditor" spellcheck="true"></textarea><div class="btnrow"><button class="btn primary" id="applyFactoryEdit">Terapkan perubahan</button><button class="btn ghost" id="cancelFactoryEdit">Batal</button></div></div></div>
 <div class="panel" id="qualityPanel">
 <div class="panel-title">[CHECK] Content Quality Checker</div>
 <p class="small">Periksa kelengkapan dan konsistensi paket sebelum dipublikasikan. Pemeriksaan berjalan lokal berdasarkan teks, bukan penilaian AI atau jaminan performa.</p>
@@ -136,7 +136,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 </div>
 
 <div class="panel">
-<div class="panel-title">[CONTENT] AI Image Generator  -  Pollinations</div>
+<div class="panel-title">✧ AI Image Generator  -  Pollinations</div>
 <p class="small">Buat gambar sungguhan dari deskripsi. Hubungkan akun Pollinations melalui persetujuan resmi. App Key disimpan hanya di sesi browser; token sementara tidak dimasukkan ke GitHub.</p>
 <div class="field"><label>App Key Pollinations (awalan pk_)</label><input id="polliAppKey" type="password" autocomplete="off" placeholder="Tempel App Key pk_ di sini"></div>
 <div class="btnrow">
@@ -150,7 +150,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="field"><label>Model gambar</label><select id="aiImageModel"><option value="tongyi-mai/z-image-turbo">Z-Image Turbo (model awal)</option><option value="black-forest-labs/flux.1-schnell">FLUX.1 Schnell</option></select></div>
 </div>
 <p class="small">Batas anggaran yang diminta saat persetujuan: maksimal US$0,01 untuk kunci sementara (1 hari). Biaya nyata bergantung model dan dapat berbeda. Periksa layar persetujuan Pollinations; jika batas US$0,01 tidak terlihat, batalkan dan jangan setujui. Tidak ada top-up otomatis dari aplikasi.</p>
-<div class="btnrow"><button class="btn primary full" id="generateAiImage">[CONTENT] Hasilkan gambar AI</button></div>
+<div class="btnrow"><button class="btn primary full" id="generateAiImage">✧ Hasilkan gambar AI</button></div>
 <div id="aiImageStatus" class="ai-status">Gambar AI belum dibuat.</div>
 <div class="ai-image-preview hide" id="aiImagePreviewWrap"><img id="aiImagePreview" alt="Hasil gambar AI KREOVA"></div>
 <div class="btnrow"><button class="btn" id="useAiImageAsPoster">Gunakan sebagai latar poster</button><button class="btn" id="downloadAiImage">Unduh gambar AI</button></div>
@@ -217,7 +217,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="hero"><h1>My <span>Profile</span></h1><p>Kelola identitas dan akun KREOVA AI kamu.</p></div>
 <div class="panel" id="profilePanel">
 <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px">
-<div id="profileAvatar" style="width:88px;height:88px;border-radius:50%;background:#1b1b27;border:2px solid #ff477e;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden">♙</div>
+<div id="profileAvatar" style="width:88px;height:88px;border-radius:50%;background:#1b1b27;border:2px solid #ff477e;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden">●</div>
 <div><h2 id="profileNameLabel" style="margin:0 0 6px">Profil Pengguna</h2><div id="profileEmailLabel" class="small">Login untuk melihat profil</div><div id="profileStateBadge" class="ai-status warn">Belum login</div></div>
 </div>
 <div class="btnrow"><label class="btn" for="profilePhotoInput">Ganti foto profil</label><input id="profilePhotoInput" type="file" accept="image/*" style="display:none"><button class="btn" id="profileRemovePhoto" type="button">Hapus foto</button></div>
@@ -242,15 +242,10 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 </div>
 <div class="mobilebar" id="mobileNav">
 <button class="active" data-page="dashboard"><span class="ico">⌂</span>Home</button>
-<button data-page="factory"><span class="ico">⚡</span>Factory</button>
+<button data-page="factory"><span class="ico">⚙</span>Factory</button>
 <button data-page="poster"><span class="ico">▧</span>Image</button>
-<button data-page="ideas"><span class="ico">✦</span>Ideas</button>
 <button data-page="script"><span class="ico">✎</span>Script</button>
-<button data-page="scenes"><span class="ico">▣</span>Scenes</button>
-<button data-page="video"><span class="ico">▶</span>Video</button>
-<button data-page="social"><span class="ico">[LINK]</span>Social</button>
-<button data-page="projects"><span class="ico">[PROJECT]</span>Saved</button>
-<button data-page="account"><span class="ico">♙</span>Akun</button>
+<button data-page="account"><span class="ico">●</span>Akun</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -558,7 +553,7 @@ document.getElementById('generateAiImage').onclick=async()=>{
     setAiImageStatus('Gagal membuat gambar: '+err.message,'warn');
   }finally{
     button.disabled=false;
-    button.textContent='[CONTENT] Hasilkan gambar AI';
+    button.textContent='✧ Hasilkan gambar AI';
   }
 };
 document.getElementById('downloadAiImage').onclick=()=>{
@@ -606,7 +601,7 @@ function setProfileUser(user){
  document.getElementById('profileEditEmail').value=logged?(user.email||''):'';
  const badge=document.getElementById('profileStateBadge');badge.textContent=logged?'Akun aktif':'Belum login';badge.className='ai-status '+(logged?'good':'warn');
  const avatar=document.getElementById('profileAvatar');const photo=localStorage.getItem(PROFILE_PHOTO_KEY);
- if(photo){avatar.innerHTML='';const img=document.createElement('img');img.src=photo;img.alt='Foto profil';img.style.cssText='width:100%;height:100%;object-fit:cover';avatar.appendChild(img)}else avatar.textContent=(logged?name.charAt(0).toUpperCase():'♙');
+ if(photo){avatar.innerHTML='';const img=document.createElement('img');img.src=photo;img.alt='Foto profil';img.style.cssText='width:100%;height:100%;object-fit:cover';avatar.appendChild(img)}else avatar.textContent=(logged?name.charAt(0).toUpperCase():'●');
 }
 function sbRefreshUser(){if(!kreovaSb)return;kreovaSb.auth.getSession().then(({data,error})=>{if(error){sbUserStatus('Gagal membaca sesi: '+error.message);setProfileUser(null);return}const u=data.session?.user||null;setProfileUser(u);sbUserStatus(u?'Login sebagai '+u.email:'Belum login.',!!u)}).catch(e=>sbUserStatus('Gagal membaca sesi: '+e.message))}
 function initKreovaAuth(){if(!window.supabase?.createClient){sbUserStatus('Library Supabase belum termuat. Periksa koneksi lalu refresh.');return}kreovaSb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}});
