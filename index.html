@@ -922,7 +922,7 @@ sbConnect();
 document.getElementById('sbSignup').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value,display=document.getElementById('sbDisplayName').value.trim();if(!email||password.length<8){alert('Masukkan email dan password minimal 8 karakter.');return}const {data,error}=await kreovaSb.auth.signUp({email,password,options:{data:{display_name:display}}});if(error){sbUserStatus('Daftar gagal: '+error.message);return}sbUserStatus(data.session?'Pendaftaran berhasil, akun login.':'Pendaftaran berhasil. Periksa email untuk konfirmasi sebelum login.',!!data.session)};
 document.getElementById('sbLogin').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value;if(!email||!password){alert('Masukkan email dan password.');return}const {data,error}=await kreovaSb.auth.signInWithPassword({email,password});if(error){sbUserStatus('Login gagal: '+error.message);return}sbUserStatus('Login berhasil sebagai '+data.user.email,true)};
 document.getElementById('sbLogout').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const {error}=await kreovaSb.auth.signOut();if(error)sbUserStatus('Logout gagal: '+error.message);else sbUserStatus('Logout berhasil.',true)};
- .
+ 
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 </script>
 </body>
