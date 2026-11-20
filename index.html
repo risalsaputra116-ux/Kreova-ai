@@ -200,15 +200,28 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 </section>
 
 <section id="account" class="section">
-<div class="hero"><h1>Account <span>Center</span></h1><p>Masuk atau buat akun KREOVA AI dengan aman.</p></div>
-<div class="panel"><div class="panel-title">🔐 Login / Daftar</div>
-<div class="field"><label>Nama tampilan (untuk daftar)</label><input id="sbDisplayName" placeholder="Nama kamu" autocomplete="name"></div>
+<div class="hero"><h1>My <span>Profile</span></h1><p>Kelola identitas dan akun KREOVA AI kamu.</p></div>
+<div class="panel" id="profilePanel">
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px">
+<div id="profileAvatar" style="width:88px;height:88px;border-radius:50%;background:#1b1b27;border:2px solid #ff477e;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden">👤</div>
+<div><h2 id="profileNameLabel" style="margin:0 0 6px">Profil Pengguna</h2><div id="profileEmailLabel" class="small">Login untuk melihat profil</div><div id="profileStateBadge" class="ai-status warn">Belum login</div></div>
+</div>
+<div class="btnrow"><label class="btn" for="profilePhotoInput">Ganti foto profil</label><input id="profilePhotoInput" type="file" accept="image/*" style="display:none"><button class="btn" id="profileRemovePhoto" type="button">Hapus foto</button></div>
+<div class="field"><label>Nama tampilan</label><input id="profileEditName" placeholder="Nama pengguna"></div>
+<div class="btnrow"><button class="btn primary" id="profileSaveName" type="button">Simpan nama</button></div>
+<div class="field"><label>Email akun</label><input id="profileEditEmail" type="email" readonly placeholder="Email akun"></div>
+<div class="field"><label>Password baru (opsional)</label><input id="profileNewPassword" type="password" autocomplete="new-password" placeholder="Minimal 8 karakter"></div>
+<div class="btnrow"><button class="btn" id="profileSavePassword" type="button">Ubah password</button></div>
+<div id="sbUserStatus" class="ai-status warn">Belum login.</div>
+</div>
+<div class="panel"><div class="panel-title">🔐 Masuk / Buat akun</div>
+<div class="field"><label>Nama tampilan (untuk daftar)</label><input id="sbDisplayName" placeholder="Nama kamu"></div>
 <div class="field"><label>Email</label><input id="sbEmail" type="email" autocomplete="email" placeholder="email@contoh.com"></div>
 <div class="field"><label>Password (minimal 8 karakter)</label><input id="sbPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
 <div class="btnrow"><button class="btn primary" id="sbSignup">Daftar</button><button class="btn" id="sbLogin">Login</button><button class="btn ghost" id="sbLogout">Logout</button></div>
-<div id="sbUserStatus" class="ai-status warn">Memuat koneksi akun…</div>
 </div>
-<div class="panel"><div class="panel-title">Status fitur & paket</div><p class="small">Image Studio lokal tetap dapat digunakan. Pembatasan 10 gambar AI per hari belum aktif. Generator Pollinations masih menggunakan izin akun Pollinations dan bukan kuota KREOVA AI. Paket Premium Rp15.000/bulan masih berupa rencana; pembayaran belum diaktifkan.</p></div>
+<div class="panel"><div class="panel-title">Proyek saya</div><p class="small">Lihat dan lanjutkan proyek konten yang tersimpan di perangkat ini.</p><button class="btn" data-page="projects" type="button">Buka proyek tersimpan</button></div>
+<div class="panel"><div class="panel-title">Tentang akun</div><p class="small">KREOVA AI • Free MVP. Pengaturan Supabase tidak ditampilkan pada halaman profil.</p></div>
 </section>
 <footer>KREOVA AI • Free MVP • Penyimpanan lokal</footer>
 </main>
@@ -561,61 +574,37 @@ setOut('socialResult',`KREOVA AI — SOCIAL PACK BRIEF\n\nKONTEN:\n${t}\nPLATFOR
 document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{let txt=document.getElementById(b.dataset.copy).textContent.trim();if(!txt||txt.includes('akan muncul di sini')){alert('Belum ada hasil untuk disalin');return}try{await navigator.clipboard.writeText(txt);alert('Berhasil disalin')}catch(e){alert('Clipboard tidak tersedia. Pilih dan salin teks hasil secara manual.')}});
 document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>saveResult(b.dataset.save,b.dataset.saveTitle==='factory'?'Content Factory — '+(val('factoryTopic')||'Konten'):undefined));
 renderProjects();
-// KREOVA AI — Supabase Auth. Gunakan publishable key, bukan secret/service_role.
-const SUPABASE_URL = 'https://uokgtueihzcopqqdraxa.supabase.co';
-const SUPABASE_PUBLIC_KEY = 'sb_publishable_k-wgjzsFoVFTlRkADPOsXA_eEg3I-Ei';
-let kreovaSb = null;
-function sbUserStatus(msg, good=false){
-  const el=document.getElementById('sbUserStatus');
-  if(el){el.textContent=msg;el.className='ai-status '+(good?'good':'warn');}
+// KREOVA AI — Auth + profile. Public publishable key only; never use service_role.
+let kreovaSb=null;
+const SUPABASE_URL='https://uokgtueihzcopqqdraxa.supabase.co';
+const SUPABASE_PUBLIC_KEY='sb_publishable_k-wgjzsFoVFTlRkADPOsXA_eEg3I-Ei';
+const PROFILE_PHOTO_KEY='kreova_profile_photo_v1';
+function sbUserStatus(msg,good=false){const el=document.getElementById('sbUserStatus');if(el){el.textContent=msg;el.className='ai-status '+(good?'good':'warn')}}
+function sbClient(){return kreovaSb}
+function setProfileUser(user){
+ const logged=!!user;
+ const name=(user?.user_metadata?.display_name||user?.user_metadata?.name||user?.email?.split('@')[0]||'Pengguna').trim();
+ document.getElementById('profileNameLabel').textContent=logged?name:'Profil Pengguna';
+ document.getElementById('profileEmailLabel').textContent=logged?(user.email||'Email tidak tersedia'):'Login untuk melihat profil';
+ document.getElementById('profileEditName').value=logged?name:'';
+ document.getElementById('profileEditEmail').value=logged?(user.email||''):'';
+ const badge=document.getElementById('profileStateBadge');badge.textContent=logged?'Akun aktif':'Belum login';badge.className='ai-status '+(logged?'good':'warn');
+ const avatar=document.getElementById('profileAvatar');const photo=localStorage.getItem(PROFILE_PHOTO_KEY);
+ if(photo){avatar.innerHTML='';const img=document.createElement('img');img.src=photo;img.alt='Foto profil';img.style.cssText='width:100%;height:100%;object-fit:cover';avatar.appendChild(img)}else avatar.textContent=(logged?name.charAt(0).toUpperCase():'👤');
 }
-function sbRefreshUser(){
-  if(!kreovaSb){sbUserStatus('Koneksi akun belum tersedia. Muat ulang halaman.');return;}
-  kreovaSb.auth.getSession().then(({data,error})=>{
-    if(error){sbUserStatus('Gagal membaca sesi: '+error.message);return;}
-    const u=data.session?.user;
-    sbUserStatus(u?'Login sebagai '+u.email:'Belum login.',!!u);
-  });
+function sbRefreshUser(){if(!kreovaSb)return;kreovaSb.auth.getSession().then(({data,error})=>{if(error){sbUserStatus('Gagal membaca sesi: '+error.message);setProfileUser(null);return}const u=data.session?.user||null;setProfileUser(u);sbUserStatus(u?'Login sebagai '+u.email:'Belum login.',!!u)}).catch(e=>sbUserStatus('Gagal membaca sesi: '+e.message))}
+function initKreovaAuth(){if(!window.supabase?.createClient){sbUserStatus('Library Supabase belum termuat. Periksa koneksi lalu refresh.');return}kreovaSb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}});
+ kreovaSb.auth.onAuthStateChange((event,session)=>{const u=session?.user||null;setProfileUser(u);sbUserStatus(u?'Login sebagai '+u.email+' • '+event:'Belum login.',!!u)});
+ sbRefreshUser();
 }
-if(window.supabase && window.supabase.createClient){
-  kreovaSb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY,{
-  auth:{
-    persistSession:true,
-    autoRefreshToken:true,
-    detectSessionInUrl:true
-  }
-});
-  kreovaSb.auth.onAuthStateChange((event,session)=>{
-    sbUserStatus(session?.user?'Login sebagai '+session.user.email:'Belum login.',!!session?.user);
-  });
-  sbRefreshUser();
-}else{
-  sbUserStatus('Library Supabase belum termuat. Periksa koneksi internet lalu muat ulang.');
-}
-document.getElementById('sbSignup').onclick=async()=>{
-  if(!kreovaSb){alert('Koneksi akun belum tersedia. Muat ulang halaman.');return;}
-  const email=document.getElementById('sbEmail').value.trim();
-  const password=document.getElementById('sbPassword').value;
-  const display=document.getElementById('sbDisplayName').value.trim();
-  if(!email||password.length<8){alert('Masukkan email dan password minimal 8 karakter.');return;}
-  const {data,error}=await kreovaSb.auth.signUp({email,password,options:{data:{display_name:display}}});
-  if(error){sbUserStatus('Daftar gagal: '+error.message);return;}
-  sbUserStatus(data.session?'Pendaftaran berhasil. Login sebagai '+data.user.email:'Pendaftaran berhasil. Periksa email untuk konfirmasi sebelum login.',!!data.session);
-};
-document.getElementById('sbLogin').onclick=async()=>{
-  if(!kreovaSb){alert('Koneksi akun belum tersedia. Muat ulang halaman.');return;}
-  const email=document.getElementById('sbEmail').value.trim();
-  const password=document.getElementById('sbPassword').value;
-  if(!email||!password){alert('Masukkan email dan password.');return;}
-  const {data,error}=await kreovaSb.auth.signInWithPassword({email,password});
-  if(error){sbUserStatus('Login gagal: '+error.message);return;}
-  sbUserStatus('Login berhasil sebagai '+data.user.email,true);
-};
-document.getElementById('sbLogout').onclick=async()=>{
-  if(!kreovaSb){alert('Koneksi akun belum tersedia. Muat ulang halaman.');return;}
-  const {error}=await kreovaSb.auth.signOut();
-  if(error)sbUserStatus('Logout gagal: '+error.message);else sbUserStatus('Logout berhasil.',true);
-};
+document.getElementById('sbSignup').onclick=async()=>{if(!kreovaSb){alert('Koneksi akun belum siap. Refresh halaman.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value,display=document.getElementById('sbDisplayName').value.trim();if(!email||password.length<8){alert('Masukkan email dan password minimal 8 karakter.');return}const {data,error}=await kreovaSb.auth.signUp({email,password,options:{data:{display_name:display}}});if(error){sbUserStatus('Daftar gagal: '+error.message);return}sbUserStatus(data.session?'Pendaftaran berhasil, akun login.':'Pendaftaran berhasil. Periksa email untuk konfirmasi sebelum login.',!!data.session)};
+document.getElementById('sbLogin').onclick=async()=>{if(!kreovaSb){alert('Koneksi akun belum siap. Refresh halaman.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value;if(!email||!password){alert('Masukkan email dan password.');return}const {data,error}=await kreovaSb.auth.signInWithPassword({email,password});if(error){sbUserStatus('Login gagal: '+error.message);return}setProfileUser(data.user);sbUserStatus('Login berhasil sebagai '+data.user.email,true)};
+document.getElementById('sbLogout').onclick=async()=>{if(!kreovaSb)return;const {error}=await kreovaSb.auth.signOut();if(error)sbUserStatus('Logout gagal: '+error.message);else{setProfileUser(null);sbUserStatus('Logout berhasil.',true)}};
+document.getElementById('profilePhotoInput').onchange=e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Pilih file gambar.');return}if(file.size>2*1024*1024){alert('Ukuran foto maksimal 2 MB.');e.target.value='';return}const reader=new FileReader();reader.onload=()=>{try{localStorage.setItem(PROFILE_PHOTO_KEY,reader.result);setProfileUser(kreovaSb?.auth?.getUser?null:null);sbRefreshUser()}catch(err){alert('Foto gagal disimpan: ruang penyimpanan browser mungkin penuh.')}};reader.readAsDataURL(file)};
+document.getElementById('profileRemovePhoto').onclick=()=>{localStorage.removeItem(PROFILE_PHOTO_KEY);sbRefreshUser()};
+document.getElementById('profileSaveName').onclick=async()=>{if(!kreovaSb){alert('Login dahulu.');return}const name=document.getElementById('profileEditName').value.trim();if(!name){alert('Nama tidak boleh kosong.');return}const {data,error}=await kreovaSb.auth.updateUser({data:{display_name:name}});if(error){sbUserStatus('Gagal mengubah nama: '+error.message);return}setProfileUser(data.user);sbUserStatus('Nama profil berhasil disimpan.',true)};
+document.getElementById('profileSavePassword').onclick=async()=>{if(!kreovaSb){alert('Login dahulu.');return}const password=document.getElementById('profileNewPassword').value;if(password.length<8){alert('Password baru minimal 8 karakter.');return}const {error}=await kreovaSb.auth.updateUser({password});if(error){sbUserStatus('Gagal mengubah password: '+error.message);return}document.getElementById('profileNewPassword').value='';sbUserStatus('Password berhasil diperbarui.',true)};
+initKreovaAuth();
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 </script>
 </body>
