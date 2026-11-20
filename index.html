@@ -869,7 +869,6 @@ document.getElementById('makeSocial').onclick=()=>{let t=val('socialTopic');if(!
 setOut('socialResult',`KREOVA AI — SOCIAL PACK BRIEF\n\nKONTEN:\n${t}\nPLATFORM: ${p}\nTUJUAN: ${g}\n\nBUAT PAKET:\n1. 5 judul alternatif yang menarik dan jujur.\n2. Caption utama sesuai platform ${p}.\n3. Deskripsi yang mudah dibaca dan relevan.\n4. 8–15 hashtag relevan (hindari hashtag spam).\n5. CTA sesuai tujuan: ${g}.\n6. Konsep thumbnail/cover: visual, komposisi, teks singkat, prompt gambar.\n7. Saran waktu posting sebagai eksperimen, bukan jaminan.\n8. Versi caption pendek dan versi lebih lengkap.\n\nHindari klaim viral atau clickbait yang menyesatkan.`)};
 document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{let txt=document.getElementById(b.dataset.copy).textContent.trim();if(!txt||txt.includes('akan muncul di sini')){alert('Belum ada hasil untuk disalin');return}try{await navigator.clipboard.writeText(txt);alert('Berhasil disalin')}catch(e){alert('Clipboard tidak tersedia. Pilih dan salin teks hasil secara manual.')}});
 document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>saveResult(b.dataset.save,b.dataset.saveTitle==='factory'?'Content Factory — '+(val('factoryTopic')||'Konten'):undefined));
-renderProjects();
 // KREOVA AI v9 — Supabase Auth UI. Publishable key only; never use service_role here.
 let kreovaSb=null;
 const SB_URL_SESSION='kreova_sb_url_session', SB_KEY_SESSION='kreova_sb_key_session';
@@ -920,11 +919,10 @@ document.getElementById('sbClearConfig').onclick = ()=>{
   sbUserStatus('Belum login.');
 };
 
-sbConnect();
 document.getElementById('sbSignup').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value,display=document.getElementById('sbDisplayName').value.trim();if(!email||password.length<8){alert('Masukkan email dan password minimal 8 karakter.');return}const {data,error}=await kreovaSb.auth.signUp({email,password,options:{data:{display_name:display}}});if(error){sbUserStatus('Daftar gagal: '+error.message);return}sbUserStatus(data.session?'Pendaftaran berhasil, akun login.':'Pendaftaran berhasil. Periksa email untuk konfirmasi sebelum login.',!!data.session)};
 document.getElementById('sbLogin').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value;if(!email||!password){alert('Masukkan email dan password.');return}const {data,error}=await kreovaSb.auth.signInWithPassword({email,password});if(error){sbUserStatus('Login gagal: '+error.message);return}sbUserStatus('Login berhasil sebagai '+data.user.email,true)};
 document.getElementById('sbLogout').onclick=async()=>{if(!kreovaSb){alert('Hubungkan Supabase terlebih dahulu.');return}const {error}=await kreovaSb.auth.signOut();if(error)sbUserStatus('Logout gagal: '+error.message);else sbUserStatus('Logout berhasil.',true)};
-
+ .
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 </script>
 </body>
