@@ -25,7 +25,41 @@ main{flex:1;min-width:0;padding:23px clamp(15px,4vw,42px) 50px;max-width:1320px;
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:13px}.field:last-child{margin-bottom:0}.field label{display:block;color:#d5d0e0;font-size:12px;margin-bottom:7px}input,textarea,select{width:100%;background:#111119;border:1px solid #3a394a;border-radius:10px;padding:11px 12px;color:#f7f3fb;outline:none}textarea{min-height:90px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:#a67bdb}
 .btn{border:1px solid #474253;background:#2a2735;color:#f4f0fa;border-radius:10px;padding:11px 14px;font-weight:750}.btn:hover{filter:brightness(1.12)}.btn.primary{border:0;background:linear-gradient(100deg,var(--pink),#b879ff);color:white}.btn.ghost{background:#191821}.btn.full{width:100%}.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.btnrow .btn{flex:1}
 .editor-area{margin-top:12px}.editor-area textarea{min-height:320px;font-size:13px;line-height:1.55}.edit-help{margin:7px 0 10px;color:var(--muted);font-size:11px;line-height:1.5}.result{background:#111119;border:1px solid #353445;border-radius:12px;padding:14px;min-height:180px;max-height:520px;overflow:auto;white-space:pre-wrap;line-height:1.55;font-size:13px;color:#e6e0ef}.empty{color:#777387;display:grid;place-items:center;text-align:center;min-height:160px;padding:20px}.hide{display:none!important}.section{display:none}.section.active{display:block}
-.project-list{display:grid;gap:8px}.project-row{display:flex;gap:10px;align-items:center;border:1px solid #383746;background:#17171f;padding:11px;border-radius:11px}.project-row .name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.project-row button{padding:7px 10px;font-size:11px}
+.project-list{
+display:grid;
+gap:8px;
+width:100%;
+min-width:0;
+}
+
+.project-row{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+align-items:center;
+border:1px solid #383746;
+background:#17171f;
+padding:11px;
+border-radius:11px;
+width:100%;
+max-width:100%;
+min-width:0;
+box-sizing:border-box;
+overflow:hidden;
+}
+
+.project-row .name{
+flex:1 1 150px;
+min-width:0;
+overflow-wrap:anywhere;
+word-break:break-word;
+}
+
+.project-row button{
+padding:7px 10px;
+font-size:11px;
+flex-shrink:0;
+}
 .small{color:var(--muted);font-size:11px;line-height:1.5}.pill{font-size:10px;color:#8fe1b8;background:#1b2b25;border:1px solid #2e4b3d;padding:5px 8px;border-radius:20px}
 footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 .mobilebar{display:none}
