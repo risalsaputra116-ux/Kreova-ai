@@ -182,11 +182,11 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <section id="video" class="section">
 <div class="hero"><h1>Video <span>Studio</span></h1><p>Susun gambar, teks, dan audio menjadi video lokal di browser. Ini bukan generator AI text-to-video.</p></div>
 <div class="panel"><div class="panel-title">🎞️ Generator Video langsung di panel</div>
-<p class="small">Gunakan demo LTX-2.5 browser yang memanggil layanan resmi dari browser, tanpa GPU milik iframe sendiri. Mulai dari resolusi kecil dan durasi singkat (1–2 detik) jika kontrol tersedia. Antrean GPU layanan resmi tetap dapat penuh atau gagal sementara. Video hasil demo tidak otomatis disimpan ke proyek KREOVA.</p>
+<p class="small">Gunakan demo LTX-2.5 browser yang memanggil layanan resmi dari browser, tanpa GPU milik iframe sendiri. Gunakan pengaturan awal paling ringan: 512×512 dan durasi 1 detik; jangan aktifkan auto-length atau decoder berat. Jika Space masih meminta GPU terlalu lama, itu batas kuota Space dan bukan bug aplikasi; coba generator lagi nanti. Video hasil demo tidak otomatis disimpan ke proyek KREOVA.</p>
 <div class="field"><label>Prompt catatan (opsional, untuk salin-tempel ke generator tertanam)</label><textarea id="aiVideoPrompt" placeholder="Contoh: Shot sinematik seorang tabib berjalan melewati pasar kuno saat kabut pagi, kamera tracking pelan, cahaya lembut, gerakan natural, realistis"></textarea></div>
 <div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt catatan</button><button class="btn" id="openAiVideoService">Buka generator di tab baru (jika embed gagal)</button></div>
-<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px;background:#0b0b10"><iframe title="LTX AI Video Generator" src="https://arpitkgoyal-ltx-2-5-demo.static.hf.space/index.html" loading="lazy" style="display:block;width:100%;height:820px;border:0;background:#0b0b10" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="no-referrer"></iframe></div>
-<div class="small" style="margin-top:8px">Jika embed tidak dapat dimuat di browser, gunakan tombol buka tab baru. Demo ini memakai antrean GPU publik, bukan API berjaminan uptime.</div></div>
+<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px;background:#0b0b10"><iframe title="LTX AI Video Generator" src="https://chopperblu-ltx-2-5-demo.hf.space" loading="lazy" style="display:block;width:100%;height:820px;border:0;background:#0b0b10" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="no-referrer"></iframe></div>
+<div class="small" style="margin-top:8px">Jika embed tidak dapat dimuat di browser, gunakan tombol buka tab baru. Demo komunitas ini memakai ZeroGPU publik; tetap bisa gagal bila kuota atau GPU sedang penuh.</div></div>
 <div class="panel"><div class="panel-title">🎥 Buat video dari gambar</div>
 <div class="field"><label>Tambah gambar adegan (maksimal 12)</label><input id="vsImages" type="file" accept="image/*" multiple></div>
 <div class="grid"><div class="field"><label>Format</label><select id="vsFormat"><option value="portrait">Vertikal 9:16</option><option value="landscape">Horizontal 16:9</option><option value="square">Kotak 1:1</option></select></div><div class="field"><label>Durasi per gambar</label><select id="vsDuration"><option>3</option><option selected>5</option><option>7</option><option>10</option></select></div></div>
@@ -448,7 +448,7 @@ document.getElementById('generateAiImage').onclick=async()=>{
       headers:{'Content-Type':'application/json','apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'},
       body:JSON.stringify({
         prompt:prompt+', high quality, detailed composition, no watermark',
-        params:{width:dimensions[0],height:dimensions[1],steps:10,cfg_scale:5,sampler_name:'k_euler',seed:0,n:1},
+        params:{width:dimensions[0],height:dimensions[1],steps:4,cfg_scale:4,sampler_name:'k_euler',seed:String(Math.floor(Math.random()*2147483647)),n:1},
         // No model filter: permits any available worker/model and avoids model-specific cost mismatch.
         models:[],
         nsfw:false,
@@ -571,7 +571,7 @@ const videoPromptEl=document.getElementById('aiVideoPrompt');
 const videoPromptCopy=document.getElementById('copyAiVideoPrompt');
 const videoServiceOpen=document.getElementById('openAiVideoService');
 if(videoPromptCopy)videoPromptCopy.onclick=async()=>{const t=videoPromptEl?.value.trim();if(!t){alert('Tulis prompt video dahulu.');return}try{await navigator.clipboard.writeText(t);alert('Prompt video disalin. Tempelkan di layanan video yang dibuka.')}catch(e){alert('Clipboard gagal. Salin prompt secara manual.')}};
-if(videoServiceOpen)videoServiceOpen.onclick=()=>window.open('https://arpitkgoyal-ltx-2-5-demo.static.hf.space/index.html','_blank','noopener');
+if(videoServiceOpen)videoServiceOpen.onclick=()=>window.open('https://chopperblu-ltx-2-5-demo.hf.space','_blank','noopener');
 // Ad Manager: safely configure official AdSense script using publisher ID only
 const AD_CONFIG_KEY='kreova_ads_config_v1';
 function getAdConfig(){try{return JSON.parse(localStorage.getItem(AD_CONFIG_KEY)||'{}')}catch{return {}}}
