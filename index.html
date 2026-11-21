@@ -136,11 +136,11 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 
 <div class="panel">
 <div class="panel-title">✨ AI Image Generator - GRATIS (AI Horde)</div>
-<p class="small">Buat gambar melalui AI Horde, layanan komunitas yang menggunakan GPU relawan. Tidak memerlukan App Key pribadi atau kredit berbayar. Pengguna anonim mungkin mendapat antrean lebih lama dan hasil bergantung pada worker yang tersedia.</p>
+<p class="small">Buat gambar lewat AI Horde worker komunitas. Mode anonim memakai ukuran maksimal 576 px dan 10 langkah untuk menekan kebutuhan Kudos; hasil dan antrean tetap bergantung worker yang tersedia.</p>
 <div class="field"><label>Deskripsi gambar</label><textarea id="aiImagePrompt" placeholder="Contoh: Tabib China berjubah putih berdiri di depan istana kuno, manusia realistis, sinematik, pencahayaan dramatis, detail tinggi"></textarea></div>
 <div class="grid">
 <div class="field"><label>Format gambar</label><select id="aiImageFormat"><option value="portrait">Vertikal 9:16</option><option value="square">Kotak 1:1</option><option value="landscape">Horizontal 16:9</option></select></div>
-<div class="field"><label>Model gambar (AI Horde)</label><select id="aiImageModel"><option value="Deliberate">Deliberate</option><option value="DreamShaper">DreamShaper</option><option value="SDXL">SDXL</option></select></div>
+<div class="field"><label>Mode gratis anonim</label><div class="small">Worker/model dipilih otomatis agar permintaan tetap ringan dan tidak memerlukan Kudos.</div><select id="aiImageModel" disabled><option value="auto">Otomatis (worker tersedia)</option></select></div>
 </div>
 <div class="btnrow"><button class="btn primary full" id="generateAiImage">✨ Hasilkan gambar gratis</button></div>
 <div id="aiImageStatus" class="ai-status warn">Siap. Tulis prompt, lalu tekan Hasilkan gambar gratis.</div>
@@ -182,7 +182,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <section id="video" class="section">
 <div class="hero"><h1>Video <span>Studio</span></h1><p>Susun gambar, teks, dan audio menjadi video lokal di browser. Ini bukan generator AI text-to-video.</p></div>
 <div class="panel"><div class="panel-title">🎞️ Generator Video langsung di panel</div>
-<p class="small">Gunakan generator LTX-2.5 yang tertanam untuk Text-to-Video atau Image-to-Video. Untuk menghindari error GPU duration 800s, mulai dengan setelan ringan: 512 × 512, durasi 4 detik, dan satu video. Jika masih gagal, turunkan resolusi/durasi atau coba lagi saat GPU tersedia. Setelan generator berada di iframe layanan, jadi KREOVA tidak dapat mengubahnya otomatis. Video hasil iframe tidak otomatis disimpan ke proyek KREOVA.</p>
+<p class="small">Gunakan demo LTX-2.5 browser yang memanggil layanan resmi dari browser, tanpa GPU milik iframe sendiri. Mulai dari resolusi kecil dan durasi singkat (1–2 detik) jika kontrol tersedia. Antrean GPU layanan resmi tetap dapat penuh atau gagal sementara. Video hasil demo tidak otomatis disimpan ke proyek KREOVA.</p>
 <div class="field"><label>Prompt catatan (opsional, untuk salin-tempel ke generator tertanam)</label><textarea id="aiVideoPrompt" placeholder="Contoh: Shot sinematik seorang tabib berjalan melewati pasar kuno saat kabut pagi, kamera tracking pelan, cahaya lembut, gerakan natural, realistis"></textarea></div>
 <div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt catatan</button><button class="btn" id="openAiVideoService">Buka generator di tab baru (jika embed gagal)</button></div>
 <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px;background:#0b0b10"><iframe title="LTX AI Video Generator" src="https://arpitkgoyal-ltx-2-5-demo.static.hf.space/index.html" loading="lazy" style="display:block;width:100%;height:820px;border:0;background:#0b0b10" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="no-referrer"></iframe></div>
@@ -426,9 +426,11 @@ function waitMs(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 document.getElementById('generateAiImage').onclick=async()=>{
   const prompt=document.getElementById('aiImagePrompt').value.trim();
   if(!prompt){alert('Tulis deskripsi gambar terlebih dahulu.');return;}
-  const model=document.getElementById('aiImageModel').value;
+  
   const format=document.getElementById('aiImageFormat').value;
-  const dimensions=format==='portrait'?[512,768]:format==='square'?[512,512]:[768,512];
+  // Anonymous AI Horde requests must stay inside its low-cost anonymous work budget.
+  // Use conservative sizes (all sides <=576) and low steps; anonymous clients cannot pay kudos.
+  const dimensions=format==='portrait'?[512,576]:format==='square'?[512,512]:[576,320];
   const button=document.getElementById('generateAiImage');
   button.disabled=true;
   button.textContent='Mengantrekan gambar...';
@@ -446,8 +448,9 @@ document.getElementById('generateAiImage').onclick=async()=>{
       headers:{'Content-Type':'application/json','apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'},
       body:JSON.stringify({
         prompt:prompt+', high quality, detailed composition, no watermark',
-        params:{width:dimensions[0],height:dimensions[1],steps:20,cfg_scale:7,seed:"0",n:1},
-        models:[model],
+        params:{width:dimensions[0],height:dimensions[1],steps:10,cfg_scale:5,sampler_name:'k_euler',seed:0,n:1},
+        // No model filter: permits any available worker/model and avoids model-specific cost mismatch.
+        models:[],
         nsfw:false,
         censor_nsfw:true
       })
