@@ -182,7 +182,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <section id="video" class="section">
 <div class="hero"><h1>Video <span>Studio</span></h1><p>Susun gambar, teks, dan audio menjadi video lokal di browser. Ini bukan generator AI text-to-video.</p></div>
 <div class="panel"><div class="panel-title">🎞️ Generator Video langsung di panel</div>
-<p class="small">Gunakan generator LTX-2.5 yang tertanam di panel ini untuk Text-to-Video atau Image-to-Video. Generasi berjalan pada GPU Hugging Face bersama, sehingga anonim dapat kehabisan kuota/antrean. Jika frame gagal dimuat, buka generator di tab baru. Jangan unggah materi sensitif. Video hasil iframe tidak otomatis disimpan ke proyek KREOVA.</p>
+<p class="small">Gunakan generator LTX-2.5 yang tertanam untuk Text-to-Video atau Image-to-Video. Untuk menghindari error GPU duration 800s, mulai dengan setelan ringan: 512 × 512, durasi 4 detik, dan satu video. Jika masih gagal, turunkan resolusi/durasi atau coba lagi saat GPU tersedia. Setelan generator berada di iframe layanan, jadi KREOVA tidak dapat mengubahnya otomatis. Video hasil iframe tidak otomatis disimpan ke proyek KREOVA.</p>
 <div class="field"><label>Prompt catatan (opsional, untuk salin-tempel ke generator tertanam)</label><textarea id="aiVideoPrompt" placeholder="Contoh: Shot sinematik seorang tabib berjalan melewati pasar kuno saat kabut pagi, kamera tracking pelan, cahaya lembut, gerakan natural, realistis"></textarea></div>
 <div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt catatan</button><button class="btn" id="openAiVideoService">Buka generator di tab baru (jika embed gagal)</button></div>
 <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px;background:#0b0b10"><iframe title="LTX AI Video Generator" src="https://arpitkgoyal-ltx-2-5-demo.static.hf.space/index.html" loading="lazy" style="display:block;width:100%;height:820px;border:0;background:#0b0b10" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="no-referrer"></iframe></div>
@@ -211,6 +211,11 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="panel"><div class="panel-title">Proyek tersimpan</div><div id="projectList" class="project-list"><p class="small">Belum ada proyek tersimpan.</p></div></div>
 </section>
 
+<div id="projectViewModal" class="hide" aria-hidden="true" style="position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.86);padding:16px;overflow:auto">
+<div style="max-width:800px;margin:30px auto;background:#17171f;border:1px solid var(--border);border-radius:16px;padding:16px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><h2 id="projectViewTitle" style="margin:0">Proyek</h2><button class="btn" id="closeProjectView" type="button">Tutup</button></div>
+<pre id="projectViewContent" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;margin-top:16px;max-height:70vh;overflow:auto"></pre>
+</div></div>
 <section id="account" class="section">
 <div class="hero"><h1>My <span>Profile</span></h1><p>Kelola identitas dan akun KREOVA AI kamu.</p></div>
 <div class="panel" id="profilePanel">
@@ -263,11 +268,14 @@ const pages=['dashboard','factory','poster','ideas','script','scenes','video','s
 const pageNames={dashboard:'Dashboard',factory:'Content Factory',poster:'Image Studio',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',video:'Video Studio',social:'Social Pack',projects:'My Projects',account:'Akun / Login'};
 function goPage(p){if(!pages.includes(p))return;pages.forEach(x=>document.getElementById(x).classList.toggle('active',x===p));document.getElementById('crumb').textContent=pageNames[p];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===p));window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.page)));
+document.getElementById('closeProjectView').onclick=closeProjectView;document.getElementById('projectViewModal').addEventListener('click',e=>{if(e.target.id==='projectViewModal')closeProjectView()});
 function val(id){return document.getElementById(id).value.trim()}
 function setOut(id,txt){document.getElementById(id).textContent=txt;if(id==='factoryResult'){const wrap=document.getElementById('factoryEditorWrap');if(wrap)wrap.classList.add('hide')}}
 function saveResult(id,title){let content=document.getElementById(id).textContent.trim();if(!content||content.startsWith('Brief ')||content.startsWith('Paket ')){alert('Buat hasil terlebih dahulu.');return}let projects=loadProjects();projects.unshift({id:Date.now(),title:title||content.slice(0,50),content,created:new Date().toLocaleString('id-ID')});try{localStorage.setItem('kreova_projects',JSON.stringify(projects));renderProjects();alert('Proyek tersimpan di perangkat.')}catch(e){alert('Proyek gagal disimpan. Penyimpanan browser penuh; hapus beberapa proyek lama lalu coba lagi.')}}
-function loadProjects(){try{return JSON.parse(localStorage.getItem('kreova_projects')||'[]')}catch(e){return[]}}
-function renderProjects(){let list=document.getElementById('projectList'),arr=loadProjects();if(list)list.innerHTML='';if(!arr.length){if(list)list.innerHTML='<p class="small">Belum ada proyek tersimpan.</p>';updateDashboardStats();return}arr.forEach(p=>{if(!list)return;let row=document.createElement('div');row.className='project-row';let name=document.createElement('div');name.className='name';name.innerHTML='<strong>'+escapeHtml(p.title)+'</strong><div class="small">'+escapeHtml(p.created||'')+'</div>';let open=document.createElement('button');open.className='btn';open.textContent='Buka';open.onclick=()=>{let win=window.open('','_blank');if(win){win.document.write('<pre style="white-space:pre-wrap;font-family:system-ui;padding:16px">'+escapeHtml(p.content)+'</pre>')}else alert(p.content)};let del=document.createElement('button');del.className='btn';del.textContent='Hapus';del.onclick=()=>{if(confirm('Hapus proyek ini?')){localStorage.setItem('kreova_projects',JSON.stringify(loadProjects().filter(x=>x.id!==p.id)));renderProjects()}};row.append(name,open,del);list.appendChild(row)});updateDashboardStats()}
+function loadProjects(){try{const raw=JSON.parse(localStorage.getItem('kreova_projects')||'[]');return Array.isArray(raw)?raw.filter(p=>p&&typeof p==='object'&&typeof p.content==='string'):[]}catch(e){return[]}}
+function renderProjects(){let list=document.getElementById('projectList'),arr=loadProjects();if(list)list.innerHTML='';if(!arr.length){if(list)list.innerHTML='<p class="small">Belum ada proyek tersimpan.</p>';updateDashboardStats();return}arr.forEach(p=>{if(!list)return;let row=document.createElement('div');row.className='project-row';let name=document.createElement('div');name.className='name';name.innerHTML='<strong>'+escapeHtml(p.title)+'</strong><div class="small">'+escapeHtml(p.created||'')+'</div>';let open=document.createElement('button');open.className='btn';open.textContent='Buka';open.onclick=()=>showProject(p);let del=document.createElement('button');del.className='btn';del.textContent='Hapus';del.onclick=()=>{if(confirm('Hapus proyek ini?')){localStorage.setItem('kreova_projects',JSON.stringify(loadProjects().filter(x=>x.id!==p.id)));renderProjects()}};row.append(name,open,del);list.appendChild(row)});updateDashboardStats()}
+function showProject(p){const modal=document.getElementById('projectViewModal'),title=document.getElementById('projectViewTitle'),content=document.getElementById('projectViewContent');if(!modal||!title||!content){alert(p.content||'Proyek kosong');return}title.textContent=p.title||'Proyek';content.textContent=p.content||'';modal.classList.remove('hide');modal.setAttribute('aria-hidden','false')}
+function closeProjectView(){const modal=document.getElementById('projectViewModal');if(modal){modal.classList.add('hide');modal.setAttribute('aria-hidden','true')}}
 function updateDashboardStats(){const arr=loadProjects(),count=document.getElementById('dashProjectCount'),recent=document.getElementById('dashRecentProjects');if(count)count.textContent=arr.length;if(!recent)return;if(!arr.length){recent.innerHTML='<div class="empty">Belum ada proyek tersimpan.</div>';return}recent.innerHTML='';arr.slice(0,3).forEach(p=>{const item=document.createElement('div');item.className='project-row';const title=document.createElement('strong');title.textContent=p.title||'Proyek tanpa judul';const date=document.createElement('div');date.className='small';date.textContent=p.created||'';const wrap=document.createElement('div');wrap.append(title,date);recent.appendChild(wrap)})}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 document.getElementById('startProject').onclick=()=>{let t=val('dashTopic');if(!t){alert('Masukkan topik terlebih dahulu');return}document.getElementById('ideaTopic').value=t;document.getElementById('ideaPlatform').value=document.getElementById('dashPlatform').value;goPage('ideas')};
@@ -438,13 +446,13 @@ document.getElementById('generateAiImage').onclick=async()=>{
       headers:{'Content-Type':'application/json','apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'},
       body:JSON.stringify({
         prompt:prompt+', high quality, detailed composition, no watermark',
-        params:{width:dimensions[0],height:dimensions[1],steps:25,cfg_scale:7,seed:0,n:1},
+        params:{width:dimensions[0],height:dimensions[1],steps:20,cfg_scale:7,seed:"0",n:1},
         models:[model],
         nsfw:false,
         censor_nsfw:true
       })
     });
-    if(!submitResponse.ok){let msg='HTTP '+submitResponse.status;try{let d=await submitResponse.json();msg=d.message||d.error||msg;}catch(e){};throw new Error('Permintaan gagal: '+msg);}
+    if(!submitResponse.ok){let msg='HTTP '+submitResponse.status;try{let d=await submitResponse.json();msg=d.message||d.error||d.detail||msg;if(d.errors)msg+=' — '+(typeof d.errors==='string'?d.errors:JSON.stringify(d.errors));if(d.validation_errors)msg+=' — '+JSON.stringify(d.validation_errors);}catch(e){};throw new Error('Permintaan gagal: '+msg);}
     const submitted=await submitResponse.json();
     if(!submitted.id)throw new Error('Server tidak memberikan ID antrean.');
     const requestId=submitted.id;
