@@ -182,7 +182,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <section id="video" class="section">
 <div class="hero"><h1>Video <span>Studio</span></h1><p>Susun gambar, teks, dan audio menjadi video lokal di browser. Ini bukan generator AI text-to-video.</p></div>
 <div class="panel"><div class="panel-title">🎞️ Generator Video langsung di panel</div>
-<p class="small">Gunakan demo LTX-2.5 browser yang memanggil layanan resmi dari browser, tanpa GPU milik iframe sendiri. Gunakan pengaturan awal paling ringan: 512×512 dan durasi 1 detik; jangan aktifkan auto-length atau decoder berat. Jika Space masih meminta GPU terlalu lama, itu batas kuota Space dan bukan bug aplikasi; coba generator lagi nanti. Video hasil demo tidak otomatis disimpan ke proyek KREOVA.</p>
+<p class="small">Gunakan demo LTX-2.5 browser yang memanggil layanan resmi dari browser, tanpa GPU milik iframe sendiri. Di dalam generator, pilih resolusi terendah (misalnya 256/384), durasi paling singkat, dan matikan auto-length/decoder berat. KREOVA tidak dapat mengatur kontrol di iframe lintas-domain; jika masih muncul batas GPU, Space publik menolak permintaan dan itu tidak dapat diatasi dari kode KREOVA. Video hasil demo tidak otomatis disimpan ke proyek KREOVA.</p>
 <div class="field"><label>Prompt catatan (opsional, untuk salin-tempel ke generator tertanam)</label><textarea id="aiVideoPrompt" placeholder="Contoh: Shot sinematik seorang tabib berjalan melewati pasar kuno saat kabut pagi, kamera tracking pelan, cahaya lembut, gerakan natural, realistis"></textarea></div>
 <div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt catatan</button><button class="btn" id="openAiVideoService">Buka generator di tab baru (jika embed gagal)</button></div>
 <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px;background:#0b0b10"><iframe title="LTX AI Video Generator" src="https://chopperblu-ltx-2-5-demo.hf.space" loading="lazy" style="display:block;width:100%;height:820px;border:0;background:#0b0b10" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="no-referrer"></iframe></div>
@@ -428,9 +428,9 @@ document.getElementById('generateAiImage').onclick=async()=>{
   if(!prompt){alert('Tulis deskripsi gambar terlebih dahulu.');return;}
   
   const format=document.getElementById('aiImageFormat').value;
-  // Anonymous AI Horde requests must stay inside its low-cost anonymous work budget.
-  // Use conservative sizes (all sides <=576) and low steps; anonymous clients cannot pay kudos.
-  const dimensions=format==='portrait'?[512,576]:format==='square'?[512,512]:[576,320];
+  // Anonymous AI Horde: use ultra-low sampler work and omit seed (API supplies a random seed).
+  // Avoid costly size/step combinations that anonymous accounts cannot afford.
+  const dimensions=format==='portrait'?[256,384]:format==='square'?[256,256]:[384,256];
   const button=document.getElementById('generateAiImage');
   button.disabled=true;
   button.textContent='Mengantrekan gambar...';
@@ -441,14 +441,14 @@ document.getElementById('generateAiImage').onclick=async()=>{
   document.getElementById('aiImagePreviewWrap').classList.add('hide');
   document.getElementById('downloadAiImage').disabled=true;
   document.getElementById('useAiImageAsPoster').disabled=true;
-  setAiImageStatus('Mengirim permintaan ke AI Horde gratis. Worker relawan dan antrean dapat membuat proses lebih lama...','warn');
+  setAiImageStatus('Mengirim permintaan ringan ke AI Horde anonim (256–384 px, 1 step). Hasil mungkin lebih sederhana.','warn');
   try{
     const submitResponse=await fetch(AI_HORDE_API+'/generate/async',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'},
       body:JSON.stringify({
         prompt:prompt+', high quality, detailed composition, no watermark',
-        params:{width:dimensions[0],height:dimensions[1],steps:4,cfg_scale:4,sampler_name:'k_euler',seed:String(Math.floor(Math.random()*2147483647)),n:1},
+        params:{width:dimensions[0],height:dimensions[1],steps:1,cfg_scale:3,sampler_name:'k_euler',n:1},
         // No model filter: permits any available worker/model and avoids model-specific cost mismatch.
         models:[],
         nsfw:false,
