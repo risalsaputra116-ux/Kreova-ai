@@ -30,9 +30,10 @@ main{flex:1;min-width:0;padding:23px clamp(15px,4vw,42px) 50px;max-width:1320px;
 footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 .mobilebar{display:none}
 @media(max-width:800px){.sidebar{width:210px}.cards{grid-template-columns:1fr 1fr}}
-@media(max-width:620px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 86px}.hero{margin:22px 0}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{padding-top:3px}.mobilebar{position:fixed;display:flex;bottom:0;left:0;right:0;background:#17161e;border-top:1px solid #343340;padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5;justify-content:flex-start;gap:4px;overflow-x:auto}.mobilebar button{flex:1 1 20%;min-width:0;background:none;border:0;color:#aaa6b7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:#d9a4ff}.mobilebar .ico{font-size:18px}.badge{font-size:10px}.panel{padding:14px}}
+@media(max-width:620px){.app{display:block}.sidebar{display:none}main{padding:18px 14px 86px}.hero{margin:22px 0}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{padding-top:3px}.mobilebar{position:fixed;display:flex;bottom:0;left:0;right:0;background:#17161e;border-top:1px solid #343340;padding:7px 5px calc(7px + env(safe-area-inset-bottom));z-index:5;justify-content:flex-start;gap:4px;overflow-x:auto}.mobilebar button{flex:0 0 auto;min-width:55px;background:none;border:0;color:#aaa6b7;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px}.mobilebar button.active{color:#d9a4ff}.mobilebar .ico{font-size:18px}.badge{font-size:10px}.panel{padding:14px}}
 
 .poster-preview{width:100%;max-width:420px;margin:12px auto;background:#111119;border:1px solid #393548;border-radius:14px;padding:10px}
+.ad-placeholder{min-height:100px;border:1px dashed #555267;border-radius:12px;display:grid;place-items:center;text-align:center;color:#898597;font-size:11px;letter-spacing:.4px;background:#13131b;padding:14px;margin-top:10px}.ad-slot{margin-top:10px}
 #posterCanvas{display:block;width:100%;height:auto;border-radius:8px;background:#201d2b}
 .file-input{padding:9px}
 
@@ -50,47 +51,47 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="brand"><div class="logo">K</div><div><div class="brand-name">KREOVA AI</div><div class="brand-sub">AI CREATIVE STUDIO</div></div></div>
 <div class="nav-title">WORKSPACE</div>
 <nav class="nav" id="sideNav">
-<button class="active" data-page="dashboard"><span class="ico">⌂</span>Dashboard</button>
-<button data-page="factory"><span class="ico">⚙</span>Content Factory</button>
-<button data-page="poster"><span class="ico">▧</span>Image Studio</button>
-<button data-page="ideas"><span class="ico">✦</span>AI Idea Studio</button>
-<button data-page="script"><span class="ico">✎</span>Script Studio</button>
-<button data-page="scenes"><span class="ico">▣</span>Scene Maker</button>
-<button data-page="video"><span class="ico">▶</span>Video Studio</button>
-<button data-page="social"><span class="ico">↗</span>Social Pack</button>
-<button data-page="projects"><span class="ico">▤</span>My Projects</button>
-<button data-page="account"><span class="ico">●</span>Akun / Login</button>
+<button class="active" data-page="dashboard"><span class="ico">[HOME]</span>Dashboard</button>
+<button data-page="factory"><span class="ico">[FACTORY]</span>Content Factory</button>
+<button data-page="poster"><span class="ico">[IMAGE]</span>Image Studio</button>
+<button data-page="ideas"><span class="ico">[IDEA]</span>AI Idea Studio</button>
+<button data-page="script"><span class="ico">[SCRIPT]</span>Script Studio</button>
+<button data-page="scenes"><span class="ico">[SCENE]</span>Scene Maker</button>
+<button data-page="video"><span class="ico">[VIDEO]</span>Video Studio</button>
+<button data-page="social"><span class="ico">[LINK]</span>Social Pack</button>
+<button data-page="projects"><span class="ico">[PROJECT]</span>My Projects</button>
+<button data-page="account"><span class="ico">[ACCOUNT]</span>Akun / Login</button>
 </nav>
-<div class="sidebar-bottom"><div class="free">[FREE] FREE EDITION</div><div class="side-note">MVP berjalan di perangkat. AI gambar terhubung melalui persetujuan akun Pollinations.</div></div>
+<div class="sidebar-bottom"><div class="free">[FREE] FREE EDITION</div><div class="side-note">MVP gratis. AI gambar menggunakan worker komunitas AI Horde; antrean dapat berubah.</div></div>
 </aside>
 <main>
 <div class="top"><div class="breadcrumb">Workspace / <span id="crumb">Dashboard</span></div><span class="badge">v8  |  AI IMAGE</span></div>
 <section id="dashboard" class="section active">
 <div class="hero"><h1>Your idea.<br><span>Your content studio.</span></h1><p>Ubah ide sederhana menjadi brief produksi konten, naskah, scene, dan paket publikasi. Mulai dari satu topik.</p></div>
-<div class="panel"><div class="panel-title"><span class="ico">✦</span>Mulai proyek baru</div>
+<div class="panel"><div class="panel-title"><span class="ico">[IDEA]</span>Mulai proyek baru</div>
 <div class="grid">
 <div class="field"><label>Topik atau ide konten</label><input id="dashTopic" placeholder="Contoh: fakta unik tentang laut dalam"></div>
 <div class="field"><label>Platform</label><select id="dashPlatform"><option>YouTube Shorts</option><option>TikTok</option><option>Instagram Reels</option><option>Facebook Reels</option><option>YouTube Video Panjang</option></select></div>
-</div><div class="btnrow"><button class="btn primary full" id="startProject">✦ Mulai membuat konten</button></div>
+</div><div class="btnrow"><button class="btn primary full" id="startProject">[IDEA] Mulai membuat konten</button></div>
 </div>
-<div class="panel"><div class="panel-title"><span class="ico">✦</span>Creative tools</div>
+<div class="ad-slot" id="kreovaAdDashboard"><div class="ad-placeholder" id="kreovaAdPlaceholder">Slot iklan KREOVA AI · aktif setelah konfigurasi akun iklan disetujui</div></div>
+<div class="panel"><div class="panel-title"><span class="ico">[TOOLS]</span>Creative tools</div>
 <div class="cards">
-<div class="tool-card" data-page="factory"><div class="tool-icon">⚙</div><h3>Content Factory</h3><p>Satu topik menjadi paket konten lengkap, langsung di perangkat.</p></div>
-<div class="tool-card" data-page="poster"><div class="tool-icon">▧</div><h3>Image Studio</h3><p>Buat poster dari tema atau foto sendiri, lalu ekspor PNG.</p></div>
-<div class="tool-card" data-page="ideas"><div class="tool-icon">✦</div><h3>AI Idea Studio</h3><p>Bangun ide, angle, dan hook untuk konten.</p></div>
-<div class="tool-card" data-page="script"><div class="tool-icon">✎</div><h3>Script Studio</h3><p>Susun naskah video sesuai durasi dan gaya.</p></div>
-<div class="tool-card" data-page="scenes"><div class="tool-icon">▣</div><h3>Scene Maker</h3><p>Ubah naskah menjadi urutan adegan produksi.</p></div>
-<div class="tool-card" data-page="video"><div class="tool-icon">▶</div><h3>Video Studio</h3><p>Susun gambar, subtitle, dan audio menjadi video.</p></div>
+<div class="tool-card" data-page="factory"><div class="tool-icon">[FACTORY]</div><h3>Content Factory</h3><p>Satu topik menjadi paket konten lengkap, langsung di perangkat.</p></div>
+<div class="tool-card" data-page="poster"><div class="tool-icon">[IMAGE]</div><h3>Image Studio</h3><p>Buat poster dari tema atau foto sendiri, lalu ekspor PNG.</p></div>
+<div class="tool-card" data-page="ideas"><div class="tool-icon">[IDEA]</div><h3>AI Idea Studio</h3><p>Bangun ide, angle, dan hook untuk konten.</p></div>
+<div class="tool-card" data-page="script"><div class="tool-icon">[SCRIPT]</div><h3>Script Studio</h3><p>Susun naskah video sesuai durasi dan gaya.</p></div>
+<div class="tool-card" data-page="scenes"><div class="tool-icon">[SCENE]</div><h3>Scene Maker</h3><p>Ubah naskah menjadi urutan adegan produksi.</p></div>
+<div class="tool-card" data-page="video"><div class="tool-icon">[VIDEO]</div><h3>Video Studio</h3><p>Susun gambar, subtitle, dan audio menjadi video.</p></div>
 <div class="tool-card" data-page="social"><div class="tool-icon">[SOCIAL]</div><h3>Social Pack</h3><p>Judul, caption, deskripsi, dan hashtag.</p></div>
 <div class="tool-card" data-page="projects"><div class="tool-icon">[PROJECTS]</div><h3>My Projects</h3><p>Lanjutkan proyek yang tersimpan di perangkat.</p></div>
-<div class="tool-card" data-page="script"><div class="tool-icon">✧</div><h3>Content Assistant</h3><p>Susun brief kreatif untuk AI chat pilihanmu.</p></div>
+<div class="tool-card" data-page="script"><div class="tool-icon">[CONTENT]</div><h3>Content Assistant</h3><p>Susun brief kreatif untuk AI chat pilihanmu.</p></div>
 </div></div>
+<div class="panel"><div class="panel-title">[PROJECT] Ringkasan proyek</div><div class="grid"><div class="field"><label>Proyek tersimpan</label><div id="dashProjectCount" style="font-size:28px;font-weight:800;color:var(--pink)">0</div></div><div class="field"><label>Status</label><div class="small">FREE EDITION  |  Berjalan di perangkat</div></div></div><div class="panel-title">Proyek terbaru</div><div id="dashRecentProjects" class="small">Belum ada proyek tersimpan.</div><button class="btn full" data-page="projects" type="button">Lihat semua proyek</button></div>
 </section>
-
-<div class="panel"><div class="panel-title">▤ Ringkasan proyek</div><div class="grid"><div class="field"><label>Proyek tersimpan</label><div id="dashProjectCount" style="font-size:28px;font-weight:800;color:var(--pink)">0</div></div><div class="field"><label>Status</label><div class="small">FREE EDITION  |  Berjalan di perangkat</div></div></div><div class="panel-title">Proyek terbaru</div><div id="dashRecentProjects" class="small">Belum ada proyek tersimpan.</div><button class="btn full" data-page="projects" type="button">Lihat semua proyek</button></div>
 <section id="factory" class="section">
 <div class="hero"><h1>Content <span>Factory</span></h1><p>Ubah satu topik menjadi paket konten lengkap. Generator template offline  -  tanpa login, tanpa biaya API.</p></div>
-<div class="panel"><div class="panel-title"><span class="ico">⚙</span>Rancang paket konten</div>
+<div class="panel"><div class="panel-title"><span class="ico">[FACTORY]</span>Rancang paket konten</div>
 <div class="grid">
 <div class="field full"><label>Topik utama</label><textarea id="factoryTopic" placeholder="Contoh: 5 kebiasaan sederhana agar tidur lebih nyenyak"></textarea></div>
 <div class="field"><label>Platform</label><select id="factoryPlatform"><option>TikTok</option><option>YouTube Shorts</option><option>Instagram Reels</option><option>Facebook Reels</option><option>YouTube</option></select></div>
@@ -99,8 +100,8 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="field"><label>Gaya</label><select id="factoryTone"><option>Natural dan akrab</option><option>Sinematik dan emosional</option><option>Lucu dan santai</option><option>Jelas dan informatif</option><option>Semangat dan inspiratif</option></select></div>
 <div class="field full"><label>Target penonton (opsional)</label><input id="factoryAudience" placeholder="Contoh: pekerja sibuk, pelajar, orang tua"></div>
 <div class="field full"><label>Ajakan / CTA (opsional)</label><input id="factoryCTA" placeholder="Contoh: Simpan video ini untuk dicoba nanti"></div>
-</div><button class="btn primary full" id="makeFactory">⚙ Buat paket konten</button></div>
-<div class="panel"><div class="panel-title">Paket konten kamu</div><div class="result" id="factoryResult"><div class="empty">Masukkan topik, lalu tekan Buat paket konten.</div></div><div class="btnrow"><button class="btn" id="editFactory">[EDIT] Edit paket</button><button class="btn" data-copy="factoryResult">Salin paket</button><button class="btn" data-save="factoryResult" data-save-title="factory">Simpan proyek</button></div><div class="editor-area hide" id="factoryEditorWrap"><div class="edit-help">Edit bebas seluruh isi paket di bawah ini. Perubahan baru diterapkan setelah menekan "Terapkan perubahan".</div><textarea id="factoryEditor" spellcheck="true"></textarea><div class="btnrow"><button class="btn primary" id="applyFactoryEdit">Terapkan perubahan</button><button class="btn ghost" id="cancelFactoryEdit">Batal</button></div></div></div>
+</div><button class="btn primary full" id="makeFactory">[FACTORY] Buat paket konten</button></div>
+<div class="panel"><div class="panel-title">Paket konten kamu</div><div class="result" id="factoryResult"><div class="empty">Masukkan topik, lalu tekan Buat paket konten.</div></div><div class="btnrow"><button class="btn" id="editFactory">[EDIT] Edit paket</button><button class="btn" data-copy="factoryResult">Salin paket</button><button class="btn" data-share="factoryResult">Bagikan</button><button class="btn" data-save="factoryResult" data-save-title="factory">Simpan proyek</button></div><div class="editor-area hide" id="factoryEditorWrap"><div class="edit-help">Edit bebas seluruh isi paket di bawah ini. Perubahan baru diterapkan setelah menekan "Terapkan perubahan".</div><textarea id="factoryEditor" spellcheck="true"></textarea><div class="btnrow"><button class="btn primary" id="applyFactoryEdit">Terapkan perubahan</button><button class="btn ghost" id="cancelFactoryEdit">Batal</button></div></div></div>
 <div class="panel" id="qualityPanel">
 <div class="panel-title">[CHECK] Content Quality Checker</div>
 <p class="small">Periksa kelengkapan dan konsistensi paket sebelum dipublikasikan. Pemeriksaan berjalan lokal berdasarkan teks, bukan penilaian AI atau jaminan performa.</p>
@@ -114,7 +115,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <section id="poster" class="section">
 <div class="hero"><h1>Image <span>Studio</span></h1><p>Buat poster konten dari tema atau foto galeri. Editor berjalan di perangkat dan dapat mengekspor PNG.</p></div>
 <div class="panel">
-<div class="panel-title">▧ Sumber gambar</div>
+<div class="panel-title">[IMAGE] Sumber gambar</div>
 <div class="field"><label>Judul / tema poster</label><input id="posterTitle" placeholder="Contoh: 5 kebiasaan agar hidup lebih tenang"></div>
 <div class="field"><label>Subjudul (opsional)</label><input id="posterSubtitle" placeholder="Mulai dari langkah kecil setiap hari"></div>
 <div class="field"><label>Unggah foto sendiri (opsional)</label><input id="posterPhoto" class="file-input" type="file" accept="image/*"><p class="small">Jika foto dipilih, foto akan menjadi latar poster. Jika tidak, poster dibuat dari desain grafis lokal.</p></div>
@@ -127,15 +128,28 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="panel">
 <div class="panel-title">Pratinjau poster</div>
 <div class="poster-preview"><canvas id="posterCanvas" width="1080" height="1920"></canvas></div>
-<div class="btnrow"><button class="btn primary" id="downloadPoster">Unduh PNG</button><button class="btn" id="copyPosterPrompt">Salin prompt AI</button></div>
-<p class="small">Poster lokal tetap tersedia. Fitur AI Image Generator membuat gambar sungguhan melalui akun Pollinations; biaya mengikuti model dan batas anggaran yang kamu setujui.</p>
+<div class="btnrow"><button class="btn primary" id="downloadPoster">Unduh PNG</button><button class="btn" id="copyPosterPrompt">Salin prompt AI</button><button class="btn" id="sharePoster">Bagikan poster</button></div>
+<p class="small">Poster lokal tetap tersedia. AI Image Generator memakai AI Horde dengan API anonim gratis; proses bergantung ketersediaan worker komunitas dan waktu antrean.</p>
 </div>
 <div class="panel">
 <div class="panel-title">Prompt gambar AI dari tema</div>
 <div id="posterPrompt" class="result"><div class="empty">Isi tema poster, lalu tekan Buat / perbarui poster.</div></div>
 </div>
 
-
+<div class="panel">
+<div class="panel-title">[CONTENT] AI Image Generator - GRATIS (AI Horde)</div>
+<p class="small">Buat gambar melalui AI Horde, layanan komunitas yang menggunakan GPU relawan. Tidak memerlukan App Key pribadi atau kredit berbayar. Pengguna anonim mungkin mendapat antrean lebih lama dan hasil bergantung pada worker yang tersedia.</p>
+<div class="field"><label>Deskripsi gambar</label><textarea id="aiImagePrompt" placeholder="Contoh: Tabib China berjubah putih berdiri di depan istana kuno, manusia realistis, sinematik, pencahayaan dramatis, detail tinggi"></textarea></div>
+<div class="grid">
+<div class="field"><label>Format gambar</label><select id="aiImageFormat"><option value="portrait">Vertikal 9:16</option><option value="square">Kotak 1:1</option><option value="landscape">Horizontal 16:9</option></select></div>
+<div class="field"><label>Model gambar (AI Horde)</label><select id="aiImageModel"><option value="Deliberate">Deliberate</option><option value="DreamShaper">DreamShaper</option><option value="SDXL">SDXL</option></select></div>
+</div>
+<div class="btnrow"><button class="btn primary full" id="generateAiImage">[CONTENT] Hasilkan gambar gratis</button></div>
+<div id="aiImageStatus" class="ai-status warn">Siap. Tulis prompt, lalu tekan Hasilkan gambar gratis.</div>
+<div class="ai-image-preview hide" id="aiImagePreviewWrap"><img id="aiImagePreview" alt="Hasil gambar AI KREOVA"></div>
+<div class="btnrow"><button class="btn" id="useAiImageAsPoster">Gunakan sebagai latar poster</button><button class="btn" id="downloadAiImage">Unduh gambar AI</button></div>
+</div>
+</div>
 
 </section>
 <section id="ideas" class="section">
@@ -144,8 +158,8 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="field full"><label>Topik / niche</label><input id="ideaTopic" placeholder="Misalnya: cerita misteri di desa"></div>
 <div class="field"><label>Platform target</label><select id="ideaPlatform"><option>YouTube Shorts</option><option>TikTok</option><option>Instagram Reels</option><option>Facebook</option><option>YouTube long-form</option></select></div>
 <div class="field"><label>Gaya konten</label><select id="ideaStyle"><option>Hook kuat dan bikin penasaran</option><option>Emosional dan relatable</option><option>Lucu, ringan, shareable</option><option>Edukasi, jelas, ringkas</option><option>Misteri dan sinematik</option><option>Inspiratif dan membangun</option></select></div>
-</div><button class="btn primary full" id="makeIdea">✦ Buat ide & brief</button></div>
-<div class="panel"><div class="panel-title">Hasil</div><div class="result" id="ideaResult"><div class="empty">Brief ide akan muncul di sini setelah kamu mengisi topik.</div></div><div class="btnrow"><button class="btn" data-copy="ideaResult">Salin hasil</button><button class="btn" data-save="ideaResult">Simpan proyek</button></div></div>
+</div><button class="btn primary full" id="makeIdea">[IDEA] Buat ide & brief</button></div>
+<div class="panel"><div class="panel-title">Hasil</div><div class="result" id="ideaResult"><div class="empty">Brief ide akan muncul di sini setelah kamu mengisi topik.</div></div><div class="btnrow"><button class="btn" data-copy="ideaResult">Salin hasil</button><button class="btn" data-share="ideaResult">Bagikan</button><button class="btn" data-save="ideaResult">Simpan proyek</button></div></div>
 </section>
 
 <section id="script" class="section">
@@ -156,28 +170,33 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="field"><label>Jenis</label><select id="scriptType"><option>Short video</option><option>Video edukasi</option><option>Storytelling / drama</option><option>Video promosi</option><option>Video YouTube panjang</option></select></div>
 <div class="field"><label>Tone</label><select id="scriptTone"><option>Natural, kuat, tidak bertele-tele</option><option>Emosional</option><option>Komedi</option><option>Misterius</option><option>Profesional</option><option>Persuasif</option></select></div>
 <div class="field"><label>Target audiens</label><input id="scriptAudience" placeholder="Contoh: penonton usia 18 - 35"></div>
-</div><button class="btn primary full" id="makeScript">✦ Buat script brief</button></div>
-<div class="panel"><div class="panel-title">Script brief</div><div class="result" id="scriptResult"><div class="empty">Brief naskah akan tampil di sini.</div></div><div class="btnrow"><button class="btn" data-copy="scriptResult">Salin</button><button class="btn" data-save="scriptResult">Simpan proyek</button></div></div>
+</div><button class="btn primary full" id="makeScript">[IDEA] Buat script brief</button></div>
+<div class="panel"><div class="panel-title">Script brief</div><div class="result" id="scriptResult"><div class="empty">Brief naskah akan tampil di sini.</div></div><div class="btnrow"><button class="btn" data-copy="scriptResult">Salin</button><button class="btn" data-share="scriptResult">Bagikan</button><button class="btn" data-save="scriptResult">Simpan proyek</button></div></div>
 </section>
 
 <section id="scenes" class="section">
 <div class="hero"><h1>Video Scene <span>Maker</span></h1><p>Siapkan struktur scene, prompt visual, voice-over, dan teks layar untuk video.</p></div>
 <div class="panel"><div class="field"><label>Tempel naskah / ringkasan cerita</label><textarea id="sceneText" placeholder="Tempel naskah di sini. Untuk MVP, pembagian adegan dibuat berdasarkan paragraf atau kalimat."></textarea></div>
 <div class="grid"><div class="field"><label>Format</label><select id="sceneFormat"><option>Vertikal 9:16 (Shorts/Reels)</option><option>Horizontal 16:9 (YouTube)</option><option>Square 1:1</option></select></div><div class="field"><label>Gaya visual</label><select id="sceneVisual"><option>Realistis sinematik</option><option>Dokumenter</option><option>Animasi 2D</option><option>Motion graphics</option><option>AI cinematic</option></select></div></div>
-<button class="btn primary full" id="makeScenes">✦ Buat storyboard prompt</button></div>
-<div class="panel"><div class="panel-title">Storyboard brief</div><div class="result" id="sceneResult"><div class="empty">Storyboard prompt muncul di sini.</div></div><div class="btnrow"><button class="btn" data-copy="sceneResult">Salin</button><button class="btn" data-save="sceneResult">Simpan proyek</button></div></div>
+<button class="btn primary full" id="makeScenes">[IDEA] Buat storyboard prompt</button></div>
+<div class="panel"><div class="panel-title">Storyboard brief</div><div class="result" id="sceneResult"><div class="empty">Storyboard prompt muncul di sini.</div></div><div class="btnrow"><button class="btn" data-copy="sceneResult">Salin</button><button class="btn" data-share="sceneResult">Bagikan</button><button class="btn" data-save="sceneResult">Simpan proyek</button></div></div>
 </section>
 
 <section id="video" class="section">
-<div class="hero"><h1>Video <span>Studio</span></h1><p>Susun foto adegan menjadi video dengan teks dan audio, langsung di browser.</p></div>
-<div class="panel"><div class="panel-title">▶ Buat video dari gambar</div>
+<div class="hero"><h1>Video <span>Studio</span></h1><p>Susun gambar, teks, dan audio menjadi video lokal di browser. Ini bukan generator AI text-to-video.</p></div>
+<div class="panel"><div class="panel-title">[AI VIDEO] Text-to-Video / Image-to-Video</div>
+<p class="small">KREOVA menyiapkan prompt dan membuka layanan generator video publik di tab lain. Pembuatan video dilakukan oleh layanan eksternal; gratis/kuota dan ketersediaan dapat berubah. Jangan unggah media privat.</p>
+<div class="field"><label>Prompt video AI</label><textarea id="aiVideoPrompt" placeholder="Contoh: Shot sinematik seorang tabib berjalan melewati pasar kuno saat kabut pagi, kamera tracking pelan, cahaya lembut, gerakan natural, realistis"></textarea></div>
+<div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt video</button><button class="btn primary" id="openAiVideoService">Buka generator video publik</button></div>
+<div class="small">Layanan publik yang dapat dicoba: Wan2.Video. KREOVA tidak mengirim prompt secara otomatis ke layanan tersebut.</div></div>
+<div class="panel"><div class="panel-title">[VIDEO] Buat video dari gambar</div>
 <div class="field"><label>Tambah gambar adegan (maksimal 12)</label><input id="vsImages" type="file" accept="image/*" multiple></div>
 <div class="grid"><div class="field"><label>Format</label><select id="vsFormat"><option value="portrait">Vertikal 9:16</option><option value="landscape">Horizontal 16:9</option><option value="square">Kotak 1:1</option></select></div><div class="field"><label>Durasi per gambar</label><select id="vsDuration"><option>3</option><option selected>5</option><option>7</option><option>10</option></select></div></div>
 <div class="field"><label>Subtitle / teks layar (opsional)</label><textarea id="vsCaption" placeholder="Teks akan tampil pada semua gambar"></textarea></div>
 <div class="field"><label>Audio latar (opsional)</label><input id="vsAudio" type="file" accept="audio/*"></div>
 <div class="btnrow"><button class="btn" id="vsClear">Bersihkan</button><button class="btn primary" id="vsPreview">PLAY Preview</button></div><div class="small" id="vsStatus">Pilih gambar untuk mulai.</div></div>
 <div class="panel"><div class="panel-title">Preview video</div><canvas id="vsCanvas" width="720" height="1280" style="display:block;width:100%;max-width:360px;margin:auto;background:#080808;border-radius:12px;aspect-ratio:9/16"></canvas><div class="btnrow"><button class="btn primary full" id="vsExport">[FREE] Rekam & ekspor video</button></div><div id="vsDownload" class="small"></div></div>
-<div class="panel"><div class="panel-title">Format ekspor</div><p class="small">Ekspor gratis dari browser menghasilkan WebM. MP4 akan ditambahkan setelah mesin konversi video disiapkan. Gunakan Chrome Android dan jangan tutup tab selama proses.</p></div>
+<div class="panel"><div class="panel-title">Format ekspor</div><p class="small">Ekspor gratis dari browser menghasilkan WebM dari gambar (slideshow), bukan video AI generatif. MP4 belum tersedia. Gunakan Chrome Android dan jangan tutup tab selama proses.</p></div>
 </section>
 <section id="social" class="section">
 <div class="hero"><h1>Social <span>Pack</span></h1><p>Siapkan paket publikasi untuk platform pilihan.</p></div>
@@ -185,8 +204,8 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="field full"><label>Topik / isi video</label><textarea id="socialTopic" placeholder="Topik, ringkasan video, atau pesan utama"></textarea></div>
 <div class="field"><label>Platform</label><select id="socialPlatform"><option>YouTube Shorts</option><option>TikTok</option><option>Instagram Reels</option><option>Facebook Reels</option><option>YouTube</option></select></div>
 <div class="field"><label>Target / tujuan</label><select id="socialGoal"><option>Meningkatkan jangkauan</option><option>Mendorong komentar</option><option>Mengedukasi</option><option>Promosi produk</option><option>Membangun personal brand</option></select></div>
-</div><button class="btn primary full" id="makeSocial">✦ Buat social pack brief</button></div>
-<div class="panel"><div class="panel-title">Paket publikasi</div><div class="result" id="socialResult"><div class="empty">Paket publikasi akan muncul di sini.</div></div><div class="btnrow"><button class="btn" data-copy="socialResult">Salin</button><button class="btn" data-save="socialResult">Simpan proyek</button></div></div>
+</div><button class="btn primary full" id="makeSocial">[IDEA] Buat social pack brief</button></div>
+<div class="panel"><div class="panel-title">Paket publikasi</div><div class="result" id="socialResult"><div class="empty">Paket publikasi akan muncul di sini.</div></div><div class="btnrow"><button class="btn" data-copy="socialResult">Salin</button><button class="btn" data-share="socialResult">Bagikan</button><button class="btn" data-save="socialResult">Simpan proyek</button></div></div>
 </section>
 
 <section id="projects" class="section">
@@ -198,7 +217,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="hero"><h1>My <span>Profile</span></h1><p>Kelola identitas dan akun KREOVA AI kamu.</p></div>
 <div class="panel" id="profilePanel">
 <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px">
-<div id="profileAvatar" style="width:88px;height:88px;border-radius:50%;background:#1b1b27;border:2px solid #ff477e;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden">●</div>
+<div id="profileAvatar" style="width:88px;height:88px;border-radius:50%;background:#1b1b27;border:2px solid #ff477e;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden">[ACCOUNT]</div>
 <div><h2 id="profileNameLabel" style="margin:0 0 6px">Profil Pengguna</h2><div id="profileEmailLabel" class="small">Login untuk melihat profil</div><div id="profileStateBadge" class="ai-status warn">Belum login</div></div>
 </div>
 <div class="btnrow"><label class="btn" for="profilePhotoInput">Ganti foto profil</label><input id="profilePhotoInput" type="file" accept="image/*" style="display:none"><button class="btn" id="profileRemovePhoto" type="button">Hapus foto</button></div>
@@ -217,16 +236,28 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 </div>
 <div class="panel"><div class="panel-title">Proyek saya</div><p class="small">Lihat dan lanjutkan proyek konten yang tersimpan di perangkat ini.</p><button class="btn" data-page="projects" type="button">Buka proyek tersimpan</button></div>
 <div class="panel"><div class="panel-title">Tentang akun</div><p class="small">KREOVA AI  |  Free MVP. Pengaturan Supabase tidak ditampilkan pada halaman profil.</p></div>
+<div class="panel" id="adSetupPanel"><div class="panel-title">[ADS] Ad Manager — konfigurasi AdSense</div>
+<p class="small">Konfigurasi disimpan lokal pada browser ini. Iklan hanya dapat tayang setelah situs dan akun AdSense memenuhi persetujuan Google. Jangan memasukkan kode yang tidak berasal dari akun iklan kamu.</p>
+<div class="field"><label>AdSense Publisher ID (ca-pub-...)</label><input id="kreovaAdClient" placeholder="ca-pub-XXXXXXXXXXXXXXXX"></div>
+<div class="field"><label>Ad unit ID (opsional untuk slot banner)</label><input id="kreovaAdSlot" inputmode="numeric" placeholder="ID unit iklan numerik"></div>
+<div class="btnrow"><button class="btn primary" id="saveAdConfig">Simpan & aktifkan konfigurasi</button><button class="btn" id="clearAdConfig">Hapus konfigurasi</button></div>
+<div class="ai-status warn" id="adConfigStatus">Belum dikonfigurasi.</div><div class="field"><label>Kode iklan untuk ditanam pada file publik</label><textarea id="kreovaAdCode" readonly placeholder="Kode akan dibuat setelah Publisher ID diisi"></textarea><button class="btn" id="copyAdCode">Salin kode iklan</button><p class="small">Pengaturan lokal tidak otomatis berlaku untuk pengunjung lain. Kode yang dihasilkan perlu dimasukkan ke index.html yang dipublikasikan agar iklan dapat tampil untuk semua pengguna.</p></div><div class="ad-slot" id="kreovaAdSlotBox"><div class="ad-placeholder">Slot banner iklan · belum aktif</div></div>
+<p class="small">Auto Ads: masukkan Publisher ID yang valid. Banner slot: masukkan Publisher ID dan Ad unit ID. Pendapatan tidak dijamin dan tidak langsung aktif.</p></div>
 </section>
 <footer>KREOVA AI  |  Free MVP  |  Penyimpanan lokal</footer>
 </main>
 </div>
 <div class="mobilebar" id="mobileNav">
-<button class="active" data-page="dashboard"><span class="ico">⌂</span>Home</button>
-<button data-page="factory"><span class="ico">⚙</span>Factory</button>
-<button data-page="poster"><span class="ico">▧</span>Image</button>
-<button data-page="script"><span class="ico">✎</span>Script</button>
-<button data-page="account"><span class="ico">●</span>Akun</button>
+<button class="active" data-page="dashboard"><span class="ico">[HOME]</span>Home</button>
+<button data-page="factory"><span class="ico">[FACTORY]</span>Factory</button>
+<button data-page="poster"><span class="ico">[IMAGE]</span>Image</button>
+<button data-page="ideas"><span class="ico">[IDEA]</span>Ideas</button>
+<button data-page="script"><span class="ico">[SCRIPT]</span>Script</button>
+<button data-page="scenes"><span class="ico">[SCENE]</span>Scenes</button>
+<button data-page="video"><span class="ico">[VIDEO]</span>Video</button>
+<button data-page="social"><span class="ico">[LINK]</span>Social</button>
+<button data-page="projects"><span class="ico">[PROJECT]</span>Saved</button>
+<button data-page="account"><span class="ico">[ACCOUNT]</span>Akun</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -311,8 +342,9 @@ function qualityCheck(){
  const matched=topicWords.filter(w=>text.toLowerCase().includes(w)).length;
  const relevant=topicWords.length===0||matched>=Math.min(2,topicWords.length);
  add('Kesesuaian topik',relevant,'kata kunci topik muncul dalam paket','periksa apakah semua bagian tetap membahas topik utama');
- const total=lines.length;
- const finalScore=total?Math.round(score/total*100):0;
+ const pct=Math.round(score/sections.length/1*100); // score includes all checks; normalized below
+ const total=sections.length+5;
+ const finalScore=Math.round(score/total*100);
  const verdict=finalScore>=85?'Paket cukup lengkap':finalScore>=65?'Paket perlu sedikit penyempurnaan':'Paket perlu diperbaiki sebelum publikasi';
  const result=`HASIL PEMERIKSAAN KUALITAS\n\nSKOR KELENGKAPAN: ${finalScore}/100\n${verdict}\nPlatform: ${platform}\nTarget durasi: ${duration} detik\n\nRINCIAN:\n${lines.join('\n')}\n\nCATATAN:\nSkor ini mengukur kelengkapan struktur dan beberapa sinyal konsistensi secara otomatis. Ia tidak menilai kebenaran fakta, kualitas visual sebenarnya, hak cipta, atau peluang viral. Baca ulang dan sesuaikan dengan kebutuhan penonton sebelum publikasi.`;
  document.getElementById('qualityResult').textContent=result;
@@ -368,145 +400,99 @@ document.getElementById('downloadPoster').onclick=()=>{
  if(!val('posterTitle')){alert('Isi judul atau tema poster terlebih dahulu.');return}
  drawPoster();const a=document.createElement('a');a.download='kreova-poster.png';a.href=posterCanvas.toDataURL('image/png');a.click();
 };
+document.getElementById('sharePoster').onclick=async()=>{try{drawPoster();const blob=await new Promise(resolve=>posterCanvas.toBlob(resolve,'image/png'));if(blob&&navigator.share&&navigator.canShare){const file=new File([blob],'kreova-poster.png',{type:'image/png'});if(navigator.canShare({files:[file]})){await navigator.share({title:val('posterTitle')||'Poster KREOVA AI',files:[file]});return}}shareFallback(document.getElementById('posterPrompt').textContent||val('posterTitle'))}catch(err){if(err&&err.name!=='AbortError')alert('Bagikan poster dari galeri setelah menekan Unduh PNG.')}};
 document.getElementById('copyPosterPrompt').onclick=async()=>{
  const prompt=document.getElementById('posterPrompt').textContent.trim();if(!prompt||prompt.startsWith('Isi tema')){alert('Buat prompt terlebih dahulu.');return}
  try{await navigator.clipboard.writeText(prompt);alert('Prompt AI berhasil disalin.')}catch(e){alert('Clipboard tidak tersedia; pilih teks prompt lalu salin manual.')}
 };
-// KREOVA AI IMAGE GENERATOR - PERCHANCE
-let aiGeneratedBlob = null;
-let aiGeneratedObjectUrl = null;
 
-function setAiImageStatus(text, type='warn'){
+// KREOVA AI - AI Horde anonymous image generation (gratis)
+const AI_HORDE_API='https://stablehorde.net/api/v2';
+const AI_HORDE_ANON_KEY='0000000000';
+let aiGeneratedBlob=null;
+let aiGeneratedObjectUrl=null;
+function setAiImageStatus(message,type='warn'){
   const el=document.getElementById('aiImageStatus');
   if(!el)return;
-  el.textContent=text;
-  el.className='ai-status '+type;
+  el.textContent=message;
+  el.className='ai-status '+(type==='good'?'good':'warn');
 }
-
+function waitMs(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 document.getElementById('generateAiImage').onclick=async()=>{
   const prompt=document.getElementById('aiImagePrompt').value.trim();
-  if(!prompt){
-    alert('Masukkan deskripsi gambar terlebih dahulu.');
-    return;
-  }
-
-  const btn=document.getElementById('generateAiImage');
-  btn.disabled=true;
-
-  setAiImageStatus('Menghubungkan generator gambar...');
-
+  if(!prompt){alert('Tulis deskripsi gambar terlebih dahulu.');return;}
+  const model=document.getElementById('aiImageModel').value;
   const format=document.getElementById('aiImageFormat').value;
-  let resolution='768x768';
-
-  if(format==='portrait') resolution='512x768';
-  if(format==='landscape') resolution='768x512';
-
-  const requestId='kreova_'+Date.now();
-
-  const params=new URLSearchParams({
-    prompt:prompt,
-    format:'json',
-    id:requestId,
-    resolution:resolution
-  });
-
-  const iframe=document.createElement('iframe');
-  iframe.style.display='none';
-  iframe.src='https://perchance.org/perchance-ai-api?'+params.toString();
-
-  const timeout=setTimeout(()=>{
-    cleanup();
-    setAiImageStatus(
-      'Generator tidak merespons. Coba ulangi atau buka Perchance melalui browser.',
-      'warn'
-    );
-    btn.disabled=false;
-  },120000);
-
-  function cleanup(){
-    clearTimeout(timeout);
-    window.removeEventListener('message',receive);
-    iframe.remove();
-    btn.disabled=false;
-  }
-
-  function receive(event){
-    const data=event.data;
-
-    if(!data || data.api!=='perchance-image-api')return;
-    if(!data.result || data.result.id!==requestId)return;
-
-    cleanup();
-
-    if(!data.result.ok || !data.result.url){
-      setAiImageStatus('Gagal membuat gambar. Silakan coba lagi.','warn');
-      return;
-    }
-
-    const img=document.getElementById('aiImagePreview');
-    const wrap=document.getElementById('aiImagePreviewWrap');
-
-    img.src=data.result.url;
-    wrap.classList.remove('hide');
-
-    aiGeneratedBlob=null;
-
-    if(aiGeneratedObjectUrl){
-      URL.revokeObjectURL(aiGeneratedObjectUrl);
-    }
-
-    aiGeneratedObjectUrl=data.result.url;
-
-    setAiImageStatus('Gambar berhasil dibuat!','good');
-  }
-
-  window.addEventListener('message',receive);
-  document.body.appendChild(iframe);
-};
-
-document.getElementById('downloadAiImage').onclick=async()=>{
-  if(!aiGeneratedObjectUrl){
-    alert('Buat gambar terlebih dahulu.');
-    return;
-  }
-
+  const dimensions=format==='portrait'?[512,576]:format==='square'?[512,512]:[576,324];
+  const button=document.getElementById('generateAiImage');
+  button.disabled=true;
+  button.textContent='Mengantrekan gambar...';
+  setAiImageStatus('Mengirim permintaan ke AI Horde gratis. Worker relawan dan antrean dapat membuat proses lebih lama...','warn');
   try{
-    const response=await fetch(aiGeneratedObjectUrl);
-    const blob=await response.blob();
-
-    const link=document.createElement('a');
-    link.href=URL.createObjectURL(blob);
-    link.download='kreova-ai-image.jpg';
-    link.click();
-
-    setTimeout(()=>URL.revokeObjectURL(link.href),3000);
-  }catch(e){
-    window.open(aiGeneratedObjectUrl,'_blank');
+    const submitResponse=await fetch(AI_HORDE_API+'/generate/async',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'},
+      body:JSON.stringify({
+        prompt:prompt+', high quality, detailed composition, no watermark',
+        params:{width:dimensions[0],height:dimensions[1],steps:25,cfg_scale:7,seed:0,n:1},
+        models:[model],
+        nsfw:false,
+        censor_nsfw:true
+      })
+    });
+    if(!submitResponse.ok){let msg='HTTP '+submitResponse.status;try{let d=await submitResponse.json();msg=d.message||d.error||msg;}catch(e){};throw new Error('Permintaan gagal: '+msg);}
+    const submitted=await submitResponse.json();
+    if(!submitted.id)throw new Error('Server tidak memberikan ID antrean.');
+    const requestId=submitted.id;
+    let generation=null;
+    for(let attempt=0;attempt<120;attempt++){
+      await waitMs(3000);
+      const checkResponse=await fetch(AI_HORDE_API+'/generate/check/'+encodeURIComponent(requestId),{headers:{'apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'}});
+      if(!checkResponse.ok)throw new Error('Pemeriksaan antrean gagal (HTTP '+checkResponse.status+').');
+      const check=await checkResponse.json();
+      if(check.faulted)throw new Error('Worker gagal memproses gambar. Coba lagi nanti.');
+      if(check.done){
+        const statusResponse=await fetch(AI_HORDE_API+'/generate/status/'+encodeURIComponent(requestId),{headers:{'apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'}});
+        if(!statusResponse.ok)throw new Error('Gagal mengambil hasil gambar (HTTP '+statusResponse.status+').');
+        const statusData=await statusResponse.json();
+        generation=statusData.generations&&statusData.generations[0];
+        break;
+      }
+      setAiImageStatus('Masih mengantre... perkiraan server '+(check.wait_time||0)+' detik. (cek '+(attempt+1)+'/120)','warn');
+    }
+    if(!generation)throw new Error('Antrean terlalu lama. Silakan coba lagi nanti.');
+    if(!generation.img)throw new Error('Worker selesai tetapi tidak mengirim data gambar.');
+    let imageData=generation.img;
+    if(imageData.startsWith('data:image/')){
+      const imageResponse=await fetch(imageData);aiGeneratedBlob=await imageResponse.blob();
+    }else{
+      const binary=atob(imageData);
+      const bytes=new Uint8Array(binary.length);
+      for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+      aiGeneratedBlob=new Blob([bytes],{type:'image/png'});
+    }
+    if(aiGeneratedObjectUrl)URL.revokeObjectURL(aiGeneratedObjectUrl);
+    aiGeneratedObjectUrl=URL.createObjectURL(aiGeneratedBlob);
+    document.getElementById('aiImagePreview').src=aiGeneratedObjectUrl;
+    document.getElementById('aiImagePreviewWrap').classList.remove('hide');
+    setAiImageStatus('Gambar selesai dibuat oleh worker komunitas AI Horde. Periksa hasil sebelum diunduh.','good');
+  }catch(err){
+    setAiImageStatus('Gagal membuat gambar: '+err.message,'warn');
+  }finally{
+    button.disabled=false;
+    button.textContent='[CONTENT] Hasilkan gambar gratis';
   }
 };
-
+document.getElementById('downloadAiImage').onclick=()=>{
+  if(!aiGeneratedBlob||!aiGeneratedObjectUrl){alert('Buat gambar AI terlebih dahulu.');return;}
+  const a=document.createElement('a');a.href=aiGeneratedObjectUrl;a.download='kreova-ai-image.png';a.click();
+};
 document.getElementById('useAiImageAsPoster').onclick=()=>{
-  if(!aiGeneratedObjectUrl){
-    alert('Buat gambar terlebih dahulu.');
-    return;
-  }
-
+  if(!aiGeneratedObjectUrl){alert('Buat gambar AI terlebih dahulu.');return;}
   const img=new Image();
-
-  img.onload=()=>{
-    posterImage=img;
-    drawPoster();
-    setAiImageStatus(
-      'Gambar AI berhasil dipasang sebagai latar poster.',
-      'good'
-    );
-  };
-
-  img.crossOrigin='anonymous';
+  img.onload=()=>{posterImage=img;drawPoster();setAiImageStatus('Gambar AI sudah dipasang sebagai latar poster. Kamu bisa menambahkan judul dan mengunduh poster PNG.','good');};
   img.src=aiGeneratedObjectUrl;
 };
- 
-
 
 drawPoster();
 document.getElementById('makeIdea').onclick=()=>{let t=val('ideaTopic');if(!t){alert('Masukkan topik');return}let plat=document.getElementById('ideaPlatform').value,sty=document.getElementById('ideaStyle').value;
@@ -519,6 +505,10 @@ document.getElementById('makeSocial').onclick=()=>{let t=val('socialTopic');if(!
 setOut('socialResult',`KREOVA AI  -  SOCIAL PACK BRIEF\n\nKONTEN:\n${t}\nPLATFORM: ${p}\nTUJUAN: ${g}\n\nBUAT PAKET:\n1. 5 judul alternatif yang menarik dan jujur.\n2. Caption utama sesuai platform ${p}.\n3. Deskripsi yang mudah dibaca dan relevan.\n4. 8 - 15 hashtag relevan (hindari hashtag spam).\n5. CTA sesuai tujuan: ${g}.\n6. Konsep thumbnail/cover: visual, komposisi, teks singkat, prompt gambar.\n7. Saran waktu posting sebagai eksperimen, bukan jaminan.\n8. Versi caption pendek dan versi lebih lengkap.\n\nHindari klaim viral atau clickbait yang menyesatkan.`)};
 document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{let txt=document.getElementById(b.dataset.copy).textContent.trim();if(!txt||txt.includes('akan muncul di sini')){alert('Belum ada hasil untuk disalin');return}try{await navigator.clipboard.writeText(txt);alert('Berhasil disalin')}catch(e){alert('Clipboard tidak tersedia. Pilih dan salin teks hasil secara manual.')}});
 document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>saveResult(b.dataset.save,b.dataset.saveTitle==='factory'?'Content Factory  -  '+(val('factoryTopic')||'Konten'):undefined));
+function shareFallback(text){const encoded=encodeURIComponent(text+'\n\nDibuat dengan KREOVA AI');if(confirm('OK membuka WhatsApp untuk membagikan teks. Cancel untuk menyalin.')){window.open('https://wa.me/?text='+encoded,'_blank')}else if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>alert('Teks disalin.')).catch(()=>alert('Salin teks secara manual.'))}else alert('Salin teks hasil secara manual.')}
+function shareOutput(id){const node=document.getElementById(id);if(!node)return;const text=node.innerText.trim();if(!text||text.includes('akan muncul di sini')||text.includes('akan tampil di sini')){alert('Buat hasil terlebih dahulu.');return}if(navigator.share){navigator.share({title:'KREOVA AI',text:text+'\n\nDibuat dengan KREOVA AI'}).catch(e=>{if(e&&e.name!=='AbortError')shareFallback(text)})}else shareFallback(text)}
+document.querySelectorAll('[data-share]').forEach(b=>b.addEventListener('click',()=>shareOutput(b.dataset.share)));
+
 renderProjects();
 // KREOVA AI  -  Auth + profile. Public publishable key only; never use service_role.
 let kreovaSb=null;
@@ -536,7 +526,7 @@ function setProfileUser(user){
  document.getElementById('profileEditEmail').value=logged?(user.email||''):'';
  const badge=document.getElementById('profileStateBadge');badge.textContent=logged?'Akun aktif':'Belum login';badge.className='ai-status '+(logged?'good':'warn');
  const avatar=document.getElementById('profileAvatar');const photo=localStorage.getItem(PROFILE_PHOTO_KEY);
- if(photo){avatar.innerHTML='';const img=document.createElement('img');img.src=photo;img.alt='Foto profil';img.style.cssText='width:100%;height:100%;object-fit:cover';avatar.appendChild(img)}else avatar.textContent=(logged?name.charAt(0).toUpperCase():'●');
+ if(photo){avatar.innerHTML='';const img=document.createElement('img');img.src=photo;img.alt='Foto profil';img.style.cssText='width:100%;height:100%;object-fit:cover';avatar.appendChild(img)}else avatar.textContent=(logged?name.charAt(0).toUpperCase():'[ACCOUNT]');
 }
 function sbRefreshUser(){if(!kreovaSb)return;kreovaSb.auth.getSession().then(({data,error})=>{if(error){sbUserStatus('Gagal membaca sesi: '+error.message);setProfileUser(null);return}const u=data.session?.user||null;setProfileUser(u);sbUserStatus(u?'Login sebagai '+u.email:'Belum login.',!!u)}).catch(e=>sbUserStatus('Gagal membaca sesi: '+e.message))}
 function initKreovaAuth(){if(!window.supabase?.createClient){sbUserStatus('Library Supabase belum termuat. Periksa koneksi lalu refresh.');return}kreovaSb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}});
@@ -546,16 +536,39 @@ function initKreovaAuth(){if(!window.supabase?.createClient){sbUserStatus('Libra
 document.getElementById('sbSignup').onclick=async()=>{if(!kreovaSb){alert('Koneksi akun belum siap. Refresh halaman.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value,display=document.getElementById('sbDisplayName').value.trim();if(!email||password.length<8){alert('Masukkan email dan password minimal 8 karakter.');return}const {data,error}=await kreovaSb.auth.signUp({email,password,options:{data:{display_name:display}}});if(error){sbUserStatus('Daftar gagal: '+error.message);return}sbUserStatus(data.session?'Pendaftaran berhasil, akun login.':'Pendaftaran berhasil. Periksa email untuk konfirmasi sebelum login.',!!data.session)};
 document.getElementById('sbLogin').onclick=async()=>{if(!kreovaSb){alert('Koneksi akun belum siap. Refresh halaman.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value;if(!email||!password){alert('Masukkan email dan password.');return}const {data,error}=await kreovaSb.auth.signInWithPassword({email,password});if(error){sbUserStatus('Login gagal: '+error.message);return}setProfileUser(data.user);sbUserStatus('Login berhasil sebagai '+data.user.email,true)};
 document.getElementById('sbLogout').onclick=async()=>{if(!kreovaSb)return;const {error}=await kreovaSb.auth.signOut();if(error)sbUserStatus('Logout gagal: '+error.message);else{setProfileUser(null);sbUserStatus('Logout berhasil.',true)}};
-document.getElementById('profilePhotoInput').onchange=e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Pilih file gambar.');return}if(file.size>2*1024*1024){alert('Ukuran foto maksimal 2 MB.');e.target.value='';return}const reader=new FileReader();reader.onload=()=>{try{localStorage.setItem(PROFILE_PHOTO_KEY,reader.result);setProfileUser(kreovaSb?.auth?.getUser?null:null);sbRefreshUser()}catch(err){alert('Foto gagal disimpan: ruang penyimpanan browser mungkin penuh.')}};reader.readAsDataURL(file)};
+document.getElementById('profilePhotoInput').onchange=e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Pilih file gambar.');return}if(file.size>2*1024*1024){alert('Ukuran foto maksimal 2 MB.');e.target.value='';return}const reader=new FileReader();reader.onload=()=>{try{localStorage.setItem(PROFILE_PHOTO_KEY,reader.result);if(kreovaSb)sbRefreshUser();else setProfileUser(null)}catch(err){alert('Foto gagal disimpan: ruang penyimpanan browser mungkin penuh.')}};reader.readAsDataURL(file)};
 document.getElementById('profileRemovePhoto').onclick=()=>{localStorage.removeItem(PROFILE_PHOTO_KEY);sbRefreshUser()};
 document.getElementById('profileSaveName').onclick=async()=>{if(!kreovaSb){alert('Login dahulu.');return}const name=document.getElementById('profileEditName').value.trim();if(!name){alert('Nama tidak boleh kosong.');return}const {data,error}=await kreovaSb.auth.updateUser({data:{display_name:name}});if(error){sbUserStatus('Gagal mengubah nama: '+error.message);return}setProfileUser(data.user);sbUserStatus('Nama profil berhasil disimpan.',true)};
 document.getElementById('profileSavePassword').onclick=async()=>{if(!kreovaSb){alert('Login dahulu.');return}const password=document.getElementById('profileNewPassword').value;if(password.length<8){alert('Password baru minimal 8 karakter.');return}const {error}=await kreovaSb.auth.updateUser({password});if(error){sbUserStatus('Gagal mengubah password: '+error.message);return}document.getElementById('profileNewPassword').value='';sbUserStatus('Password berhasil diperbarui.',true)};
+// AI Video prompt helper: external generator launch + clipboard
+const videoPromptEl=document.getElementById('aiVideoPrompt');
+const videoPromptCopy=document.getElementById('copyAiVideoPrompt');
+const videoServiceOpen=document.getElementById('openAiVideoService');
+if(videoPromptCopy)videoPromptCopy.onclick=async()=>{const t=videoPromptEl?.value.trim();if(!t){alert('Tulis prompt video dahulu.');return}try{await navigator.clipboard.writeText(t);alert('Prompt video disalin. Tempelkan di layanan video yang dibuka.')}catch(e){alert('Clipboard gagal. Salin prompt secara manual.')}};
+if(videoServiceOpen)videoServiceOpen.onclick=()=>window.open('https://wan2.video/','_blank','noopener');
+// Ad Manager: safely configure official AdSense script using publisher ID only
+const AD_CONFIG_KEY='kreova_ads_config_v1';
+function getAdConfig(){try{return JSON.parse(localStorage.getItem(AD_CONFIG_KEY)||'{}')}catch{return {}}}
+function adStatus(message,good=false){const e=document.getElementById('adConfigStatus');if(e){e.textContent=message;e.className='ai-status '+(good?'good':'warn')}}
+function buildAdSnippet(cfg){const c=(cfg.client||'').trim(),slot=(cfg.slot||'').trim();if(!/^ca-pub-\d{16}$/.test(c))return '';const head='<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+c+'" crossorigin="anonymous"><\/script>';if(!/^\d+$/.test(slot))return head;return head+'\n<ins class="adsbygoogle" style="display:block" data-ad-client="'+c+'" data-ad-slot="'+slot+'" data-ad-format="auto" data-full-width-responsive="true"></ins>\n<script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script>'}
+function updateAdSnippet(cfg){const out=document.getElementById('kreovaAdCode');if(out)out.value=buildAdSnippet(cfg)}
+const copyAdBtn=document.getElementById('copyAdCode');if(copyAdBtn)copyAdBtn.onclick=async()=>{const code=document.getElementById('kreovaAdCode')?.value;if(!code){alert('Masukkan Publisher ID terlebih dahulu.');return}try{await navigator.clipboard.writeText(code);alert('Kode AdSense disalin. Tempel sesuai instruksi di index.html.')}catch{alert('Clipboard gagal; salin kode dari kotak.')}};
+function applyAdConfig(cfg){const client=(cfg.client||'').trim();const slot=(cfg.slot||'').trim();
+ if(!/^ca-pub-\d{16}$/.test(client)){adStatus('Publisher ID belum valid. Format harus ca-pub- diikuti 16 digit.');return false}
+ if(!document.querySelector('script[data-kreova-adsense]')){const script=document.createElement('script');script.async=true;script.crossOrigin='anonymous';script.dataset.kreovaAdsense='1';script.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+encodeURIComponent(client);document.head.appendChild(script)}
+ const placeholder=document.getElementById('kreovaAdDashboard');if(placeholder){placeholder.innerHTML='';if(slot&&/^\d+$/.test(slot)){const ins=document.createElement('ins');ins.className='adsbygoogle';ins.style.display='block';ins.style.width='100%';ins.dataset.adClient=client;ins.dataset.adSlot=slot;ins.dataset.adFormat='auto';ins.dataset.fullWidthResponsive='true';placeholder.appendChild(ins);try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}else placeholder.innerHTML='<div class="ad-placeholder">Auto Ads siap dimuat jika akun dan situs disetujui.</div>'}
+ const slotBox=document.getElementById('kreovaAdSlotBox');if(slotBox){slotBox.innerHTML='';if(slot&&/^\d+$/.test(slot)){const ins=document.createElement('ins');ins.className='adsbygoogle';ins.style.display='block';ins.dataset.adClient=client;ins.dataset.adSlot=slot;ins.dataset.adFormat='auto';ins.dataset.fullWidthResponsive='true';slotBox.appendChild(ins);try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}else slotBox.innerHTML='<div class="ad-placeholder">Ad unit belum diisi. Auto Ads akan mengatur penempatan jika aktif di akun Google.</div>'}
+ adStatus('Konfigurasi tersimpan dan script AdSense dipasang. Tayang tetap bergantung persetujuan serta kebijakan Google.',true);return true}
+const savedAd=getAdConfig();const adClientInput=document.getElementById('kreovaAdClient'),adSlotInput=document.getElementById('kreovaAdSlot');if(adClientInput)adClientInput.value=savedAd.client||'';if(adSlotInput)adSlotInput.value=savedAd.slot||'';
+const saveAdsBtn=document.getElementById('saveAdConfig');if(saveAdsBtn)saveAdsBtn.onclick=()=>{const cfg={client:adClientInput.value.trim(),slot:adSlotInput.value.trim()};if(!/^ca-pub-\d{16}$/.test(cfg.client)){adStatus('Publisher ID tidak valid. Periksa format ca-pub- diikuti 16 digit.');return}localStorage.setItem(AD_CONFIG_KEY,JSON.stringify(cfg));updateAdSnippet(cfg);applyAdConfig(cfg)};
+const clearAdsBtn=document.getElementById('clearAdConfig');if(clearAdsBtn)clearAdsBtn.onclick=()=>{localStorage.removeItem(AD_CONFIG_KEY);adClientInput.value='';adSlotInput.value='';document.getElementById('kreovaAdCode').value='';const dashboard=document.getElementById('kreovaAdDashboard');if(dashboard)dashboard.innerHTML='<div class="ad-placeholder">Slot iklan KREOVA AI · konfigurasi dihapus</div>';const slotBox=document.getElementById('kreovaAdSlotBox');if(slotBox)slotBox.innerHTML='<div class="ad-placeholder">Slot banner iklan · belum aktif</div>';adStatus('Konfigurasi iklan dihapus.')};
+if(savedAd.client){updateAdSnippet(savedAd);applyAdConfig(savedAd)}
 initKreovaAuth();
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 // Video Studio  -  browser canvas recorder, free WebM output
 (()=>{const el=id=>document.getElementById(id),canvas=el('vsCanvas'),ctx=canvas.getContext('2d');let imgs=[],preview=false,raf=0,previewStart=0,audioFile=null;
 function setDimensions(){let f=el('vsFormat').value;if(f==='landscape'){canvas.width=1280;canvas.height=720}else if(f==='square'){canvas.width=1080;canvas.height=1080}else{canvas.width=720;canvas.height=1280}canvas.style.aspectRatio=canvas.width+'/'+canvas.height}
-function draw(img,text){let w=canvas.width,h=canvas.height;ctx.fillStyle='#08080c';ctx.fillRect(0,0,w,h);if(img){let scale=Math.max(w/img.width,h/img.height),iw=img.width*scale,ih=img.height*scale;ctx.drawImage(img,(w-iw)/2,(h-ih)/2,iw,ih);ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(0,0,w,h)}if(text){let fs=Math.max(22,Math.round(w*.045),),max=w*.86;ctx.font='bold '+fs+'px system-ui';ctx.textAlign='center';let lines=[],line='';text.trim().split(/\s+/).forEach(word=>{let t=line?line+' '+word:word;if(ctx.measureText(t).width>max&&line){lines.push(line);line=word}else line=t});if(line)lines.push(line);let lh=fs*1.28,y=h*.83,bh=lines.length*lh+34;ctx.fillStyle='rgba(0,0,0,.62)';ctx.fillRect(w*.06,y-bh/2,w*.88,bh);ctx.fillStyle='#fff';lines.forEach((l,i)=>ctx.fillText(l,w/2,y-(lines.length-1)*lh/2+i*lh))}}
+function draw(img,text){let w=canvas.width,h=canvas.height;ctx.fillStyle='#08080c';ctx.fillRect(0,0,w,h);if(img){let scale=Math.max(w/img.width,h/img.height),iw=img.width*scale,ih=img.height*scale;ctx.drawImage(img,(w-iw)/2,(h-ih)/2,iw,ih);ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(0,0,w,h)}if(text){let fs=Math.max(22,Math.round(w*.045)),max=w*.86;ctx.font='bold '+fs+'px system-ui';ctx.textAlign='center';let lines=[],line='';text.trim().split(/\s+/).forEach(word=>{let t=line?line+' '+word:word;if(ctx.measureText(t).width>max&&line){lines.push(line);line=word}else line=t});if(line)lines.push(line);let lh=fs*1.28,y=h*.83,bh=lines.length*lh+34;ctx.fillStyle='rgba(0,0,0,.62)';ctx.fillRect(w*.06,y-bh/2,w*.88,bh);ctx.fillStyle='#fff';lines.forEach((l,i)=>ctx.fillText(l,w/2,y-(lines.length-1)*lh/2+i*lh))}}
 function loop(){if(!preview)return;let sec=Math.max(1,+el('vsDuration').value),index=Math.floor(((performance.now()-previewStart)/1000/sec)%imgs.length);draw(imgs[index],el('vsCaption').value);raf=requestAnimationFrame(loop)}
 el('vsImages').onchange=async()=>{let selected=[...el('vsImages').files];if(selected.length>12){alert('Maksimal 12 gambar.');selected=selected.slice(0,12)}if(selected.some(f=>f.size>12*1024*1024)||selected.reduce((n,f)=>n+f.size,0)>40*1024*1024){alert('Batasi tiap gambar 12 MB dan total gambar 40 MB agar HP tidak kehabisan memori.');el('vsImages').value='';imgs=[];return}let files=selected;imgs=[];for(let file of files){let im=new Image();im.src=URL.createObjectURL(file);try{await im.decode()}catch{}imgs.push(im)}el('vsStatus').textContent=imgs.length+' gambar siap. Total '+(files.reduce((sum,f)=>sum+f.size,0)/1024/1024).toFixed(1)+' MB';if(imgs.length)draw(imgs[0],el('vsCaption').value)};
 el('vsAudio').onchange=()=>{audioFile=el('vsAudio').files[0]||null;el('vsStatus').textContent=audioFile?'Audio dipilih: '+audioFile.name:'Audio tidak dipilih'};
