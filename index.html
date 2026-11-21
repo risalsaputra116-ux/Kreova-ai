@@ -135,15 +135,15 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 </div>
 
 <div class="panel">
-<div class="panel-title">✨ AI Image Generator - GRATIS (AI Horde)</div>
+<div class="panel-title">✨ AI Image Generator - Puter AI</div>
 <p class="small">Buat gambar lewat AI Horde worker komunitas. Mode anonim memakai ukuran maksimal 576 px dan 10 langkah untuk menekan kebutuhan Kudos; hasil dan antrean tetap bergantung worker yang tersedia.</p>
 <div class="field"><label>Deskripsi gambar</label><textarea id="aiImagePrompt" placeholder="Contoh: Tabib China berjubah putih berdiri di depan istana kuno, manusia realistis, sinematik, pencahayaan dramatis, detail tinggi"></textarea></div>
 <div class="grid">
-<div class="field"><label>Format gambar</label><select id="aiImageFormat"><option value="portrait">Vertikal 9:16</option><option value="square">Kotak 1:1</option><option value="landscape">Horizontal 16:9</option></select></div>
-<div class="field"><label>Mode gratis anonim</label><div class="small">Worker/model dipilih otomatis agar permintaan tetap ringan dan tidak memerlukan Kudos.</div><select id="aiImageModel" disabled><option value="auto">Otomatis (worker tersedia)</option></select></div>
+
+<div class="field"><label>Provider Puter AI</label><div class="small">Model image default Puter; tidak memakai AI Horde/Kudos.</div><select id="aiImageModel" disabled><option value="default">Model default Puter</option></select></div>
 </div>
-<div class="btnrow"><button class="btn primary full" id="generateAiImage">✨ Hasilkan gambar gratis</button></div>
-<div id="aiImageStatus" class="ai-status warn">Siap. Tulis prompt, lalu tekan Hasilkan gambar gratis.</div>
+<div class="btnrow"><button class="btn primary full" id="generateAiImage">✨ Hasilkan gambar</button></div>
+<div id="aiImageStatus" class="ai-status warn">Siap. Masuk ke Puter, lalu buat gambar.</div>
 <div class="ai-image-preview hide" id="aiImagePreviewWrap"><img id="aiImagePreview" alt="Hasil gambar AI KREOVA"></div>
 <div class="btnrow"><button class="btn" id="useAiImageAsPoster" disabled>Gunakan sebagai latar poster</button><button class="btn" id="downloadAiImage" disabled>Unduh gambar AI</button></div>
 </div>
@@ -181,12 +181,15 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 
 <section id="video" class="section">
 <div class="hero"><h1>Video <span>Studio</span></h1><p>Susun gambar, teks, dan audio menjadi video lokal di browser. Ini bukan generator AI text-to-video.</p></div>
-<div class="panel"><div class="panel-title">🎞️ Generator Video langsung di panel</div>
-<p class="small">Gunakan demo LTX-2.5 browser yang memanggil layanan resmi dari browser, tanpa GPU milik iframe sendiri. Di dalam generator, pilih resolusi terendah (misalnya 256/384), durasi paling singkat, dan matikan auto-length/decoder berat. KREOVA tidak dapat mengatur kontrol di iframe lintas-domain; jika masih muncul batas GPU, Space publik menolak permintaan dan itu tidak dapat diatasi dari kode KREOVA. Video hasil demo tidak otomatis disimpan ke proyek KREOVA.</p>
-<div class="field"><label>Prompt catatan (opsional, untuk salin-tempel ke generator tertanam)</label><textarea id="aiVideoPrompt" placeholder="Contoh: Shot sinematik seorang tabib berjalan melewati pasar kuno saat kabut pagi, kamera tracking pelan, cahaya lembut, gerakan natural, realistis"></textarea></div>
-<div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt catatan</button><button class="btn" id="openAiVideoService">Buka generator di tab baru (jika embed gagal)</button></div>
-<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px;background:#0b0b10"><iframe title="LTX AI Video Generator" src="https://chopperblu-ltx-2-5-demo.hf.space" loading="lazy" style="display:block;width:100%;height:820px;border:0;background:#0b0b10" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="no-referrer"></iframe></div>
-<div class="small" style="margin-top:8px">Jika embed tidak dapat dimuat di browser, gunakan tombol buka tab baru. Demo komunitas ini memakai ZeroGPU publik; tetap bisa gagal bila kuota atau GPU sedang penuh.</div></div>
+<div class="panel"><div class="panel-title">🎞️ AI Video Generator — Puter AI</div>
+<p class="small">Generator video text-to-video dan image-to-video melalui Puter AI, menggantikan iframe Hugging Face yang sering terkena batas GPU. Login Puter diperlukan. Penggunaan AI mengikuti saldo/kuota dan model yang tersedia di akun Puter; tidak dijamin gratis atau unlimited.</p>
+<div class="field"><label>Prompt video</label><textarea id="aiVideoPrompt" placeholder="Deskripsikan subjek, gerakan, kamera, suasana, dan gaya. Contoh: seorang tabib berjalan pelan di pasar kuno berkabut, kamera tracking, gerakan natural, sinematik."></textarea></div>
+<div class="grid"><div class="field"><label>Model video</label><select id="aiVideoModel"><option value="togetherai:wan-ai/wan2.7-t2v">Wan 2.7 Text-to-Video</option><option value="kling-3.0-turbo">Kling 3.0 Turbo</option><option value="minimax/hailuo-02">MiniMax Hailuo 02</option></select></div><div class="field"><label>Durasi</label><select id="aiVideoSeconds"><option value="5">5 detik</option><option value="6">6 detik</option><option value="10">10 detik</option></select></div></div>
+<div class="field"><label>Gambar awal (opsional, image-to-video)</label><input type="file" id="aiVideoReference" accept="image/*"></div>
+<div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt</button><button class="btn" id="puterSignIn">Masuk akun Puter</button><button class="btn primary" id="generateAiVideo">🎬 Hasilkan video</button></div>
+<div id="aiVideoStatus" class="ai-status warn">Puter SDK sedang menunggu login atau prompt.</div>
+<div id="aiVideoResultWrap" class="hide" style="margin-top:12px"><video id="aiVideoResult" controls playsinline style="width:100%;max-height:520px;background:#080808;border-radius:12px"></video><div class="btnrow"><button class="btn" id="downloadAiVideo">Unduh video</button></div></div>
+<div class="small" style="margin-top:8px">Jika model menolak ukuran atau durasi, pilih model lain atau durasi lebih pendek. Generator ini memakai akun Puter pengguna. Hasil bisa sementara; unduh setelah selesai.</div></div>
 <div class="panel"><div class="panel-title">🎥 Buat video dari gambar</div>
 <div class="field"><label>Tambah gambar adegan (maksimal 12)</label><input id="vsImages" type="file" accept="image/*" multiple></div>
 <div class="grid"><div class="field"><label>Format</label><select id="vsFormat"><option value="portrait">Vertikal 9:16</option><option value="landscape">Horizontal 16:9</option><option value="square">Kotak 1:1</option></select></div><div class="field"><label>Durasi per gambar</label><select id="vsDuration"><option>3</option><option selected>5</option><option>7</option><option>10</option></select></div></div>
@@ -263,6 +266,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <button data-page="account"><span class="ico">👤</span>Akun</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.puter.com/v2/"></script>
 <script>
 const pages=['dashboard','factory','poster','ideas','script','scenes','video','social','projects','account'];
 const pageNames={dashboard:'Dashboard',factory:'Content Factory',poster:'Image Studio',ideas:'AI Idea Studio',script:'Script Studio',scenes:'Scene Maker',video:'Video Studio',social:'Social Pack',projects:'My Projects',account:'Akun / Login'};
@@ -411,113 +415,48 @@ document.getElementById('copyPosterPrompt').onclick=async()=>{
  try{await navigator.clipboard.writeText(prompt);alert('Prompt AI berhasil disalin.')}catch(e){alert('Clipboard tidak tersedia; pilih teks prompt lalu salin manual.')}
 };
 
-// KREOVA AI - AI Horde anonymous image generation (gratis)
-const AI_HORDE_API='https://stablehorde.net/api/v2';
-const AI_HORDE_ANON_KEY='0000000000';
+// KREOVA AI image generation via Puter.js (user-authenticated provider)
 let aiGeneratedBlob=null;
 let aiGeneratedObjectUrl=null;
+let aiGeneratedSourceUrl=null;
 function setAiImageStatus(message,type='warn'){
-  const el=document.getElementById('aiImageStatus');
-  if(!el)return;
-  el.textContent=message;
-  el.className='ai-status '+(type==='good'?'good':'warn');
+  const el=document.getElementById('aiImageStatus');if(!el)return;
+  el.textContent=message;el.className='ai-status '+(type==='good'?'good':'warn');
 }
-function waitMs(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+function puterAvailable(){return typeof window.puter!=='undefined'&&puter.ai&&typeof puter.ai.txt2img==='function'}
 document.getElementById('generateAiImage').onclick=async()=>{
-  const prompt=document.getElementById('aiImagePrompt').value.trim();
-  if(!prompt){alert('Tulis deskripsi gambar terlebih dahulu.');return;}
-  
-  const format=document.getElementById('aiImageFormat').value;
-  // Anonymous AI Horde: use ultra-low sampler work and omit seed (API supplies a random seed).
-  // Avoid costly size/step combinations that anonymous accounts cannot afford.
-  const dimensions=format==='portrait'?[256,384]:format==='square'?[256,256]:[384,256];
-  const button=document.getElementById('generateAiImage');
-  button.disabled=true;
-  button.textContent='Mengantrekan gambar...';
-  // Clear any previous image so a failed new request cannot be mistaken for the latest result.
-  aiGeneratedBlob=null;
-  if(aiGeneratedObjectUrl){URL.revokeObjectURL(aiGeneratedObjectUrl);aiGeneratedObjectUrl=null;}
-  document.getElementById('aiImagePreview').removeAttribute('src');
+  const prompt=document.getElementById('aiImagePrompt').value.trim();if(!prompt){alert('Tulis deskripsi gambar terlebih dahulu.');return}
+  if(!puterAvailable()){setAiImageStatus('SDK Puter tidak berhasil dimuat. Periksa internet atau coba refresh halaman.');return}
+  const model='gpt-image-2.6-flare';
+  const button=document.getElementById('generateAiImage');button.disabled=true;button.textContent='Menghasilkan gambar...';
+  aiGeneratedBlob=null;aiGeneratedSourceUrl=null;
+  if(aiGeneratedObjectUrl){URL.revokeObjectURL(aiGeneratedObjectUrl);aiGeneratedObjectUrl=null}
+  const imgEl=document.getElementById('aiImagePreview');imgEl.removeAttribute('src');
   document.getElementById('aiImagePreviewWrap').classList.add('hide');
-  document.getElementById('downloadAiImage').disabled=true;
-  document.getElementById('useAiImageAsPoster').disabled=true;
-  setAiImageStatus('Mengirim permintaan ringan ke AI Horde anonim (256–384 px, 1 step). Hasil mungkin lebih sederhana.','warn');
+  document.getElementById('downloadAiImage').disabled=true;document.getElementById('useAiImageAsPoster').disabled=true;
+  setAiImageStatus('Menyiapkan Puter AI... Jika belum login, jendela login akan muncul. Penggunaan mengikuti kuota/biaya akun Puter.');
   try{
-    const submitResponse=await fetch(AI_HORDE_API+'/generate/async',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'},
-      body:JSON.stringify({
-        prompt:prompt+', high quality, detailed composition, no watermark',
-        params:{width:dimensions[0],height:dimensions[1],steps:1,cfg_scale:3,sampler_name:'k_euler',n:1},
-        // No model filter: permits any available worker/model and avoids model-specific cost mismatch.
-        models:[],
-        nsfw:false,
-        censor_nsfw:true
-      })
-    });
-    if(!submitResponse.ok){let msg='HTTP '+submitResponse.status;try{let d=await submitResponse.json();msg=d.message||d.error||d.detail||msg;if(d.errors)msg+=' — '+(typeof d.errors==='string'?d.errors:JSON.stringify(d.errors));if(d.validation_errors)msg+=' — '+JSON.stringify(d.validation_errors);}catch(e){};throw new Error('Permintaan gagal: '+msg);}
-    const submitted=await submitResponse.json();
-    if(!submitted.id)throw new Error('Server tidak memberikan ID antrean.');
-    const requestId=submitted.id;
-    let generation=null;
-    for(let attempt=0;attempt<120;attempt++){
-      await waitMs(3000);
-      const checkResponse=await fetch(AI_HORDE_API+'/generate/check/'+encodeURIComponent(requestId),{headers:{'apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'}});
-      if(!checkResponse.ok)throw new Error('Pemeriksaan antrean gagal (HTTP '+checkResponse.status+').');
-      const check=await checkResponse.json();
-      if(check.faulted)throw new Error('Worker gagal memproses gambar. Coba lagi nanti.');
-      if(check.done){
-        const statusResponse=await fetch(AI_HORDE_API+'/generate/status/'+encodeURIComponent(requestId),{headers:{'apikey':AI_HORDE_ANON_KEY,'Client-Agent':'KREOVA-AI:1.0:AndroidWeb'}});
-        if(!statusResponse.ok)throw new Error('Gagal mengambil hasil gambar (HTTP '+statusResponse.status+').');
-        const statusData=await statusResponse.json();
-        generation=statusData.generations&&statusData.generations[0];
-        break;
-      }
-      setAiImageStatus('Masih mengantre... perkiraan server '+(check.wait_time||0)+' detik. (cek '+(attempt+1)+'/120)','warn');
-    }
-    if(!generation)throw new Error('Antrean terlalu lama. Silakan coba lagi nanti.');
-    if(!generation.img)throw new Error('Worker selesai tetapi tidak mengirim data gambar.');
-    let imageData=String(generation.img||'').trim();
-    // AI Horde commonly returns an image URL (not base64). Handle URL, data URI, and legacy base64 safely.
-    if(/^https?:\/\//i.test(imageData)){
-      const imageResponse=await fetch(imageData);
-      if(!imageResponse.ok)throw new Error('Worker menghasilkan gambar, tetapi unduhan gagal (HTTP '+imageResponse.status+').');
-      aiGeneratedBlob=await imageResponse.blob();
-      if(!aiGeneratedBlob.type.startsWith('image/'))throw new Error('Alamat hasil worker tidak mengembalikan file gambar.');
-    }else if(imageData.startsWith('data:image/')){
-      const imageResponse=await fetch(imageData);
-      if(!imageResponse.ok)throw new Error('Data gambar gagal dibaca.');
-      aiGeneratedBlob=await imageResponse.blob();
-    }else{
-      // Fallback for base64 image payloads returned by compatible workers.
-      const binary=atob(imageData);
-      const bytes=new Uint8Array(binary.length);
-      for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-      aiGeneratedBlob=new Blob([bytes],{type:'image/png'});
-    }
-    if(aiGeneratedObjectUrl)URL.revokeObjectURL(aiGeneratedObjectUrl);
-    aiGeneratedObjectUrl=URL.createObjectURL(aiGeneratedBlob);
-    document.getElementById('aiImagePreview').src=aiGeneratedObjectUrl;
+    if(!puter.auth.isSignedIn())await puter.auth.signIn();
+    setAiImageStatus('Mengirim prompt ke Puter AI. Tunggu proses selesai...');
+    const image=await puter.ai.txt2img(prompt+', realistic cinematic composition, detailed, no text or watermark',{model});
+    const src=image&&image.src?image.src:String(image||'');if(!src)throw new Error('Puter tidak mengembalikan gambar.');
+    aiGeneratedSourceUrl=src;imgEl.src=src;
+    await new Promise((resolve,reject)=>{imgEl.onload=resolve;imgEl.onerror=()=>reject(new Error('Gambar berhasil dikembalikan tetapi gagal ditampilkan.'));if(imgEl.complete&&imgEl.naturalWidth)resolve()});
     document.getElementById('aiImagePreviewWrap').classList.remove('hide');
-    document.getElementById('downloadAiImage').disabled=false;
-    document.getElementById('useAiImageAsPoster').disabled=false;
-    setAiImageStatus('Gambar selesai dibuat oleh worker komunitas AI Horde. Periksa hasil sebelum diunduh.','good');
-  }catch(err){
-    setAiImageStatus('Gagal membuat gambar: '+err.message,'warn');
-  }finally{
-    button.disabled=false;
-    button.textContent='✨ Hasilkan gambar gratis';
-  }
+    document.getElementById('downloadAiImage').disabled=false;document.getElementById('useAiImageAsPoster').disabled=false;
+    setAiImageStatus('Gambar berhasil dibuat. Unduh atau gunakan sebagai poster.','good');
+  }catch(err){setAiImageStatus('Gagal membuat gambar: '+(err&&err.message?err.message:String(err)));}
+  finally{button.disabled=false;button.textContent='✨ Hasilkan gambar'}
 };
-document.getElementById('downloadAiImage').onclick=()=>{
-  if(!aiGeneratedBlob||!aiGeneratedObjectUrl){alert('Buat gambar AI terlebih dahulu.');return;}
-  const a=document.createElement('a');a.href=aiGeneratedObjectUrl;const ext=aiGeneratedBlob.type==='image/jpeg'?'jpg':aiGeneratedBlob.type==='image/webp'?'webp':aiGeneratedBlob.type==='image/gif'?'gif':'png';a.download='kreova-ai-image.'+ext;a.click();
+document.getElementById('downloadAiImage').onclick=async()=>{
+  if(!aiGeneratedSourceUrl){alert('Buat gambar AI terlebih dahulu.');return;}
+  try{const r=await fetch(aiGeneratedSourceUrl);if(!r.ok)throw new Error('download');aiGeneratedBlob=await r.blob();aiGeneratedObjectUrl=URL.createObjectURL(aiGeneratedBlob);const ext=aiGeneratedBlob.type==='image/jpeg'?'jpg':aiGeneratedBlob.type==='image/webp'?'webp':'png';const a=document.createElement('a');a.href=aiGeneratedObjectUrl;a.download='kreova-ai-image.'+ext;a.click()}catch{const a=document.createElement('a');a.href=aiGeneratedSourceUrl;a.target='_blank';a.rel='noopener';a.download='kreova-ai-image';a.click()}
 };
 document.getElementById('useAiImageAsPoster').onclick=()=>{
-  if(!aiGeneratedObjectUrl){alert('Buat gambar AI terlebih dahulu.');return;}
+  if(!aiGeneratedSourceUrl){alert('Buat gambar AI terlebih dahulu.');return;}
   const img=new Image();
   img.onload=()=>{posterImage=img;drawPoster();setAiImageStatus('Gambar AI sudah dipasang sebagai latar poster. Kamu bisa menambahkan judul dan mengunduh poster PNG.','good');};
-  img.src=aiGeneratedObjectUrl;
+  img.src=aiGeneratedSourceUrl;
 };
 
 drawPoster();
@@ -566,12 +505,40 @@ document.getElementById('profilePhotoInput').onchange=e=>{const file=e.target.fi
 document.getElementById('profileRemovePhoto').onclick=()=>{localStorage.removeItem(PROFILE_PHOTO_KEY);if(kreovaSb)sbRefreshUser();else setProfileUser(null)};
 document.getElementById('profileSaveName').onclick=async()=>{if(!kreovaSb){alert('Login dahulu.');return}const name=document.getElementById('profileEditName').value.trim();if(!name){alert('Nama tidak boleh kosong.');return}const {data,error}=await kreovaSb.auth.updateUser({data:{display_name:name}});if(error){sbUserStatus('Gagal mengubah nama: '+error.message);return}setProfileUser(data.user);sbUserStatus('Nama profil berhasil disimpan.',true)};
 document.getElementById('profileSavePassword').onclick=async()=>{if(!kreovaSb){alert('Login dahulu.');return}const password=document.getElementById('profileNewPassword').value;if(password.length<8){alert('Password baru minimal 8 karakter.');return}const {error}=await kreovaSb.auth.updateUser({password});if(error){sbUserStatus('Gagal mengubah password: '+error.message);return}document.getElementById('profileNewPassword').value='';sbUserStatus('Password berhasil diperbarui.',true)};
-// AI Video prompt helper: external generator launch + clipboard
+// KREOVA AI video generation using Puter.js (replaces HF demo embed)
 const videoPromptEl=document.getElementById('aiVideoPrompt');
 const videoPromptCopy=document.getElementById('copyAiVideoPrompt');
-const videoServiceOpen=document.getElementById('openAiVideoService');
-if(videoPromptCopy)videoPromptCopy.onclick=async()=>{const t=videoPromptEl?.value.trim();if(!t){alert('Tulis prompt video dahulu.');return}try{await navigator.clipboard.writeText(t);alert('Prompt video disalin. Tempelkan di layanan video yang dibuka.')}catch(e){alert('Clipboard gagal. Salin prompt secara manual.')}};
-if(videoServiceOpen)videoServiceOpen.onclick=()=>window.open('https://chopperblu-ltx-2-5-demo.hf.space','_blank','noopener');
+const puterSignInBtn=document.getElementById('puterSignIn');
+const generateVideoBtn=document.getElementById('generateAiVideo');
+const videoStatusEl=document.getElementById('aiVideoStatus');
+const videoResultEl=document.getElementById('aiVideoResult');
+let aiVideoSource=null;
+function puterVideoStatus(msg,good=false){if(videoStatusEl){videoStatusEl.textContent=msg;videoStatusEl.className='ai-status '+(good?'good':'warn')}}
+if(videoPromptCopy)videoPromptCopy.onclick=async()=>{const t=videoPromptEl?.value.trim();if(!t){alert('Tulis prompt video dahulu.');return}try{await navigator.clipboard.writeText(t);alert('Prompt video disalin.')}catch(e){alert('Clipboard gagal. Salin prompt secara manual.')}};
+if(puterSignInBtn)puterSignInBtn.onclick=async()=>{if(!puterAvailable()){puterVideoStatus('Puter SDK tidak tersedia. Refresh saat internet aktif.');return}try{await puter.auth.signIn();puterVideoStatus('Login Puter berhasil. Kamu dapat mencoba membuat video.',true)}catch(e){puterVideoStatus('Login gagal: '+(e.message||e))}};
+if(generateVideoBtn)generateVideoBtn.onclick=async()=>{
+ const prompt=videoPromptEl?.value.trim();if(!prompt){alert('Tulis prompt video terlebih dahulu.');return}
+ if(!puterAvailable()){puterVideoStatus('Puter SDK tidak tersedia. Periksa internet dan refresh halaman.');return}
+ generateVideoBtn.disabled=true;generateVideoBtn.textContent='🎬 Memproses video...';
+ const resultWrap=document.getElementById('aiVideoResultWrap');resultWrap.classList.add('hide');videoResultEl.removeAttribute('src');
+ try{
+  if(!puter.auth.isSignedIn())await puter.auth.signIn();
+  const model=document.getElementById('aiVideoModel').value;
+  const seconds=Number(document.getElementById('aiVideoSeconds').value);
+  const file=document.getElementById('aiVideoReference').files?.[0];
+  puterVideoStatus('Permintaan video dikirim. Proses dapat memerlukan beberapa menit; biaya/kuota sesuai akun Puter.');
+  const options={model,seconds,puter_output_path:'videos/kreova-'+Date.now()+'.mp4'};
+  if(file)options.input_reference=file;
+  const video=await puter.ai.txt2vid(prompt,options);
+  aiVideoSource=video?.src||String(video||'');if(!aiVideoSource)throw new Error('Provider tidak mengembalikan video.');
+  videoResultEl.src=aiVideoSource;videoResultEl.load();resultWrap.classList.remove('hide');
+  puterVideoStatus('Video selesai. Putar dan segera unduh hasilnya; URL provider dapat bersifat sementara.',true);
+ }catch(err){puterVideoStatus('Video gagal: '+(err&&err.message?err.message:String(err)))}
+ finally{generateVideoBtn.disabled=false;generateVideoBtn.textContent='🎬 Hasilkan video'}
+};
+const downloadVideoBtn=document.getElementById('downloadAiVideo');if(downloadVideoBtn)downloadVideoBtn.onclick=async()=>{
+ if(!aiVideoSource){alert('Buat video dahulu.');return}
+ try{const response=await fetch(aiVideoSource);if(!response.ok)throw new Error('Download');const blob=await response.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='kreova-ai-video.mp4';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000)}catch{const a=document.createElement('a');a.href=aiVideoSource;a.target='_blank';a.rel='noopener';a.click();puterVideoStatus('Download langsung dibuka. Jika tidak otomatis, tekan lama video lalu simpan/download.')}};
 // Ad Manager: safely configure official AdSense script using publisher ID only
 const AD_CONFIG_KEY='kreova_ads_config_v1';
 function getAdConfig(){try{return JSON.parse(localStorage.getItem(AD_CONFIG_KEY)||'{}')}catch{return {}}}
