@@ -135,26 +135,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div id="posterPrompt" class="result"><div class="empty">Isi tema poster, lalu tekan Buat / perbarui poster.</div></div>
 </div>
 
-<div class="panel">
-<div class="panel-title">✧ AI Image Generator  -  Pollinations</div>
-<p class="small">Buat gambar sungguhan dari deskripsi. Hubungkan akun Pollinations melalui persetujuan resmi. App Key disimpan hanya di sesi browser; token sementara tidak dimasukkan ke GitHub.</p>
-<div class="field"><label>App Key Pollinations (awalan pk_)</label><input id="polliAppKey" type="password" autocomplete="off" placeholder="Tempel App Key pk_ di sini"></div>
-<div class="btnrow">
-<button class="btn primary" id="polliConnect">Hubungkan akun</button>
-<button class="btn" id="polliDisconnect">Putuskan koneksi</button>
-</div>
-<div id="polliAuthStatus" class="ai-status warn">Belum terhubung. App Key hanya disimpan sementara di tab ini.</div>
-<div class="field" style="margin-top:14px"><label>Deskripsi gambar yang ingin dibuat</label><textarea id="aiImagePrompt" placeholder="Contoh: Seorang pendekar tabib China berjubah putih berdiri di depan istana kuno, sinematik, manusia realistis, pencahayaan dramatis, detail tinggi"></textarea></div>
-<div class="grid">
-<div class="field"><label>Format gambar</label><select id="aiImageFormat"><option value="portrait">Vertikal 9:16</option><option value="square">Kotak 1:1</option><option value="landscape">Horizontal 16:9</option></select></div>
-<div class="field"><label>Model gambar</label><select id="aiImageModel"><option value="tongyi-mai/z-image-turbo">Z-Image Turbo (model awal)</option><option value="black-forest-labs/flux.1-schnell">FLUX.1 Schnell</option></select></div>
-</div>
-<p class="small">Batas anggaran yang diminta saat persetujuan: maksimal US$0,01 untuk kunci sementara (1 hari). Biaya nyata bergantung model dan dapat berbeda. Periksa layar persetujuan Pollinations; jika batas US$0,01 tidak terlihat, batalkan dan jangan setujui. Tidak ada top-up otomatis dari aplikasi.</p>
-<div class="btnrow"><button class="btn primary full" id="generateAiImage">✧ Hasilkan gambar AI</button></div>
-<div id="aiImageStatus" class="ai-status">Gambar AI belum dibuat.</div>
-<div class="ai-image-preview hide" id="aiImagePreviewWrap"><img id="aiImagePreview" alt="Hasil gambar AI KREOVA"></div>
-<div class="btnrow"><button class="btn" id="useAiImageAsPoster">Gunakan sebagai latar poster</button><button class="btn" id="downloadAiImage">Unduh gambar AI</button></div>
-</div>
+
 
 </section>
 <section id="ideas" class="section">
@@ -391,185 +372,140 @@ document.getElementById('copyPosterPrompt').onclick=async()=>{
  const prompt=document.getElementById('posterPrompt').textContent.trim();if(!prompt||prompt.startsWith('Isi tema')){alert('Buat prompt terlebih dahulu.');return}
  try{await navigator.clipboard.writeText(prompt);alert('Prompt AI berhasil disalin.')}catch(e){alert('Clipboard tidak tersedia; pilih teks prompt lalu salin manual.')}
 };
-
-// KREOVA AI v8  -  Pollinations OAuth PKCE (client-side safe flow)
-const POLLI_APP_REDIRECT = 'https://risalsaputra116-ux.github.io/Kreova-ai/';
-const POLLI_CLIENT_KEY_SESSION = 'kreova_polli_pk';
-const POLLI_TOKEN_SESSION = 'kreova_polli_access_token';
+// KREOVA AI IMAGE GENERATOR - PERCHANCE
 let aiGeneratedBlob = null;
 let aiGeneratedObjectUrl = null;
 
-function setPolliAuthStatus(message, type='warn'){
-  const el=document.getElementById('polliAuthStatus');
-  if(!el)return;
-  el.textContent=message;
-  el.className='ai-status '+(type==='good'?'good':'warn');
-}
-function setAiImageStatus(message, type='warn'){
+function setAiImageStatus(text, type='warn'){
   const el=document.getElementById('aiImageStatus');
   if(!el)return;
-  el.textContent=message;
-  el.className='ai-status '+(type==='good'?'good':'warn');
+  el.textContent=text;
+  el.className='ai-status '+type;
 }
-function bytesToBase64Url(bytes){
-  let binary='';
-  bytes.forEach(b=>binary+=String.fromCharCode(b));
-  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-}
-async function sha256Base64Url(value){
-  const bytes=new TextEncoder().encode(value);
-  const digest=await crypto.subtle.digest('SHA-256',bytes);
-  return bytesToBase64Url(new Uint8Array(digest));
-}
-function randomToken(size=32){
-  const bytes=new Uint8Array(size);
-  crypto.getRandomValues(bytes);
-  return bytesToBase64Url(bytes);
-}
-function getPolliToken(){return sessionStorage.getItem(POLLI_TOKEN_SESSION)||'';}
-function updatePolliAuthUI(){
-  const token=getPolliToken();
-  setPolliAuthStatus(token?'Akun Pollinations terhubung di tab ini. Token sementara hanya tersimpan di sessionStorage.':'Belum terhubung. Hubungkan akun untuk membuat gambar AI.',token?'good':'warn');
-}
-async function handlePolliOAuthCallback(){
-  const params=new URLSearchParams(location.search);
-  const code=params.get('code');
-  if(!code)return;
-  const returnedState=params.get('state')||'';
-  const expectedState=sessionStorage.getItem('kreova_polli_oauth_state')||'';
-  const verifier=sessionStorage.getItem('kreova_polli_pkce_verifier')||'';
-  const clientId=sessionStorage.getItem(POLLI_CLIENT_KEY_SESSION)||'';
-  if(!expectedState||returnedState!==expectedState||!verifier||!clientId){
-    setPolliAuthStatus('Koneksi gagal: verifikasi keamanan tidak cocok. Silakan hubungkan ulang.', 'warn');
-    history.replaceState({},document.title,location.pathname);
-    return;
-  }
-  setPolliAuthStatus('Menyelesaikan koneksi Pollinations...','warn');
-  try{
-    const response=await fetch('https://enter.pollinations.ai/api/oauth/token',{
-      method:'POST',
-      headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:new URLSearchParams({
-        grant_type:'authorization_code',
-        code,
-        client_id:clientId,
-        redirect_uri:POLLI_APP_REDIRECT,
-        code_verifier:verifier
-      })
-    });
-    const data=await response.json();
-    if(!response.ok||!data.access_token)throw new Error(data.error_description||data.error||('HTTP '+response.status));
-    sessionStorage.setItem(POLLI_TOKEN_SESSION,data.access_token);
-    sessionStorage.removeItem('kreova_polli_oauth_state');
-    sessionStorage.removeItem('kreova_polli_pkce_verifier');
-    history.replaceState({},document.title,location.pathname);
-    updatePolliAuthUI();
-    setAiImageStatus('Akun berhasil terhubung. Kamu bisa membuat gambar AI.','good');
-  }catch(err){
-    setPolliAuthStatus('Gagal menyelesaikan koneksi: '+err.message,'warn');
-    history.replaceState({},document.title,location.pathname);
-  }
-}
-document.getElementById('polliConnect').onclick=async()=>{
-  const entered=document.getElementById('polliAppKey').value.trim();
-  const clientId=entered||sessionStorage.getItem(POLLI_CLIENT_KEY_SESSION)||'';
-  if(!clientId.startsWith('pk_')){
-    alert('Masukkan App Key Pollinations yang diawali pk_. App Key tidak akan disimpan ke GitHub.');
-    return;
-  }
-  if(!window.crypto||!crypto.subtle){
-    alert('Browser perlu koneksi HTTPS agar proses keamanan OAuth dapat berjalan.');
-    return;
-  }
-  try{
-    sessionStorage.setItem(POLLI_CLIENT_KEY_SESSION,clientId);
-    const verifier=randomToken(48);
-    const challenge=await sha256Base64Url(verifier);
-    const state=randomToken(24);
-    sessionStorage.setItem('kreova_polli_pkce_verifier',verifier);
-    sessionStorage.setItem('kreova_polli_oauth_state',state);
-    const authUrl=new URL('https://enter.pollinations.ai/authorize');
-    authUrl.searchParams.set('response_type','code');
-    authUrl.searchParams.set('client_id',clientId);
-    authUrl.searchParams.set('redirect_uri',POLLI_APP_REDIRECT);
-    authUrl.searchParams.set('state',state);
-    authUrl.searchParams.set('code_challenge',challenge);
-    authUrl.searchParams.set('code_challenge_method','S256');
-    authUrl.searchParams.set('models','image');
-    authUrl.searchParams.set('budget','0.01');
-    authUrl.searchParams.set('expiry','1');
-    setPolliAuthStatus('Membuka halaman persetujuan Pollinations. Pastikan batas anggaran US$0,01 dan masa berlaku 1 hari terlihat. Jika tidak, batalkan.','warn');
-    location.href=authUrl.toString();
-  }catch(err){
-    setPolliAuthStatus('Tidak dapat memulai koneksi: '+err.message,'warn');
-  }
-};
-document.getElementById('polliDisconnect').onclick=()=>{
-  sessionStorage.removeItem(POLLI_TOKEN_SESSION);
-  sessionStorage.removeItem(POLLI_CLIENT_KEY_SESSION);
-  sessionStorage.removeItem('kreova_polli_pkce_verifier');
-  sessionStorage.removeItem('kreova_polli_oauth_state');
-  document.getElementById('polliAppKey').value='';
-  updatePolliAuthUI();
-  setAiImageStatus('Koneksi diputus. Token sementara di tab ini sudah dihapus.','good');
-};
+
 document.getElementById('generateAiImage').onclick=async()=>{
-  const token=getPolliToken();
   const prompt=document.getElementById('aiImagePrompt').value.trim();
-  if(!token){alert('Hubungkan akun Pollinations terlebih dahulu.');return;}
-  if(!prompt){alert('Tulis deskripsi gambar terlebih dahulu.');return;}
-  const model=document.getElementById('aiImageModel').value;
+  if(!prompt){
+    alert('Masukkan deskripsi gambar terlebih dahulu.');
+    return;
+  }
+
+  const btn=document.getElementById('generateAiImage');
+  btn.disabled=true;
+
+  setAiImageStatus('Menghubungkan generator gambar...');
+
   const format=document.getElementById('aiImageFormat').value;
-  const dimensions=format==='portrait'?[768,1365]:format==='square'?[1024,1024]:[1365,768];
-  const fullPrompt=prompt+', high quality, detailed composition, no watermark';
-  const url='https://gen.pollinations.ai/image/'+encodeURIComponent(fullPrompt)+'?'+new URLSearchParams({
-    model,
-    width:String(dimensions[0]),
-    height:String(dimensions[1])
-  }).toString();
-  const button=document.getElementById('generateAiImage');
-  button.disabled=true;
-  button.textContent='Sedang membuat gambar...';
-  setAiImageStatus('Mengirim permintaan ke Pollinations. Tunggu beberapa saat...','warn');
-  try{
-    const response=await fetch(url,{headers:{Authorization:'Bearer '+token}});
-    if(!response.ok){
-      let detail='HTTP '+response.status;
-      try{const data=await response.json();detail=data.message||data.error||detail;}catch(e){}
-      if(response.status===402)detail='Saldo atau batas anggaran tidak cukup. Tidak ada top-up otomatis. Periksa Quest Balance dan budget App Key.';
-      if(response.status===401)detail='Token tidak valid atau kedaluwarsa. Putuskan koneksi lalu hubungkan ulang.';
-      throw new Error(detail);
+  let resolution='768x768';
+
+  if(format==='portrait') resolution='512x768';
+  if(format==='landscape') resolution='768x512';
+
+  const requestId='kreova_'+Date.now();
+
+  const params=new URLSearchParams({
+    prompt:prompt,
+    format:'json',
+    id:requestId,
+    resolution:resolution
+  });
+
+  const iframe=document.createElement('iframe');
+  iframe.style.display='none';
+  iframe.src='https://perchance.org/perchance-ai-api?'+params.toString();
+
+  const timeout=setTimeout(()=>{
+    cleanup();
+    setAiImageStatus(
+      'Generator tidak merespons. Coba ulangi atau buka Perchance melalui browser.',
+      'warn'
+    );
+    btn.disabled=false;
+  },120000);
+
+  function cleanup(){
+    clearTimeout(timeout);
+    window.removeEventListener('message',receive);
+    iframe.remove();
+    btn.disabled=false;
+  }
+
+  function receive(event){
+    const data=event.data;
+
+    if(!data || data.api!=='perchance-image-api')return;
+    if(!data.result || data.result.id!==requestId)return;
+
+    cleanup();
+
+    if(!data.result.ok || !data.result.url){
+      setAiImageStatus('Gagal membuat gambar. Silakan coba lagi.','warn');
+      return;
     }
+
+    const img=document.getElementById('aiImagePreview');
+    const wrap=document.getElementById('aiImagePreviewWrap');
+
+    img.src=data.result.url;
+    wrap.classList.remove('hide');
+
+    aiGeneratedBlob=null;
+
+    if(aiGeneratedObjectUrl){
+      URL.revokeObjectURL(aiGeneratedObjectUrl);
+    }
+
+    aiGeneratedObjectUrl=data.result.url;
+
+    setAiImageStatus('Gambar berhasil dibuat!','good');
+  }
+
+  window.addEventListener('message',receive);
+  document.body.appendChild(iframe);
+};
+
+document.getElementById('downloadAiImage').onclick=async()=>{
+  if(!aiGeneratedObjectUrl){
+    alert('Buat gambar terlebih dahulu.');
+    return;
+  }
+
+  try{
+    const response=await fetch(aiGeneratedObjectUrl);
     const blob=await response.blob();
-    if(!blob.type.startsWith('image/'))throw new Error('Server tidak mengembalikan file gambar.');
-    aiGeneratedBlob=blob;
-    if(aiGeneratedObjectUrl)URL.revokeObjectURL(aiGeneratedObjectUrl);
-    aiGeneratedObjectUrl=URL.createObjectURL(blob);
-    document.getElementById('aiImagePreview').src=aiGeneratedObjectUrl;
-    document.getElementById('aiImagePreviewWrap').classList.remove('hide');
-    setAiImageStatus('Gambar AI berhasil dibuat. Periksa hasilnya sebelum diunduh.','good');
-  }catch(err){
-    setAiImageStatus('Gagal membuat gambar: '+err.message,'warn');
-  }finally{
-    button.disabled=false;
-    button.textContent='✧ Hasilkan gambar AI';
+
+    const link=document.createElement('a');
+    link.href=URL.createObjectURL(blob);
+    link.download='kreova-ai-image.jpg';
+    link.click();
+
+    setTimeout(()=>URL.revokeObjectURL(link.href),3000);
+  }catch(e){
+    window.open(aiGeneratedObjectUrl,'_blank');
   }
 };
-document.getElementById('downloadAiImage').onclick=()=>{
-  if(!aiGeneratedBlob||!aiGeneratedObjectUrl){alert('Buat gambar AI terlebih dahulu.');return;}
-  const a=document.createElement('a');
-  a.href=aiGeneratedObjectUrl;
-  a.download='kreova-ai-image.'+(aiGeneratedBlob.type.includes('png')?'png':'jpg');
-  a.click();
-};
+
 document.getElementById('useAiImageAsPoster').onclick=()=>{
-  if(!aiGeneratedObjectUrl){alert('Buat gambar AI terlebih dahulu.');return;}
+  if(!aiGeneratedObjectUrl){
+    alert('Buat gambar terlebih dahulu.');
+    return;
+  }
+
   const img=new Image();
-  img.onload=()=>{posterImage=img;drawPoster();setAiImageStatus('Gambar AI sudah dipasang sebagai latar poster. Kamu bisa menambahkan judul dan mengunduh poster PNG.','good');};
+
+  img.onload=()=>{
+    posterImage=img;
+    drawPoster();
+    setAiImageStatus(
+      'Gambar AI berhasil dipasang sebagai latar poster.',
+      'good'
+    );
+  };
+
+  img.crossOrigin='anonymous';
   img.src=aiGeneratedObjectUrl;
 };
-updatePolliAuthUI();
-handlePolliOAuthCallback();
+ 
 
 
 drawPoster();
