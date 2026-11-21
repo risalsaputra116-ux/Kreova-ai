@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111018">
 <meta name="description" content="KREOVA AI Creative Studio - studio konten gratis">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg">
 <title>KREOVA AI  -  Creative Studio</title>
 <style>
 :root{--bg:#101018;--panel:#191821;--panel2:#222332;--border:#333344;--text:#f6f3fa;--muted:#aaa6b7;--pink:#ff477e;--violet:#ad7bff;--cyan:#74d9ee}
@@ -147,8 +145,7 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 <div class="btnrow"><button class="btn primary full" id="generateAiImage">[CONTENT] Hasilkan gambar gratis</button></div>
 <div id="aiImageStatus" class="ai-status warn">Siap. Tulis prompt, lalu tekan Hasilkan gambar gratis.</div>
 <div class="ai-image-preview hide" id="aiImagePreviewWrap"><img id="aiImagePreview" alt="Hasil gambar AI KREOVA"></div>
-<div class="btnrow"><button class="btn" id="useAiImageAsPoster">Gunakan sebagai latar poster</button><button class="btn" id="downloadAiImage">Unduh gambar AI</button></div>
-</div>
+<div class="btnrow"><button class="btn" id="useAiImageAsPoster" disabled>Gunakan sebagai latar poster</button><button class="btn" id="downloadAiImage" disabled>Unduh gambar AI</button></div>
 </div>
 
 </section>
@@ -184,11 +181,12 @@ footer{text-align:center;color:#777486;font-size:11px;margin:24px 0}
 
 <section id="video" class="section">
 <div class="hero"><h1>Video <span>Studio</span></h1><p>Susun gambar, teks, dan audio menjadi video lokal di browser. Ini bukan generator AI text-to-video.</p></div>
-<div class="panel"><div class="panel-title">[AI VIDEO] Text-to-Video / Image-to-Video</div>
-<p class="small">KREOVA menyiapkan prompt dan membuka layanan generator video publik di tab lain. Pembuatan video dilakukan oleh layanan eksternal; gratis/kuota dan ketersediaan dapat berubah. Jangan unggah media privat.</p>
-<div class="field"><label>Prompt video AI</label><textarea id="aiVideoPrompt" placeholder="Contoh: Shot sinematik seorang tabib berjalan melewati pasar kuno saat kabut pagi, kamera tracking pelan, cahaya lembut, gerakan natural, realistis"></textarea></div>
-<div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt video</button><button class="btn primary" id="openAiVideoService">Buka generator video publik</button></div>
-<div class="small">Layanan publik yang dapat dicoba: Wan2.Video. KREOVA tidak mengirim prompt secara otomatis ke layanan tersebut.</div></div>
+<div class="panel"><div class="panel-title">[AI VIDEO] Generator Video langsung di panel</div>
+<p class="small">Gunakan generator LTX-2.5 yang tertanam di panel ini untuk Text-to-Video atau Image-to-Video. Generasi berjalan pada GPU Hugging Face bersama, sehingga anonim dapat kehabisan kuota/antrean. Jika frame gagal dimuat, buka generator di tab baru. Jangan unggah materi sensitif. Video hasil iframe tidak otomatis disimpan ke proyek KREOVA.</p>
+<div class="field"><label>Prompt catatan (opsional, untuk salin-tempel ke generator tertanam)</label><textarea id="aiVideoPrompt" placeholder="Contoh: Shot sinematik seorang tabib berjalan melewati pasar kuno saat kabut pagi, kamera tracking pelan, cahaya lembut, gerakan natural, realistis"></textarea></div>
+<div class="btnrow"><button class="btn" id="copyAiVideoPrompt">Salin prompt catatan</button><button class="btn" id="openAiVideoService">Buka generator di tab baru (jika embed gagal)</button></div>
+<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px;background:#0b0b10"><iframe title="LTX AI Video Generator" src="https://arpitkgoyal-ltx-2-5-demo.static.hf.space/index.html" loading="lazy" style="display:block;width:100%;height:820px;border:0;background:#0b0b10" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="no-referrer"></iframe></div>
+<div class="small" style="margin-top:8px">Jika embed tidak dapat dimuat di browser, gunakan tombol buka tab baru. Demo ini memakai antrean GPU publik, bukan API berjaminan uptime.</div></div>
 <div class="panel"><div class="panel-title">[VIDEO] Buat video dari gambar</div>
 <div class="field"><label>Tambah gambar adegan (maksimal 12)</label><input id="vsImages" type="file" accept="image/*" multiple></div>
 <div class="grid"><div class="field"><label>Format</label><select id="vsFormat"><option value="portrait">Vertikal 9:16</option><option value="landscape">Horizontal 16:9</option><option value="square">Kotak 1:1</option></select></div><div class="field"><label>Durasi per gambar</label><select id="vsDuration"><option>3</option><option selected>5</option><option>7</option><option>10</option></select></div></div>
@@ -267,7 +265,7 @@ function goPage(p){if(!pages.includes(p))return;pages.forEach(x=>document.getEle
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.page)));
 function val(id){return document.getElementById(id).value.trim()}
 function setOut(id,txt){document.getElementById(id).textContent=txt;if(id==='factoryResult'){const wrap=document.getElementById('factoryEditorWrap');if(wrap)wrap.classList.add('hide')}}
-function saveResult(id,title){let content=document.getElementById(id).textContent.trim();if(!content||content.startsWith('Brief ')||content.startsWith('Paket ')){alert('Buat hasil terlebih dahulu.');return}let projects=loadProjects();projects.unshift({id:Date.now(),title:title||content.slice(0,50),content,created:new Date().toLocaleString('id-ID')});localStorage.setItem('kreova_projects',JSON.stringify(projects));renderProjects();alert('Proyek tersimpan di perangkat.')}
+function saveResult(id,title){let content=document.getElementById(id).textContent.trim();if(!content||content.startsWith('Brief ')||content.startsWith('Paket ')){alert('Buat hasil terlebih dahulu.');return}let projects=loadProjects();projects.unshift({id:Date.now(),title:title||content.slice(0,50),content,created:new Date().toLocaleString('id-ID')});try{localStorage.setItem('kreova_projects',JSON.stringify(projects));renderProjects();alert('Proyek tersimpan di perangkat.')}catch(e){alert('Proyek gagal disimpan. Penyimpanan browser penuh; hapus beberapa proyek lama lalu coba lagi.')}}
 function loadProjects(){try{return JSON.parse(localStorage.getItem('kreova_projects')||'[]')}catch(e){return[]}}
 function renderProjects(){let list=document.getElementById('projectList'),arr=loadProjects();if(list)list.innerHTML='';if(!arr.length){if(list)list.innerHTML='<p class="small">Belum ada proyek tersimpan.</p>';updateDashboardStats();return}arr.forEach(p=>{if(!list)return;let row=document.createElement('div');row.className='project-row';let name=document.createElement('div');name.className='name';name.innerHTML='<strong>'+escapeHtml(p.title)+'</strong><div class="small">'+escapeHtml(p.created||'')+'</div>';let open=document.createElement('button');open.className='btn';open.textContent='Buka';open.onclick=()=>{let win=window.open('','_blank');if(win){win.document.write('<pre style="white-space:pre-wrap;font-family:system-ui;padding:16px">'+escapeHtml(p.content)+'</pre>')}else alert(p.content)};let del=document.createElement('button');del.className='btn';del.textContent='Hapus';del.onclick=()=>{if(confirm('Hapus proyek ini?')){localStorage.setItem('kreova_projects',JSON.stringify(loadProjects().filter(x=>x.id!==p.id)));renderProjects()}};row.append(name,open,del);list.appendChild(row)});updateDashboardStats()}
 function updateDashboardStats(){const arr=loadProjects(),count=document.getElementById('dashProjectCount'),recent=document.getElementById('dashRecentProjects');if(count)count.textContent=arr.length;if(!recent)return;if(!arr.length){recent.innerHTML='<div class="empty">Belum ada proyek tersimpan.</div>';return}recent.innerHTML='';arr.slice(0,3).forEach(p=>{const item=document.createElement('div');item.className='project-row';const title=document.createElement('strong');title.textContent=p.title||'Proyek tanpa judul';const date=document.createElement('div');date.className='small';date.textContent=p.created||'';const wrap=document.createElement('div');wrap.append(title,date);recent.appendChild(wrap)})}
@@ -342,9 +340,8 @@ function qualityCheck(){
  const matched=topicWords.filter(w=>text.toLowerCase().includes(w)).length;
  const relevant=topicWords.length===0||matched>=Math.min(2,topicWords.length);
  add('Kesesuaian topik',relevant,'kata kunci topik muncul dalam paket','periksa apakah semua bagian tetap membahas topik utama');
- const pct=Math.round(score/sections.length/1*100); // score includes all checks; normalized below
- const total=sections.length+5;
- const finalScore=Math.round(score/total*100);
+ const total=lines.length; // Count every check actually performed, including the six extra checks.
+ const finalScore=total?Math.round(score/total*100):0;
  const verdict=finalScore>=85?'Paket cukup lengkap':finalScore>=65?'Paket perlu sedikit penyempurnaan':'Paket perlu diperbaiki sebelum publikasi';
  const result=`HASIL PEMERIKSAAN KUALITAS\n\nSKOR KELENGKAPAN: ${finalScore}/100\n${verdict}\nPlatform: ${platform}\nTarget durasi: ${duration} detik\n\nRINCIAN:\n${lines.join('\n')}\n\nCATATAN:\nSkor ini mengukur kelengkapan struktur dan beberapa sinyal konsistensi secara otomatis. Ia tidak menilai kebenaran fakta, kualitas visual sebenarnya, hak cipta, atau peluang viral. Baca ulang dan sesuaikan dengan kebutuhan penonton sebelum publikasi.`;
  document.getElementById('qualityResult').textContent=result;
@@ -423,10 +420,17 @@ document.getElementById('generateAiImage').onclick=async()=>{
   if(!prompt){alert('Tulis deskripsi gambar terlebih dahulu.');return;}
   const model=document.getElementById('aiImageModel').value;
   const format=document.getElementById('aiImageFormat').value;
-  const dimensions=format==='portrait'?[512,576]:format==='square'?[512,512]:[576,324];
+  const dimensions=format==='portrait'?[512,768]:format==='square'?[512,512]:[768,512];
   const button=document.getElementById('generateAiImage');
   button.disabled=true;
   button.textContent='Mengantrekan gambar...';
+  // Clear any previous image so a failed new request cannot be mistaken for the latest result.
+  aiGeneratedBlob=null;
+  if(aiGeneratedObjectUrl){URL.revokeObjectURL(aiGeneratedObjectUrl);aiGeneratedObjectUrl=null;}
+  document.getElementById('aiImagePreview').removeAttribute('src');
+  document.getElementById('aiImagePreviewWrap').classList.add('hide');
+  document.getElementById('downloadAiImage').disabled=true;
+  document.getElementById('useAiImageAsPoster').disabled=true;
   setAiImageStatus('Mengirim permintaan ke AI Horde gratis. Worker relawan dan antrean dapat membuat proses lebih lama...','warn');
   try{
     const submitResponse=await fetch(AI_HORDE_API+'/generate/async',{
@@ -462,10 +466,19 @@ document.getElementById('generateAiImage').onclick=async()=>{
     }
     if(!generation)throw new Error('Antrean terlalu lama. Silakan coba lagi nanti.');
     if(!generation.img)throw new Error('Worker selesai tetapi tidak mengirim data gambar.');
-    let imageData=generation.img;
-    if(imageData.startsWith('data:image/')){
-      const imageResponse=await fetch(imageData);aiGeneratedBlob=await imageResponse.blob();
+    let imageData=String(generation.img||'').trim();
+    // AI Horde commonly returns an image URL (not base64). Handle URL, data URI, and legacy base64 safely.
+    if(/^https?:\/\//i.test(imageData)){
+      const imageResponse=await fetch(imageData);
+      if(!imageResponse.ok)throw new Error('Worker menghasilkan gambar, tetapi unduhan gagal (HTTP '+imageResponse.status+').');
+      aiGeneratedBlob=await imageResponse.blob();
+      if(!aiGeneratedBlob.type.startsWith('image/'))throw new Error('Alamat hasil worker tidak mengembalikan file gambar.');
+    }else if(imageData.startsWith('data:image/')){
+      const imageResponse=await fetch(imageData);
+      if(!imageResponse.ok)throw new Error('Data gambar gagal dibaca.');
+      aiGeneratedBlob=await imageResponse.blob();
     }else{
+      // Fallback for base64 image payloads returned by compatible workers.
       const binary=atob(imageData);
       const bytes=new Uint8Array(binary.length);
       for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
@@ -475,6 +488,8 @@ document.getElementById('generateAiImage').onclick=async()=>{
     aiGeneratedObjectUrl=URL.createObjectURL(aiGeneratedBlob);
     document.getElementById('aiImagePreview').src=aiGeneratedObjectUrl;
     document.getElementById('aiImagePreviewWrap').classList.remove('hide');
+    document.getElementById('downloadAiImage').disabled=false;
+    document.getElementById('useAiImageAsPoster').disabled=false;
     setAiImageStatus('Gambar selesai dibuat oleh worker komunitas AI Horde. Periksa hasil sebelum diunduh.','good');
   }catch(err){
     setAiImageStatus('Gagal membuat gambar: '+err.message,'warn');
@@ -485,7 +500,7 @@ document.getElementById('generateAiImage').onclick=async()=>{
 };
 document.getElementById('downloadAiImage').onclick=()=>{
   if(!aiGeneratedBlob||!aiGeneratedObjectUrl){alert('Buat gambar AI terlebih dahulu.');return;}
-  const a=document.createElement('a');a.href=aiGeneratedObjectUrl;a.download='kreova-ai-image.png';a.click();
+  const a=document.createElement('a');a.href=aiGeneratedObjectUrl;const ext=aiGeneratedBlob.type==='image/jpeg'?'jpg':aiGeneratedBlob.type==='image/webp'?'webp':aiGeneratedBlob.type==='image/gif'?'gif':'png';a.download='kreova-ai-image.'+ext;a.click();
 };
 document.getElementById('useAiImageAsPoster').onclick=()=>{
   if(!aiGeneratedObjectUrl){alert('Buat gambar AI terlebih dahulu.');return;}
@@ -537,7 +552,7 @@ document.getElementById('sbSignup').onclick=async()=>{if(!kreovaSb){alert('Konek
 document.getElementById('sbLogin').onclick=async()=>{if(!kreovaSb){alert('Koneksi akun belum siap. Refresh halaman.');return}const email=document.getElementById('sbEmail').value.trim(),password=document.getElementById('sbPassword').value;if(!email||!password){alert('Masukkan email dan password.');return}const {data,error}=await kreovaSb.auth.signInWithPassword({email,password});if(error){sbUserStatus('Login gagal: '+error.message);return}setProfileUser(data.user);sbUserStatus('Login berhasil sebagai '+data.user.email,true)};
 document.getElementById('sbLogout').onclick=async()=>{if(!kreovaSb)return;const {error}=await kreovaSb.auth.signOut();if(error)sbUserStatus('Logout gagal: '+error.message);else{setProfileUser(null);sbUserStatus('Logout berhasil.',true)}};
 document.getElementById('profilePhotoInput').onchange=e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Pilih file gambar.');return}if(file.size>2*1024*1024){alert('Ukuran foto maksimal 2 MB.');e.target.value='';return}const reader=new FileReader();reader.onload=()=>{try{localStorage.setItem(PROFILE_PHOTO_KEY,reader.result);if(kreovaSb)sbRefreshUser();else setProfileUser(null)}catch(err){alert('Foto gagal disimpan: ruang penyimpanan browser mungkin penuh.')}};reader.readAsDataURL(file)};
-document.getElementById('profileRemovePhoto').onclick=()=>{localStorage.removeItem(PROFILE_PHOTO_KEY);sbRefreshUser()};
+document.getElementById('profileRemovePhoto').onclick=()=>{localStorage.removeItem(PROFILE_PHOTO_KEY);if(kreovaSb)sbRefreshUser();else setProfileUser(null)};
 document.getElementById('profileSaveName').onclick=async()=>{if(!kreovaSb){alert('Login dahulu.');return}const name=document.getElementById('profileEditName').value.trim();if(!name){alert('Nama tidak boleh kosong.');return}const {data,error}=await kreovaSb.auth.updateUser({data:{display_name:name}});if(error){sbUserStatus('Gagal mengubah nama: '+error.message);return}setProfileUser(data.user);sbUserStatus('Nama profil berhasil disimpan.',true)};
 document.getElementById('profileSavePassword').onclick=async()=>{if(!kreovaSb){alert('Login dahulu.');return}const password=document.getElementById('profileNewPassword').value;if(password.length<8){alert('Password baru minimal 8 karakter.');return}const {error}=await kreovaSb.auth.updateUser({password});if(error){sbUserStatus('Gagal mengubah password: '+error.message);return}document.getElementById('profileNewPassword').value='';sbUserStatus('Password berhasil diperbarui.',true)};
 // AI Video prompt helper: external generator launch + clipboard
@@ -545,7 +560,7 @@ const videoPromptEl=document.getElementById('aiVideoPrompt');
 const videoPromptCopy=document.getElementById('copyAiVideoPrompt');
 const videoServiceOpen=document.getElementById('openAiVideoService');
 if(videoPromptCopy)videoPromptCopy.onclick=async()=>{const t=videoPromptEl?.value.trim();if(!t){alert('Tulis prompt video dahulu.');return}try{await navigator.clipboard.writeText(t);alert('Prompt video disalin. Tempelkan di layanan video yang dibuka.')}catch(e){alert('Clipboard gagal. Salin prompt secara manual.')}};
-if(videoServiceOpen)videoServiceOpen.onclick=()=>window.open('https://wan2.video/','_blank','noopener');
+if(videoServiceOpen)videoServiceOpen.onclick=()=>window.open('https://arpitkgoyal-ltx-2-5-demo.static.hf.space/index.html','_blank','noopener');
 // Ad Manager: safely configure official AdSense script using publisher ID only
 const AD_CONFIG_KEY='kreova_ads_config_v1';
 function getAdConfig(){try{return JSON.parse(localStorage.getItem(AD_CONFIG_KEY)||'{}')}catch{return {}}}
@@ -564,7 +579,6 @@ const saveAdsBtn=document.getElementById('saveAdConfig');if(saveAdsBtn)saveAdsBt
 const clearAdsBtn=document.getElementById('clearAdConfig');if(clearAdsBtn)clearAdsBtn.onclick=()=>{localStorage.removeItem(AD_CONFIG_KEY);adClientInput.value='';adSlotInput.value='';document.getElementById('kreovaAdCode').value='';const dashboard=document.getElementById('kreovaAdDashboard');if(dashboard)dashboard.innerHTML='<div class="ad-placeholder">Slot iklan KREOVA AI · konfigurasi dihapus</div>';const slotBox=document.getElementById('kreovaAdSlotBox');if(slotBox)slotBox.innerHTML='<div class="ad-placeholder">Slot banner iklan · belum aktif</div>';adStatus('Konfigurasi iklan dihapus.')};
 if(savedAd.client){updateAdSnippet(savedAd);applyAdConfig(savedAd)}
 initKreovaAuth();
-if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 // Video Studio  -  browser canvas recorder, free WebM output
 (()=>{const el=id=>document.getElementById(id),canvas=el('vsCanvas'),ctx=canvas.getContext('2d');let imgs=[],preview=false,raf=0,previewStart=0,audioFile=null;
 function setDimensions(){let f=el('vsFormat').value;if(f==='landscape'){canvas.width=1280;canvas.height=720}else if(f==='square'){canvas.width=1080;canvas.height=1080}else{canvas.width=720;canvas.height=1280}canvas.style.aspectRatio=canvas.width+'/'+canvas.height}
