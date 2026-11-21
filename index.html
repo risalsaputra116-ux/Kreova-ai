@@ -411,29 +411,34 @@ function renderProjects(){let list=document.getElementById('projectList'),arr=lo
 let open=document.createElement('button');
 open.className='btn';
 open.textContent='Buka';
-open.onclick=()=>{
-  const w=window.open('','_blank');
-  if(!w){
-    alert('Izinkan pop-up untuk membuka proyek.');
-    return;
-  }
-  w.document.body.style.margin='0';
-  w.document.body.style.background='#101018';
-  w.document.body.style.color='#fff';
-  w.document.body.style.fontFamily='Arial,sans-serif';
-  w.document.body.style.padding='20px';
+ open.onclick=()=>{
+  let old=document.getElementById('projectPreview');
+  if(old)old.remove();
 
-  const h=w.document.createElement('h2');
-  h.textContent=p.title||'Proyek';
+  let box=document.createElement('div');
+  box.id='projectPreview';
+  box.style.cssText='position:fixed;inset:0;z-index:99999;background:#101018;color:white;padding:20px;overflow:auto;font-family:Arial,sans-serif';
 
-  const c=w.document.createElement('pre');
-  c.style.whiteSpace='pre-wrap';
-  c.style.lineHeight='1.7';
-  c.style.fontFamily='inherit';
-  c.textContent=p.content||'';
+  let head=document.createElement('div');
+  head.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:20px';
 
-  w.document.body.append(h,c);
-};                                                                                                                                                                                                                                                               
+  let title=document.createElement('h2');
+  title.textContent=p.title||'Proyek';
+  title.style.margin='0';
+
+  let close=document.createElement('button');
+  close.textContent='Tutup';
+  close.className='btn';
+  close.onclick=()=>box.remove();
+
+  let content=document.createElement('div');
+  content.style.cssText='white-space:pre-wrap;line-height:1.8;overflow-wrap:anywhere';
+  content.textContent=p.content||'Proyek kosong';
+
+  head.append(title,close);
+  box.append(head,content);
+  document.body.appendChild(box);
+};                                                                                                                                                                                                                                                              
 let del=document.createElement('button');del.className='btn';del.textContent='Hapus';del.onclick=()=>{if(confirm('Hapus proyek ini?')){localStorage.setItem('kreova_projects',JSON.stringify(loadProjects().filter(x=>x.id!==p.id)));renderProjects()}};row.append(name,open,del);list.appendChild(row)});updateDashboardStats()}
 function updateDashboardStats(){const arr=loadProjects(),count=document.getElementById('dashProjectCount'),recent=document.getElementById('dashRecentProjects');if(count)count.textContent=arr.length;if(!recent)return;if(!arr.length){recent.innerHTML='<div class="empty">Belum ada proyek tersimpan.</div>';return}recent.innerHTML='';arr.slice(0,3).forEach(p=>{const item=document.createElement('div');item.className='project-row';const title=document.createElement('strong');title.textContent=p.title||'Proyek tanpa judul';const date=document.createElement('div');date.className='small';date.textContent=p.created||'';const wrap=document.createElement('div');wrap.append(title,date);recent.appendChild(wrap)})}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
